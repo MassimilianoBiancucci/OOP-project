@@ -19,7 +19,7 @@ public class EngagementController {
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////
-	// REQUESTS FOR RAW TWEETS BY IDS//////////////////////////////////////////////////
+	// REQUESTS FOR RAW TWEETS BY TWEETS IDS///////////////////////////////////////////
 	
 	// route that return raw tweets in json format with 
 	@RequestMapping(value = "/tweets", method = RequestMethod.GET)
@@ -28,15 +28,16 @@ public class EngagementController {
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
-	// method for the metadata request of the /tweets route
+	// method that return the metadata request for the /tweets route
 	@RequestMapping(value = "/tweets/metadata", method = RequestMethod.GET)
 	public ResponseEntity<Object> getTweetsMetadata(){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
+
 	///////////////////////////////////////////////////////////////////////////////////
-	// REQUESTS FOR TWEETS METRICS BY IDS//////////////////////////////////////////////
+	// REQUESTS FOR RAW TWEETS BY USER ID//////////////////////////////////////////////
 	
 	// route that return raw tweets for certain user
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
@@ -45,7 +46,7 @@ public class EngagementController {
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
-	// method for the metadata request of the /user/{userId} route
+	// method that return the metadata request for the /user/{userId} route
 	@RequestMapping(value = "/user/metadata", method = RequestMethod.GET)
 	public ResponseEntity<Object> getUserTweetsMetadata(){
 		// TODO implement
@@ -54,7 +55,7 @@ public class EngagementController {
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////
-	// REQUESTS FOR RAW TWEETS BY USER ID//////////////////////////////////////////////
+	// REQUESTS FOR TWEETS METRICS BY TWEETS IDS///////////////////////////////////////
 	
 	// route that return engagement statistics based on passed tweets
 	@RequestMapping(value = "/tweets/metrics", method = RequestMethod.GET)
@@ -63,14 +64,14 @@ public class EngagementController {
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
-	// method for the metadata request of the /tweets/metrics route
+	// method that return the metadata request of the /tweets/metrics route
 	@RequestMapping(value = "/tweets/metrics/metadata", method = RequestMethod.GET)
 	public ResponseEntity<Object> getTweetsMetricsMetadata(){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
-	
+		
 	///////////////////////////////////////////////////////////////////////////////////
 	// REQUESTS FOR TWEETS METRICS BY USER ID /////////////////////////////////////////
 	
@@ -81,7 +82,7 @@ public class EngagementController {
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
-	// method for the metadata request of the /user/{userId}/metrics route
+	// method that return the metadata request for the /user/{userId}/metrics route
 	@RequestMapping(value = "/user/metrics/metadata", method = RequestMethod.GET)
 	public ResponseEntity<Object> getUserTweetsMetricsMetadata(){
 		// TODO implement
