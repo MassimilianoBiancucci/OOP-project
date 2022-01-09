@@ -47,48 +47,129 @@ This api expose
 
 - **Requests for raw tweets** </br>
     
+    - **Reqest by tweets id**
 
-    - **Metadata** </br>
-    
+        - **Metadata**
 
-    - **something** </br>
-     
+            ```json
+            {
+                "metadata":[
+                    {
+                        "field" : "tweetIds",
+                        "type" : "JsonArray",
+                        "content":[
+                            "int"
+                        ],
+                        "description": "Array of ids of each tweet that should be returned in the response."
+                    },
+                    {
+                        "field" : "filters",
+                        "type" : "JsonArray",
+                        "content":[
+                            "JsonObject"
+                        ],
+                        "description": "Array of filters, follow the documentation for further details on filters."
+                    }
+                ]
+            }
+            ```
+
+        - **example** </br>
+            ```json
+            {
+                "tweetIds" : [
+                    23454,
+                    345676,
+                    456778563
+                ],
+                "filters" : [
+                    {
+                        
+                    },
+                    {
+
+                    }
+                ] 
+            }
+            ```
+
+    - **Reqest by user id**
+        
+        - **Metadata**
+
+            <details>
+
+            <summary>Click to expand the response json</summary>
+
+            ```json
+            {
+                "metadata":[
+                    {
+                        "field" : "tweetIds",
+                        "type" : "JsonArray",
+                        "content":[
+                            "int"
+                        ],
+                        "description": "Array of ids of each tweet that should be returned in the response."
+                    },
+                    {
+                        "field" : "filters",
+                        "type" : "JsonArray",
+                        "content":[
+                            "JsonObject"
+                        ],
+                        "description": "Array of filters, follow the documentation for further details on filters."
+                    }
+                ]
+            }
+            ```
+            </details>
+
+        - **example**
+
+            <details>
+
+            <summary>Click to expand the response json</summary>
+            
+            ```json
+            {
+                "tweetIds" : [
+                    23454,
+                    345676,
+                    456778563
+                ],
+                "filters" : [
+                    {
+                        
+                    },
+                    {
+
+                    }
+                ] 
+            }
+            ```
+            </details>
 
 - **Requests for tweets metrics**
     
     - **Metadata**
 
-        <details>
-        <summary>I could use some help...</summary>
-        <p>
-        ```json
-            {
-                "data": [
-                    {
-                        "id": "1479938624284151810",
-                        "author_id": "1114555537474113537",
-                        "public_metrics": {
-                            "retweet_count": 0,
-                            "reply_count": 0,
-                            "like_count": 0,
-                            "quote_count": 0
-                        },
-                        "text": "The Insane Engineering of James Webb Telescope https://t.co/ng4rCQMUGF via @YouTube",
-                        "created_at": "2022-01-08T22:10:38.000Z"
-                    }
-                ]
-            }
-        ```/
-        </p>
-        </details>  
 
     - **something**
+
 
 - **Requests body documentation**
 
     - 
 
     - **Filters**
+
+        - **Date filters**
+
+        - **Metric filters**
+
+        - **Message filters**
+        
 
 ---
 ## **Junit tests**

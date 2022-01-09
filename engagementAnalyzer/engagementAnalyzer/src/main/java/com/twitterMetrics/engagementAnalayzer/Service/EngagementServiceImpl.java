@@ -1,6 +1,5 @@
 package com.twitterMetrics.engagementAnalayzer.Service;
 
-import com.twitterMetrics.engagementAnalayzer.Model.TweetList;
 import com.google.gson.JsonObject;
 
 
