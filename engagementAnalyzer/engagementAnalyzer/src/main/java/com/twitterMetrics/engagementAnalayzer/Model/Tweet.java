@@ -211,7 +211,7 @@ public class Tweet {
 		return stringTweet;
 	}
 	
-	public String toJson() {
+	public JsonObject toJson() {
 		
 		JsonObject jsonTweet = new JsonObject();
 		jsonTweet.addProperty("id", getTweetId());
@@ -225,6 +225,6 @@ public class Tweet {
 		engagementValues.addProperty("quote", "");
 		jsonTweet.add("engagementValues", engagementValues);
 		
-		return jsonTweet.toString();
+		return jsonTweet;
 	}
 }
