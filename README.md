@@ -62,10 +62,10 @@ In this implementation of these filters there are 3 important chuncks that make 
 Below there is an example:
 ```json
 // examples of syntax
-{ <field>: <operator> } // template #1
-{ <field>: {"$gt": <operator's value>}} //templeate #2 
+{ "<field>": "<operator>" }     // template #1
+{ "<field>": {"$gt": "<operator's value>"}}     //templeate #2 
 
-// real example: 
+// complete example: 
 // filter that filter only tweets created after the specified date
 { "created_at": {"$gt": "2022-01-06T18:29:41.000Z"}}
 ```
@@ -74,20 +74,20 @@ Below there is an example:
     The other ones are the `match operators` that could be used for match or unmatch list of values while the `conditional operators` are used for specify interval of values accepted, below there are more accurate explenation of each type.
 
     - **Logical operators** </br>
-        The logical operators can't be applied alone, they are used for:
-        - filter combination or inversion. 
-        - operator combinations or invertion.
+        The `logical operators` can't be applied alone, they are used for:
+        - filter combination or coniugation. 
+        - operator combinations or coniugation.
 
         They are 3 operators, that permit to create unions, intersections or inversion on ensembles, if you consider all the tweets as the starting enseble and each well formed filter or operator as a subset of the general ensamble, these operators could be used for create ensables operations between these subsets.
         If the `logical operators` are used with other operators inside, they are considered operators and should be included inside a filter, if they are used with filters inside, they are considered filters itself.
-        This type of operator should be used only on `operators` or only on `filters`, otherwise the mix of the thwo will bring to an exeception, and to the refuse of the request.
+        This type of operator should be used only on `operators` or only on `filters`, otherwise the mix of the two will bring to an exeception, and to the refuse of the request.
 
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
         <tr>
-            <td>symbol</td>
-            <td>description</td>
-            <td>example of condition</td>
+            <th>Symbol</th>
+            <th>Description</th>
+            <th>Example of condition</th>
         </tr>
         <tr>
             <td>$not</td>
@@ -108,36 +108,36 @@ Below there is an example:
         </table>
 
     - **Match operators**
-
+        The `match operators` are used for filter tweets based on list of values that their fields should match or not match. This type of filters could be used on numeric values like metrics, on dates or on strings, the only limitation is that if used, the list of values inside should be of only one type and this tye should be coerent with the filter field, otherwise the request will throw an exception.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
         <tr>
-            <td>symbol</td>
-            <td>description</td>
-            <td>example of condition</td>
+            <th>Symbol</th>
+            <th>Description</th>
+            <th>Example of condition</th>
         </tr>
         <tr>
             <td>$in</td>
             <td>Match any value in array</td>
-            <td>{"$in" : [value1, value2, ...]}</td>
+            <td>{"$in" : [1000, 7520, ...]}</td>
         </tr>
         <tr>
             <td>$nin</td>
             <td>Not match any value in array</td>
-            <td>{"$nin" : [value1, value2, ...]}</td>
+            <td>{"$nin" : [1000, 7520, ...]}</td>
         </tr>
         </tbody>
         </table>
 
 
     - **Conditional operators**
-
+        The last one are the `conditional operators`, and can be used only on numeric values like metrics and on dates, so the can't be used only with strings. The usage if these operators with string values will throw an exception. Another exception will be raised even if these operators are applied to string fields.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
         <tr>
-            <td>symbol</td>
-            <td>description</td>
-            <td>example of condition</td>
+            <th>Symbol</th>
+            <th>Description</th>
+            <th>Example of condition</th>
         </tr>
         <tr>
             <td>$gt</td>
@@ -168,6 +168,69 @@ Below there is an example:
         </table>
 
 - #### **Specific fields and properties**
+    There are 8 fields considered from this API on the tweets, and these are the only fields accepetd in the request body, any other field passed will bring to the rise of an exception and to the fail of the request. Below the list of fields:
+    <table style="width:100%" border="2" bordercolor = "#fffff">
+    <thead>
+    <tr>
+        <th>Field</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>retweet_count</td>
+        <td>int</td>
+        <td>
+        The count of retweet on the original tweet, even if the current tweet is<br>
+        retwetted from another author, this value is considered from the original one.<br>
+        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        </td>
+    </tr>
+    <tr>
+        <td>reply_count</td>
+        <td>int</td>
+        <td>The number of replies or comments to the tweet.<br>
+        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        </td>
+    </tr>
+    <tr>
+        <td>like_count</td>
+        <td>int</td>
+        <td>The count of likes.<br>
+        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        </td>
+    </tr>
+    <tr>
+        <td>quote_count</td>
+        <td>int</td>
+        <td>The number of quote, that are retweets with a comments ahead.<br>
+        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        </td>
+    </tr>
+    <tr>
+        <td>engagement</td>
+        <td>double</td>
+        <td>The value of engagement calculated from the tweet responses.<br>
+        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        </td>
+    </tr>
+    <tr>
+        <td>text</td>
+        <td>String</td>
+        <td>The text content of the tweet.<br>
+        This field can be applied only to match operators.
+        </td>
+    </tr>
+    <tr>
+        <td>created_at</td>
+        <td>Date</td>
+        <td>The publication date of the tweet.<br>
+        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        </td>
+    </tr>
+    </tbody>
+    </table>
 
     - **Date filters**
 
@@ -177,7 +240,21 @@ Below there is an example:
 
 - #### **Filter combinations**
 
+    In this section will be shown some examples of filters combinations, to highlight what can be passed to the API in the request body and what will throw an error.
+    
+    By combination of filters it is meant an extensive usage of the `logical operators` to combine other operators or filters, below the examples:
+    - **Combinations of operators:**
+    ```json
+    {
+        "filters":{
+            
+        }
+    }
+    ```
 
+    - **Combinations of filters:**
+
+    
 ### **Routes**
 
 - #### **Requests for raw tweets**
