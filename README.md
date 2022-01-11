@@ -107,7 +107,7 @@ Below there is an example:
         </tbody>
         </table>
 
-    - **Match operators**
+    - **Match operators** </br>
         The `match operators` are used for filter tweets based on list of values that their fields should match or not match. This type of filters could be used on numeric values like metrics, on dates or on strings, the only limitation is that if used, the list of values inside should be of only one type and this tye should be coerent with the filter field, otherwise the request will throw an exception.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
@@ -130,7 +130,7 @@ Below there is an example:
         </table>
 
 
-    - **Conditional operators**
+    - **Conditional operators** </br>
         The last one are the `conditional operators`, and can be used only on numeric values like metrics and on dates, so the can't be used only with strings. The usage if these operators with string values will throw an exception. Another exception will be raised even if these operators are applied to string fields.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
@@ -231,13 +231,6 @@ Below there is an example:
     </tr>
     </tbody>
     </table>
-    
-    - 
-        - Date filters
-
-        - Metric filters
-            
-        - Message filters
 
 - #### **Filter combinations**
 
@@ -279,6 +272,19 @@ Below there is an example:
         This filter select all the tweets in the given set that satisfy at least on of these conditions: has more than 1000 likes, or that are created after the given date or that contain in the text one word in the list.
 
         This case is clearly a combination of filters, in this case the logical operator is used for combine filters for differents fields together, more filters for the same fields are allowed but the insertion of another operator (without filters inside) in the $or operator would meaning nothing and would throw an error.
+
+- #### **Filters package: inheritance and associations** 
+    In this section there is an insight on how filters works under the hood. This filters implementation can garant the maximum flexibility and interchangeability thanks to the extensive usage of classes Inheritance.
+    As shown before there are three main componetns of each filter: the `field`, the `operator` and the `operator's values`. there are many field with different characteristics, and many operators that accept only certain type of values, so there is an abstract class for each one of this "abstract" concepts that are extended for each subcase, in this way each class that accept a certain abstract class can accept all the subclasses and apply a different behaviour for each one, for example accept it or throw an exception where the combination of filter, operator and operatorValues can't work together. 
+
+    ![Filters package uml](UMLs/Filters%20package%20diagram.png)
+
+    - Date filters
+
+    - Metric filters
+
+    - Message filters
+
 
 ### **Routes**
 
