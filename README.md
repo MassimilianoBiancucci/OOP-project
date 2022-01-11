@@ -184,35 +184,35 @@ Below there is an example:
         <td>
         The count of retweet on the original tweet, even if the current tweet is<br>
         retwetted from another author, this value is considered from the original one.<br>
-        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
         </td>
     </tr>
     <tr>
         <td>reply_count</td>
         <td>int</td>
         <td>The number of replies or comments to the tweet.<br>
-        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
         </td>
     </tr>
     <tr>
         <td>like_count</td>
         <td>int</td>
         <td>The count of likes.<br>
-        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
         </td>
     </tr>
     <tr>
         <td>quote_count</td>
         <td>int</td>
         <td>The number of quote, that are retweets with a comments ahead.<br>
-        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
         </td>
     </tr>
     <tr>
         <td>engagement</td>
         <td>int</td>
         <td>The value of engagement calculated from the tweet responses.<br>
-        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
         </td>
     </tr>
     <tr>
@@ -226,7 +226,7 @@ Below there is an example:
         <td>created_at</td>
         <td>Date</td>
         <td>The publication date of the tweet.<br>
-        This field can be applied to match operators and to conditional operators, not on <br>logical operators.
+        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
         </td>
     </tr>
     </tbody>
@@ -256,7 +256,7 @@ Below there is an example:
         It's clear that this one is only one filter because there is only one field.
 
         Note that put another filter inside the and operator of the first filter would make no sense and would generate an error.
-
+        
     - **Combinations of filters:**
         ```json
         {
@@ -273,15 +273,21 @@ Below there is an example:
 
         This case is clearly a combination of filters, in this case the logical operator is used for combine filters for differents fields together, more filters for the same fields are allowed but the insertion of another operator (without filters inside) in the $or operator would meaning nothing and would throw an error.
 
-- #### **Filters package: inheritance and associations** 
-    In this section there is an insight on how filters works under the hood. This filters implementation can garant the maximum flexibility and interchangeability thanks to the extensive usage of classes Inheritance.
-    As shown before there are three main componetns of each filter: the `field`, the `operator` and the `operator's values`. there are many field with different characteristics, and many operators that accept only certain type of values, so there is an abstract class for each one of this "abstract" concepts that are extended for each subcase, in this way each class that accept a certain abstract class can accept all the subclasses and apply a different behaviour for each one, for example accept it or throw an exception where the combination of filter, operator and operatorValues can't work together. 
+- #### **Filters package**
+    
+    In this section there is an insight on how filters works under the hood. 
 
-    ![Filters package uml](UMLs/Filters%20package%20diagram.png)
+    - #### **Inheritance and associations**
+        This filters implementation can garant a good flexibility and interchangeability thanks to the extensive usage of classes Inheritance.
+        As shown before there are three main componetns of each filter: the `field`, the `operator` and the `operator's values`. there are many field with different characteristics, and many operators that accept only certain type of values, so there is an abstract class for each one of this "abstract" concepts that are extended for each subcase. In this way each class that accept a certain abstract class can accept all the subclasses and apply a different behaviour for each one, for example accept it or throw an exception where the combination of filter, operator and operatorValues can't work together. 
+
+        ![Filters package uml](UMLs/Filters%20package%20diagram.png)
 
     - Date filters
 
+
     - Metric filters
+
 
     - Message filters
 

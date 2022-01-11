@@ -24,7 +24,9 @@ public class EngagementController {
 	// route that return raw tweets in json format with 
 	@RequestMapping(value = "/tweets", method = RequestMethod.GET)
 	public ResponseEntity<Object> getTweets(@RequestBody String requestParameters){
-		// TODO implement
+		
+		
+		
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	

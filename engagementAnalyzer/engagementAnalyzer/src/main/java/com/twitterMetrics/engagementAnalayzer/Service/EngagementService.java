@@ -4,10 +4,10 @@ import com.google.gson.JsonObject;
 
 public interface EngagementService {
 	
-	public abstract JsonObject getRawTweetsData();
+	public abstract JsonObject getRawTweetsData(String requestBody);
 	public abstract JsonObject getRawTweetsDataMeta();
 	
-	public abstract JsonObject getTweetsStats();
+	public abstract JsonObject getTweetsStats(String requestBody);
 	public abstract JsonObject getTweetsStatsMeta();
 	
 }
