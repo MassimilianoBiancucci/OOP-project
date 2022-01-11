@@ -210,7 +210,7 @@ Below there is an example:
     </tr>
     <tr>
         <td>engagement</td>
-        <td>double</td>
+        <td>int</td>
         <td>The value of engagement calculated from the tweet responses.<br>
         This field can be applied to match operators and to conditional operators, not on <br>logical operators.
         </td>
@@ -231,12 +231,13 @@ Below there is an example:
     </tr>
     </tbody>
     </table>
+    
+    - 
+        - Date filters
 
-    - **Date filters**
-
-    - **Metric filters**
-        
-    - **Message filters**
+        - Metric filters
+            
+        - Message filters
 
 - #### **Filter combinations**
 
@@ -244,17 +245,41 @@ Below there is an example:
     
     By combination of filters it is meant an extensive usage of the `logical operators` to combine other operators or filters, below the examples:
     - **Combinations of operators:**
-    ```json
-    {
-        "filters":{
-            
+        ```json
+        {
+            "filters":{
+                "created_at":{
+                    "$and":[
+                        {"$not":{"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
+                        {"$gt": "2022-01-01T14:07:02Z"}
+                    ]
+                }
+            }
         }
-    }
-    ```
+        ```
+        This filter select a particular time interval, it select all the tweets of dates greater than the specified date and exclude from this interval one day, note that the operator between select the specified interval but the operator cogniugation specify that this sub interval is excluded.
+
+        In this example is passed one filter for only one field, the date, and the operator applied to this filter is a composition of four operators.
+        It's clear that this one is only one filter because there is only one field.
+
+        Note that put another filter inside the and operator of the first filter would make no sense and would generate an error.
 
     - **Combinations of filters:**
+        ```json
+        {
+            "filters":{
+                "$or":[
+                    {"like_count": {"$gt": 1000}},
+                    {"created_at": {"$gt": "2022-01-01T14:07:02Z"}},
+                    {"text": {"$in": ["deeplearning", "transformers", "cnn"]}}
+                ]
+            }
+        }
+        ```
+        This filter select all the tweets in the given set that satisfy at least on of these conditions: has more than 1000 likes, or that are created after the given date or that contain in the text one word in the list.
 
-    
+        This case is clearly a combination of filters, in this case the logical operator is used for combine filters for differents fields together, more filters for the same fields are allowed but the insertion of another operator (without filters inside) in the $or operator would meaning nothing and would throw an error.
+
 ### **Routes**
 
 - #### **Requests for raw tweets**
