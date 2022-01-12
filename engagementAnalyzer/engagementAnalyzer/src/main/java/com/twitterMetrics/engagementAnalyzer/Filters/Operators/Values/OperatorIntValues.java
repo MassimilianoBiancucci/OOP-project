@@ -1,7 +1,5 @@
 package com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values;
 
-import java.util.List;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -16,21 +14,16 @@ public class OperatorIntValues implements OperatorValues{
 	
 	public OperatorIntValues(JsonArray values) {
 		
-		
-		
 		this.values = new int[values.size()];
 		
 	}
 	
-	public OperatorIntValues(String values) {
-		
-	}
-	
 	public boolean checkValues(JsonArray values) {
-		
+		// TODO debug
 		for(JsonElement je: values) {
-			if(je.getAsJsonPrimitive().isNumber()) {
-				je.getAsJsonPrimitive()
+			JsonPrimitive primitive = je.getAsJsonPrimitive();
+			if(!primitive.isNumber()) {
+				return false;
 			}
 		}
 		

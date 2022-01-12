@@ -15,7 +15,9 @@ public class RequestParser {
 	public RequestParser(String stringRequest) {
 		
 		try {
-			request = new JsonParser().parse(stringRequest).getAsJsonObject();
+			
+			this.request = new JsonParser().parse(stringRequest).getAsJsonObject();
+			
 		}catch(JsonSyntaxException e) {
 			// TODO do something if the json isn't formatted correctly
 			
@@ -30,7 +32,7 @@ public class RequestParser {
 	
 	private boolean parseRequest() {
 		
-		for(Map.Entry<String, JsonElement> entry : request.entrySet()) {
+		for(Map.Entry<String, JsonElement> entry : this.request.entrySet()) {
 			
 		    System.out.println("Key = " + entry.getKey() + " Value = " + entry.getValue() );
 		    

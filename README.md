@@ -254,9 +254,9 @@ Below there is an example:
 
         In this example is passed one filter for only one field, the date, and the operator applied to this filter is a composition of four operators.
         It's clear that this one is only one filter because there is only one field.
-
-        Note that put another filter inside the and operator of the first filter would make no sense and would generate an error.
         
+        Note that put another filter inside the and operator of the first filter would make no sense and would generate an error.
+
     - **Combinations of filters:**
         ```json
         {
