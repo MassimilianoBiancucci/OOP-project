@@ -978,11 +978,11 @@ Below all the routes are explained in detail, with example of requests and examp
             - `engagement_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of the engagement value in the filtered group of passed tweets.
 
         - #### **Example**
-            In this section there is an example of response from the api that could be returned from a call to the `/tweets/metrics` or `/user/:userId/metrics` routes, passing the correct json request body:
+            In this section there is an example of response from the api that could be returned from a call to the `/tweets/metrics` or `/user/:userId/metrics` routes, passing the correct json request body: 
             
             <details>
 
-            <summary style="color: red"><b> Click to expand json </b></summary>
+            <summary style="color: red"><b> Click to expand json :arrow_left: </b></summary>
 
             ```json
             {
