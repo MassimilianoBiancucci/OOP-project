@@ -304,7 +304,7 @@ Below all the routes are explained in detail, with example of requests and examp
     This funcionality enable to request the raw tweets as they are returned by the twitter API, with the possibility of applying to them some filters if needed, so it's possible to query the tweets with the twitter api format, but for example applying to them a filter for retrive only tweets with certain words in the text field, or all other type of filters above explained. As metioned there are two methods for retrive these tweet's raw data, by a list of tweets ids or by a twitter user id and specifing the number of tweets needed, note that in that way only the last tweets are taken.
 
     - #### **Input**
-        In this section there are the two methods routes for the <b>requests of raw tweets</b> explained in detail with a formal documentation that explain each parameter in the route and in the request body with an example request for the two routes. There is only one example of output because the two routes give the same result in the same format.
+        In this section there are the two methods routes for the <b>requests of raw tweets</b> explained in detail with a formal documentation that explain each parameter in the route and in the request body with an example request for the two routes.
 
         - #### **Reqest by tweets id**
             In the table there are the two routes relative to the service for the request of the raw tweets by a list of tweets ids. The first is the route for the effective service, the second one always returns the same result, a special json that encode the structure of the response with types and descriptions of each field.
@@ -341,7 +341,7 @@ Below all the routes are explained in detail, with example of requests and examp
                     - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
             - #### **Metadata**
-                For the metadata route there aren't any parameters to pass, below there is the result of the API call to the `/tweets/metadata` route:
+                For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/tweets/metadata` route:
 
                 <details>
 
@@ -495,7 +495,7 @@ Below all the routes are explained in detail, with example of requests and examp
                     - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
             - #### **Metadata**
-                For the metadata route there aren't any parameters to pass, below there is the result of the API call to the `/user/metadata` route:
+                For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/user/metadata` route:
 
                 <details>
 
@@ -666,13 +666,17 @@ Below all the routes are explained in detail, with example of requests and examp
             </details> </br>
 
 - #### **Requests for tweets metrics**
+    This functionality enable to request statistics on the engagement that are relative to a group of tweets passed through a list of tweets ids or by a twitter user id and specifing the number of tweets needed. 
     
+    These statistics are calculated based on the tweets passed in one of the two ways, but if there are filters specified in the json request body, the tweets used for the statistics calculation will be only the filterd tweets.
+
     - #### **Input**
+        In this section there are the two routes for the requests of <b>tweets engagement metrics</b>, showed in detail with a formal documentation that explain each parameter in the route and in the request body with an example request for the two routes.
 
         - #### **Reqest by tweets id**
 
             <table 
-                style="width:100%" 
+                style="width:100%"
                 border="2" 
                 bordercolor = "#fffff">
             <tbody>
@@ -704,7 +708,8 @@ Below all the routes are explained in detail, with example of requests and examp
                     - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
 
-            - **Metadata**
+            - #### **Metadata**
+                For the metadata route there aren't any parameters to pass.Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/tweets/metrics/metadata` route:
 
                 <details>
 
@@ -799,6 +804,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 </details> </br>
 
             - **Example**
+                Below there is an example of API call to the `/tweets/metrics` route:
 
                 <details>
 
@@ -841,13 +847,14 @@ Below all the routes are explained in detail, with example of requests and examp
             </tr>
             <tr>
             <td> GET</td>
-            <td>/tweets/metrics/metadata</td>
+            <td>/user/metrics/metadata</td>
             <td>Route for json request/response body metadata of: /user/:userId/metrics</td>
             </tr>
             </tbody>
             </table>
 
             - **Metadata**
+                For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/user/metrics/metadata` route:
 
                 <details>
 
@@ -934,6 +941,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 </details> </br>
 
             - **Example**
+                Below there is an example of API call to the `/user/:userId/metrics` route:
 
                 <details>
 
