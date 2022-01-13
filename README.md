@@ -131,7 +131,7 @@ Below there is an example:
 
 
     - **Conditional operators** </br>
-        The last one are the `conditional operators`, and can be used only on numeric values like metrics and on dates, so the can't be used only with strings. The usage if these operators with string values will throw an exception. Another exception will be raised even if these operators are applied to string fields.
+        The last one are the `conditional operators`, and can be used only on numeric values like metrics and on dates, so they can't be used only with strings. The usage if these operators with string values will throw an exception. Another exception will be raised even if these operators are applied to string fields.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
         <tr>
@@ -306,12 +306,19 @@ Below there is an example:
                 bordercolor = "#fffff">
             <tbody>
             <tr>
-            <td style="width:30%"> Request route</td>
-            <td>localhost:8080/tweets</td>
+            <th style="width:5%"> Type</th>
+            <th style="width:25%">Route</th>
+            <th>description</th>
             </tr>
             <tr>
-            <td style="width:30%"> Metadata request route</td>
-            <td>localhost:8080/tweets/metadata</td>
+            <td> GET</td>
+            <td>/tweets</td>
+            <td>Route for raw tweets request</td>
+            </tr>
+            <tr>
+            <td> GET</td>
+            <td>/tweets/metadata</td>
+            <td>Route for json request/response body metadata of: /tweets</td>
             </tr>
             </tbody>
             </table>
@@ -439,12 +446,19 @@ Below there is an example:
                 bordercolor = "#fffff">
             <tbody>
             <tr>
-            <td style="width:20%"> Request route</td>
-            <td>localhost:8080/user/:userId</td>
+            <th style="width:5%"> Type</th>
+            <th style="width:25%">Route</th>
+            <th>description</th>
             </tr>
             <tr>
-            <td style="width:30%"> Metadata request route</td>
-            <td>localhost:8080/user/metadata</td>
+            <td> GET</td>
+            <td>/user/:userId</td>
+            <td>Route raw tweets request by :userId parameter</td>
+            </tr>
+            <tr>
+            <td> GET</td>
+            <td>/user/metadata</td>
+            <td>Route for json request/response body metadata of: /user/:userId </td>
             </tr>
             </tbody>
             </table>
@@ -617,12 +631,19 @@ Below there is an example:
                 bordercolor = "#fffff">
             <tbody>
             <tr>
-            <td style="width:30%"> Request route</td>
-            <td>localhost:8080/tweets/metrics</td>
+            <th style="width:5%"> Type</th>
+            <th style="width:25%">Route</th>
+            <th>description</th>
             </tr>
             <tr>
-            <td style="width:30%"> Metadata request route</td>
-            <td>localhost:8080/tweets/metrics/metadata</td>
+            <td> GET</td>
+            <td>/tweets/metrics</td>
+            <td>Route for tweets metrics request</td>
+            </tr>
+            <tr>
+            <td> GET</td>
+            <td>/tweets/metrics/metadata</td>
+            <td>Route for json request/response body metadata of: /tweets/metrics</td>
             </tr>
             </tbody>
             </table>
@@ -753,12 +774,19 @@ Below there is an example:
                 bordercolor = "#fffff">
             <tbody>
             <tr>
-            <td style="width:30%"> Request route</td>
-            <td>localhost:8080/user/:userId/metrics</td>
+            <th style="width:5%"> Type</th>
+            <th style="width:25%">Route</th>
+            <th>description</th>
             </tr>
             <tr>
-            <td style="width:30%"> Metadata request route</td>
-            <td>localhost:8080/user/metrics/metadata</td>
+            <td> GET</td>
+            <td>/user/:userId/metrics</td>
+            <td>Route for tweets metrics request by :userId parameter</td>
+            </tr>
+            <tr>
+            <td> GET</td>
+            <td>/tweets/metrics/metadata</td>
+            <td>Route for json request/response body metadata of: /user/:userId/metrics</td>
             </tr>
             </tbody>
             </table>
@@ -878,30 +906,23 @@ Below there is an example:
 
             ```json
             {
-                "tweetIds" : [
-                    23454,
-                    345676,
-                    456778563
-                ],
-                "filters" : [
-                    {
-                        "$or": [
-                            {
-                                filter1
-                            },
-                            {
-                                filter1
-                            }
-                        ]
-                    },
-                    {
-
-                    }
-                ] 
+                "tweetsMetrics" : {
+                    "retweet_count_mean":       15.94,
+                    "reply_count_mean":         56.22,
+                    "like_count_mean":          1550.78,
+                    "quote_count_mean":         458.9,
+                    "engagement_mean":          3658.4,
+                    "retweet_count_variance":   1.0,
+                    "reply_count_variance":     1.0,
+                    "like_count_variance":      1.0,
+                    "quote_count_variance":     1.0,
+                    "engagement_variance":      1.0
+                }
             }
             ```
             </details> </br>
 
+- #### **Metadata formt documentation**
 
 - #### **Requests body documentation**
 
