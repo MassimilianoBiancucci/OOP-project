@@ -606,7 +606,7 @@ Below all the routes are explained in detail, with example of requests and examp
     - #### **Output**
         In this section there is the output explenation of the response from the api that return calling the `/tweets` and `/user/:userId` routes, note that the result from this two routes are the same. All the variables in the respose of this routes are a subset of the parameters that could be retrived directly from the Twitter API.
 
-        - #### **Request body parameters**
+        - #### **Response body parameters**
             In this section are explained all the parameters that return from the call of the above mentioned routes:
             - `tweets`: the tweets field it's an array of json obects, each java object contain all the information of one tweetthat are: id, text, created_at and public metrics.
             - `id`: This field is contained inside each object inside the <b>tweets</b> array, it's an <b>int</b> field and indicates the id of the corresponding tweet.
@@ -803,7 +803,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details> </br>
 
-            - **Example**
+            - #### **Example**
                 Below there is an example of API call to the `/tweets/metrics` route:
 
                 <details>
@@ -853,7 +853,7 @@ Below all the routes are explained in detail, with example of requests and examp
             </tbody>
             </table>
 
-            - **Metadata**
+            - #### **Metadata**
                 For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/user/metrics/metadata` route:
 
                 <details>
@@ -940,7 +940,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details> </br>
 
-            - **Example**
+            - #### **Example**
                 Below there is an example of API call to the `/user/:userId/metrics` route:
 
                 <details>
@@ -960,10 +960,26 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details>
 
-    - **Output**
+    - #### **Output**
+        In this section there is the output explenation of the response from the api that return calling the `/tweets/metrics` and `/user/:userId/metrics` routes, note that the result from this two routes are the same. All the variables in the respose of this routes are the means and the variances of the main engagement variables of each filterd tweet, with one more variable that is the combination of all those values, the engagement parameter.
 
-        - **Example**
+        - #### **Response body parameters**
+            In this section are explained all the parameters that return from the call of the above mentioned routes:
+            - `tweetsMetrics`: the tweetsMetrics field it's an object that contain all the statistics about the engagement metrics (all the parameters below).
+            - `retweet_count_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of the number of retweets in the filtered group of passed tweets.
+            - `reply_count_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of replies in the filtered group of passed tweets.
+            - `like_count_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of likes in the filtered group of passed tweets.
+            - `quote_count_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of quote in the filtered group of passed tweets.
+            - `engagement_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of the engagement value in the filtered group of passed tweets.
+            - `retweet_count_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of retweets in the filtered group of passed tweets.
+            - `reply_count_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of reply in the filtered group of passed tweets.
+            - `like_count_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of likes in the filtered group of passed tweets.
+            - `quote_count_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of quote in the filtered group of passed tweets.
+            - `engagement_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of the engagement value in the filtered group of passed tweets.
 
+        - #### **Example**
+            In this section there is an example of response from the api that could be returned from a call to the `/tweets/metrics` or `/user/:userId/metrics` routes, passing the correct json request body:
+            
             <details>
 
             <summary style="color: red"><b> Click to expand json </b></summary>
@@ -987,8 +1003,6 @@ Below all the routes are explained in detail, with example of requests and examp
             </details> </br>
 
 - #### **Metadata formt documentation**
-
-- #### **Requests body documentation**
 
 ---
 ## **Junit tests**
