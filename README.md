@@ -30,7 +30,7 @@ This application use the Twitter API to retrieve the tweets informations, applyi
 ---
 ## **Project struscture**
 
-Below is shown the structure of the project and what is the content of each folder, with a little description of each one.
+Below is shown the structure of the project and what is the content of each folder, with a little description of each one. 
 
 ```text
 
@@ -97,12 +97,12 @@ Below there is an example:
         <tr>
             <td>$or</td>
             <td>Logical operator</td>
-            <td>{"$or": [{filter1},{filter2},...]}</td>
+            <td>{"$or": [{filter1 or operator1},{filter2 or operator2},...]}</td>
         </tr>
         <tr>
             <td>$and</td>
             <td>Logical operator</td>
-            <td>{"$and": [{filter1},{filter2},...]}</td>
+            <td>{"$and": [{filter1 or operator1},{filter2 or operator2},...]}</td>
         </tr>
         </tbody>
         </table>
@@ -293,13 +293,21 @@ Below there is an example:
 
 
 ### **Routes**
+This api has two main functionalities, the first is the request of the raw tweets directly taken from the twitter api, with the application of the passed filters. The second functionality is the request of some statistics on the tweets requested after the application of the passed filters.
+Each functionality can be requested with two different routes (four routes in total), each one enable to request the same functionality in two different ways. The fisrt by passing a list of tweets ids in the request, the second by specifying the user id in the route.
+
+Note that for each route are present on more route for the metadata request, that explain with a schematic format the structure of the response, with field names, fields types, and some special structure for explain the inner structure of nested objects and arrays. The documentation for the metadata json is present below: [Metadata formt documentation](#metadata-formt-documentation).
+
+Below all the routes are explained in detail, with example of requests and examples of responses for each case. 
 
 - #### **Requests for raw tweets**
-    
-    - **Input**
+    This funcionality enable to request the raw tweets as they are returned by the twitter API, with the possibility of applying to them some filters if needed, so it's possible to query the tweets with the twitter api format, but for example applying to them a filter for retrive only tweets with certain words in the text field, or all other type of filters above explained. As metioned there are two methods for retrive these tweet's raw data, by a list of tweets ids or by a twitter user id and specifing the number of tweets needed, note that in that way only the last tweets are taken.
 
-        - **Reqest by tweets id**
+    - #### **Input**
+        In this section there are the two methods routes for the <b>requests of raw tweets</b> explained in detail with a formal documentation that explain each parameter in the route and in the request body with an example request for the two routes. There is only one example of output because the two routes give the same result in the same format.
 
+        - #### **Reqest by tweets id**
+            In the table there are the two routes relative to the service for the request of the raw tweets by a list of tweets ids. The first is the route for the effective service, the second one always returns the same result, a special json that encode the structure of the response with types and descriptions of each field.
             <table 
                 style="width:100%" 
                 border="2" 
@@ -323,7 +331,17 @@ Below there is an example:
             </tbody>
             </table>
 
-            - **Metadata**
+            - #### **Request parameters**
+                In this section there is the list of parameters that should be in the request, in the body and in the route:
+                - #### **Route parameters**
+                    The request by tweets id has a static route, all the parameters are in the request body.
+                - #### **Request body parameters**
+                    The request body must be in json format, below the parameters:
+                    - `tweetIds`: json array of int, that constain the id's of each tweet that the service will query from the Twitter API, and where the passed filters will be applied.
+                    - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
+
+            - #### **Metadata**
+                For the metadata route there aren't any parameters to pass, below there is the result of the API call to the `/tweets/metadata` route:
 
                 <details>
 
@@ -412,9 +430,10 @@ Below there is an example:
                     }
                 }
                 ```
-                </details>
+                </details> </br>
 
-            - **Example**
+            - #### **Example**
+                Below there is an example of API call to the `/tweets` route:
 
                 <details>
 
@@ -436,9 +455,9 @@ Below there is an example:
                     {
                 }
                 ```
-                </details>
+                </details> </br>
 
-        - **Reqest by user id**
+        - #### **Reqest by user id**
             
             <table 
                 style="width:100%" 
@@ -463,7 +482,20 @@ Below there is an example:
             </tbody>
             </table>
 
-            - **Metadata**
+            - #### **Request parameters**
+                In this section there is the list of parameters that should be in the body and in the route:
+                
+                - #### **Route parameters**
+                    The request by user id has only one parameter in the route, showed in the above table with the following placeholder:
+
+                    - `:userId`: should be replaced with the Twitter user id of the user of which we want retrive the tweets. this parameter its simply a number. 
+
+                - #### **Request body parameters**
+                    The request body must be in json format, below the parameters:
+                    - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
+
+            - #### **Metadata**
+                For the metadata route there aren't any parameters to pass, below there is the result of the API call to the `/user/metadata` route:
 
                 <details>
 
@@ -544,9 +576,10 @@ Below there is an example:
                     }
                 }
                 ```
-                </details>
+                </details> </br>
 
-            - **Example**
+            - #### **Example**
+                Below there is an example of API call to the `/user/:userId` route:
 
                 <details>
 
@@ -568,12 +601,25 @@ Below there is an example:
                     {
                 }
                 ```
-                </details>
+                </details> </br>
 
-    - **Output**
+    - #### **Output**
+        In this section there is the output explenation of the response from the api that return calling the `/tweets` and `/user/:userId` routes, note that the result from this two routes are the same. All the variables in the respose of this routes are a subset of the parameters that could be retrived directly from the Twitter API.
 
-        - **Example**
+        - #### **Request body parameters**
+            In this section are explained all the parameters that return from the call of the above mentioned routes:
+            - `tweets`: the tweets field it's an array of json obects, each java object contain all the information of one tweetthat are: id, text, created_at and public metrics.
+            - `id`: This field is contained inside each object inside the <b>tweets</b> array, it's an <b>int</b> field and indicates the id of the corresponding tweet.
+            - `text`: This field is contained inside each object inside the <b>tweets</b> array, it's a <b>String</b> field and indicates the message of the corresponding tweet.
+            - `created_at`:This field is contained inside each object inside the <b>tweets</b> array, it's a <b>String</b> field that encode a timestamp and indicates the date and time of creation of the corresponding tweet.
+            - `public_metrics`:This field is contained inside each object inside the <b>tweets</b> array, it's a <b>json object</b> field and containes the metrics relativ to the engagement of the corresponding tweet, the field contained inside are: retweet_count, reply_count, like_count, quote_count.
+            - `retweet_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of retweets of the corresponding tweet.
+            - `reply_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of replies of the corresponding tweet.
+            - `like_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of likes of the corresponding tweet.
+            - `quote_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of quotes of the corresponding tweet.
 
+        - #### **Example**
+            In this section there is an example of response from the api that could be returned from a call to the `/tweets` or `/user/:userId` routes, passing the correct json request body:
             <details>
 
             <summary style="color: red"><b> Click to expand json </b></summary>
@@ -647,6 +693,16 @@ Below there is an example:
             </tr>
             </tbody>
             </table>
+
+            - #### **Request parameters**
+                In this section there is the list of parameters that should be in the request, in the body and in the route:
+                - #### **Route parameters**
+                    The request by tweets id has a static route, all the parameters are in the request body.
+                - #### **Request body parameters**
+                    The request body must be in json format, below the parameters:
+                    - `tweetIds`: json array of int, that constain the id's of each tweet that the service will query from the Twitter API, and where the passed filters will be applied.
+                    - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
+
 
             - **Metadata**
 
@@ -740,7 +796,7 @@ Below there is an example:
                     }
                 }
                 ```
-                </details>
+                </details> </br>
 
             - **Example**
 
@@ -875,8 +931,8 @@ Below there is an example:
                     }
                 }
                 ```
-                </details>
-    
+                </details> </br>
+
             - **Example**
 
                 <details>
