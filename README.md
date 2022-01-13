@@ -298,6 +298,61 @@ Each functionality can be requested with two different routes (four routes in to
 
 Note that for each route are present on more route for the metadata request, that explain with a schematic format the structure of the response, with field names, fields types, and some special structure for explain the inner structure of nested objects and arrays. The documentation for the metadata json is present below: [Metadata formt documentation](#metadata-formt-documentation).
 
+Here there is the comprensive table with all the routes of this API:
+
+<table 
+style="width:100%" 
+border="2" 
+bordercolor = "#fffff">
+<tbody>
+<tr>
+<th style="width:5%"> Type</th>
+<th style="width:25%">Route</th>
+<th>description</th>
+</tr>
+<tr>
+<td> GET</td>
+<td>/tweets</td>
+<td>Route for raw tweets request</td>
+</tr>
+<tr>
+<td> GET</td>
+<td>/tweets/metadata</td>
+<td>Route for json request/response body metadata of: /tweets</td>
+</tr>
+<tr>
+<td> GET</td>
+<td>/user/:userId</td>
+<td>Route raw tweets request by :userId parameter</td>
+</tr>
+<tr>
+<td> GET</td>
+<td>/user/metadata</td>
+<td>Route for json request/response body metadata of: /user/:userId </td>
+</tr>
+<tr>
+<td> GET</td>
+<td>/tweets/metrics</td>
+<td>Route for tweets metrics request</td>
+</tr>
+<tr>
+<td> GET</td>
+<td>/tweets/metrics/metadata</td>
+<td>Route for json request/response body metadata of: /tweets/metrics</td>
+</tr>
+<tr>
+<td> GET</td>
+<td>/user/:userId/metrics</td>
+<td>Route for tweets metrics request by :userId parameter</td>
+</tr>
+<tr>
+<td> GET</td>
+<td>/user/metrics/metadata</td>
+<td>Route for json request/response body metadata of: /user/:userId/metrics</td>
+</tr>
+</tbody>
+</table>
+
 Below all the routes are explained in detail, with example of requests and examples of responses for each case. 
 
 - #### **Requests for raw tweets**
@@ -763,7 +818,7 @@ Below all the routes are explained in detail, with example of requests and examp
                                     {
                                         "field" : "quote_count_mean",
                                         "type" : "float",
-                                        "description": "Mean of the number of retweets with a quote of the passed tweets."
+                                        "description": "Mean of the number of quote of the passed tweets."
                                     },
                                     {
                                         "field" : "engagement_mean",
@@ -788,7 +843,7 @@ Below all the routes are explained in detail, with example of requests and examp
                                     {
                                         "field" : "quote_count_variance",
                                         "type" : "float",
-                                        "description": "Variance of the number of retweets with a quote of the passed tweets."
+                                        "description": "Variance of the number of quote of the passed tweets."
                                     },
                                     {
                                         "field" : "engagement_variance",
@@ -900,7 +955,7 @@ Below all the routes are explained in detail, with example of requests and examp
                                     {
                                         "field" : "quote_count_mean",
                                         "type" : "float",
-                                        "description": "Mean of the number of retweets with a quote of the passed tweets."
+                                        "description": "Mean of the number of quote of the passed tweets."
                                     },
                                     {
                                         "field" : "engagement_mean",
@@ -925,7 +980,7 @@ Below all the routes are explained in detail, with example of requests and examp
                                     {
                                         "field" : "quote_count_variance",
                                         "type" : "float",
-                                        "description": "Variance of the number of retweets with a quote of the passed tweets."
+                                        "description": "Variance of the number of quote of the passed tweets."
                                     },
                                     {
                                         "field" : "engagement_variance",
@@ -982,7 +1037,7 @@ Below all the routes are explained in detail, with example of requests and examp
             
             <details>
 
-            <summary style="color: red"><b> Click to expand json :arrow_left: </b></summary>
+            <summary style="color: red"><b> Click to expand json </b></summary>
 
             ```json
             {
@@ -1002,7 +1057,7 @@ Below all the routes are explained in detail, with example of requests and examp
             ```
             </details> </br>
 
-- #### **Metadata formt documentation**
+- #### **Metadata format documentation**
 
 ---
 ## **Junit tests**
