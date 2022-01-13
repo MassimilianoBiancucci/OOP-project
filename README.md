@@ -295,37 +295,114 @@ Below there is an example:
 ### **Routes**
 
 - #### **Requests for raw tweets**
-
+    
     - **Input**
 
         - **Reqest by tweets id**
+
+            <table 
+                style="width:100%" 
+                border="2" 
+                bordercolor = "#fffff">
+            <tbody>
+            <tr>
+            <td style="width:30%"> Request route</td>
+            <td>localhost:8080/tweets</td>
+            </tr>
+            <tr>
+            <td style="width:30%"> Metadata request route</td>
+            <td>localhost:8080/tweets/metadata</td>
+            </tr>
+            </tbody>
+            </table>
 
             - **Metadata**
 
                 <details>
 
-                <summary>Click to expand json</summary>
+                <summary style="color: red"><b> Click to expand json </b></summary>
 
                 ```json
                 {
-                    "metadata":[
-                        {
-                            "field" : "tweetIds",
-                            "type" : "JsonArray",
-                            "content":[
-                                "int"
-                            ],
-                            "description": "Array of ids of each tweet that should be returned in the response."
-                        },
-                        {
-                            "field" : "filters",
-                            "type" : "JsonArray",
-                            "content":[
-                                "JsonObject"
-                            ],
-                            "description": "Array of filters, follow the documentation for further details on filters."
-                        }
-                    ]
+                    "metadata":{
+                        "input": [
+                            {
+                                "field" : "tweetIds",
+                                "type" : "JsonArray",
+                                "description": "Array of ids of each tweet that should be returned in the response.",
+                                "content":[
+                                    "int"
+                                ]
+                            },
+                            {
+                                "field" : "filters",
+                                "type" : "JsonObject",
+                                "description": "Object that contain combinations of filters, follow the documentation for further details on filters.",
+                                "content":[
+                                    "JsonObject"
+                                ]
+                            }
+                        ],
+                        "output": [
+                            {
+                                "field" : "tweets",
+                                "type" : "JsonArray",
+                                "description": "An array of tweets, each JsonObject inside this array, is a tweet.",
+                                "contentTypes":[
+                                    "JsonObject"
+                                ],
+                                "content":{
+                                    "obj1": [
+                                        {
+                                            "field" : "id",
+                                            "type" : "String",
+                                            "description": "tweet id."
+                                        },
+                                        {
+                                            "field" : "text",
+                                            "type" : "String",
+                                            "description": "tweet text content."
+                                        },
+                                        {
+                                            "field" : "created_at",
+                                            "type" : "String",
+                                            "description": "date of creation of the corresponding tweet."
+                                        },
+                                        {
+                                            "field" : "public_metrics",
+                                            "type" : "JsonObject",
+                                            "description": "json object that contain all the metrics needed for the engagement anlysis: retweet_count, reply_count, like_count, quote_count.",
+                                            "contentTypes":[
+                                                "int"
+                                            ],
+                                            "content":[
+                                                {
+                                                    "field" : "retweet_count",
+                                                    "type" : "int",
+                                                    "description": "number of retweet associated to the corresponding tweet."
+                                                },
+                                                {
+                                                    "field" : "reply_count",
+                                                    "type" : "int",
+                                                    "description": "Number of comments to the corresponding tweet."
+                                                },
+                                                {
+                                                    "field" : "like_count",
+                                                    "type" : "int",
+                                                    "description": "number of likes associated to the corresponding tweet."
+                                                },
+                                                {
+                                                    "field" : "quote_count",
+                                                    "type" : "int",
+                                                    "description": "Number of retweet with a quote by the user that retweeted that tweet."
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
                 }
                 ```
                 </details>
@@ -334,7 +411,7 @@ Below there is an example:
 
                 <details>
 
-                <summary>Click to expand json</summary>
+                <summary style="color: red"><b> Click to expand json </b></summary>
 
                 ```json
                 {
@@ -343,53 +420,114 @@ Below there is an example:
                         345676,
                         456778563
                     ],
-                    "filters" : [
-                        {
-                            "$or": [
-                                {
-                                    filter1
-                                },
-                                {
-                                    filter1
-                                }
-                            ]
-                        },
-                        {
-
-                        }
-                    ] 
+                    "filters" : {
+                        "$or": [
+                            {"created_at": {"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
+                            {"created_at": {"$bt": ["2022-01-07T14:07:05Z", "2022-01-08T14:07:02Z"]}},
+                            {"like_count": {"$gt": 1000}}
+                        ]
+                    {
                 }
                 ```
                 </details>
 
         - **Reqest by user id**
             
+            <table 
+                style="width:100%" 
+                border="2" 
+                bordercolor = "#fffff">
+            <tbody>
+            <tr>
+            <td style="width:20%"> Request route</td>
+            <td>localhost:8080/user/:userId</td>
+            </tr>
+            <tr>
+            <td style="width:30%"> Metadata request route</td>
+            <td>localhost:8080/user/metadata</td>
+            </tr>
+            </tbody>
+            </table>
+
             - **Metadata**
 
                 <details>
 
-                <summary>Click to expand json</summary>
+                <summary style="color: red"><b> Click to expand json </b></summary>
 
                 ```json
                 {
-                    "metadata":[
-                        {
-                            "field" : "tweetIds",
-                            "type" : "JsonArray",
-                            "content":[
-                                "int"
-                            ],
-                            "description": "Array of ids of each tweet that should be returned in the response."
-                        },
-                        {
-                            "field" : "filters",
-                            "type" : "JsonArray",
-                            "content":[
-                                "JsonObject"
-                            ],
-                            "description": "Array of filters, follow the documentation for further details on filters."
-                        }
-                    ]
+                    "metadata":{
+                        "input": [
+                            {
+                                "field" : "filters",
+                                "type" : "JsonArray",
+                                "description": "Array of filters, follow the documentation for further details on filters.",
+                                "content":[
+                                    "JsonObject"
+                                ]
+                            }
+                        ],
+                        "output": [
+                            {
+                                "field" : "tweets",
+                                "type" : "JsonArray",
+                                "description": "An array of tweets, each JsonObject inside this array, is a tweet.",
+                                "contentTypes":[
+                                    "JsonObject"
+                                ],
+                                "content":{
+                                    "obj1": [
+                                        {
+                                            "field" : "id",
+                                            "type" : "String",
+                                            "description": "tweet id."
+                                        },
+                                        {
+                                            "field" : "text",
+                                            "type" : "String",
+                                            "description": "tweet text content."
+                                        },
+                                        {
+                                            "field" : "created_at",
+                                            "type" : "String",
+                                            "description": "date of creation of the corresponding tweet."
+                                        },
+                                        {
+                                            "field" : "public_metrics",
+                                            "type" : "JsonObject",
+                                            "description": "json object that contain all the metrics needed for the engagement anlysis: retweet_count, reply_count, like_count, quote_count.",
+                                            "contentTypes":[
+                                                "int"
+                                            ],
+                                            "content":[
+                                                {
+                                                    "field" : "retweet_count",
+                                                    "type" : "int",
+                                                    "description": "number of retweet associated to the corresponding tweet."
+                                                },
+                                                {
+                                                    "field" : "reply_count",
+                                                    "type" : "int",
+                                                    "description": "Number of comments to the corresponding tweet."
+                                                },
+                                                {
+                                                    "field" : "like_count",
+                                                    "type" : "int",
+                                                    "description": "number of likes associated to the corresponding tweet."
+                                                },
+                                                {
+                                                    "field" : "quote_count",
+                                                    "type" : "int",
+                                                    "description": "Number of retweet with a quote by the user that retweeted that tweet."
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
                 }
                 ```
                 </details>
@@ -398,7 +536,7 @@ Below there is an example:
 
                 <details>
 
-                <summary>Click to expand json</summary>
+                <summary style="color: red"><b> Click to expand json </b></summary>
 
                 ```json
                 {
@@ -407,121 +545,336 @@ Below there is an example:
                         345676,
                         456778563
                     ],
-                    "filters" : [
-                        {
-                            
-                        },
-                        {
-
-                        }
-                    ] 
+                    "filters" : {
+                        "$or": [
+                            {"created_at": {"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
+                            {"created_at": {"$bt": ["2022-01-07T14:07:05Z", "2022-01-08T14:07:02Z"]}},
+                            {"like_count": {"$gt": 1000}}
+                        ]
+                    {
                 }
                 ```
                 </details>
 
     - **Output**
 
-        - **Metadata**
-
-            <details>
-
-            <summary>Click to expand json</summary>
-
-            ```json
-            {
-                "metadata":[
-                    {
-                        "field" : "tweetIds",
-                        "type" : "JsonArray",
-                        "content":[
-                            "int"
-                        ],
-                        "description": "Array of ids of each tweet that should be returned in the response."
-                    },
-                    {
-                        "field" : "filters",
-                        "type" : "JsonArray",
-                        "content":[
-                            "JsonObject"
-                        ],
-                        "description": "Array of filters, follow the documentation for further details on filters."
-                    }
-                ]
-            }
-            ```
-            </details>
-
         - **Example**
 
             <details>
 
-            <summary>Click to expand json</summary>
+            <summary style="color: red"><b> Click to expand json </b></summary>
 
             ```json
             {
-                "tweetIds" : [
-                    23454,
-                    345676,
-                    456778563
-                ],
-                "filters" : [
+                "tweets": [
                     {
-                        "$or": [
-                            {
-                                filter1
-                            },
-                            {
-                                filter1
-                            }
-                        ]
+                        "id": "23454",
+                        "text": "just setting up my twttr",
+                        "created_at": "2006-03-21T20:50:14.000Z",
+                        "public_metrics": {
+                            "retweet_count": 121701,
+                            "reply_count": 10062,
+                            "like_count": 173362,
+                            "quote_count": 17802
+                        }
                     },
                     {
-
+                        "id": "345676",
+                        "text": "just setting up my twttr",
+                        "created_at": "2006-03-21T20:51:43.000Z",
+                        "public_metrics": {
+                            "retweet_count": 6105,
+                            "reply_count": 147,
+                            "like_count": 4449,
+                            "quote_count": 262
+                        }
+                    },
+                    {
+                        "id": "456778563",
+                        "text": "just setting up my twttr",
+                        "created_at": "2006-03-21T21:00:54.000Z",
+                        "public_metrics": {
+                            "retweet_count": 4767,
+                            "reply_count": 77,
+                            "like_count": 3491,
+                            "quote_count": 152
+                        }
                     }
-                ] 
+                ]
             }
             ```
-            </details>
+            </details> </br>
 
 - #### **Requests for tweets metrics**
     
-    - #### **Reqest by tweets id**
+    - #### **Input**
 
-        - **Metadata**
+        - #### **Reqest by tweets id**
 
-            <details>
+            <table 
+                style="width:100%" 
+                border="2" 
+                bordercolor = "#fffff">
+            <tbody>
+            <tr>
+            <td style="width:30%"> Request route</td>
+            <td>localhost:8080/tweets/metrics</td>
+            </tr>
+            <tr>
+            <td style="width:30%"> Metadata request route</td>
+            <td>localhost:8080/tweets/metrics/metadata</td>
+            </tr>
+            </tbody>
+            </table>
 
-            <summary>Click to expand json</summary>
+            - **Metadata**
 
-            ```json
-            {
-                "metadata":[
-                    {
-                        "field" : "tweetIds",
-                        "type" : "JsonArray",
-                        "content":[
-                            "int"
+                <details>
+
+                <summary style="color: red"><b> Click to expand json </b></summary>
+
+                ```json
+                {
+                    "metadata":{
+                        "input": [
+                            {
+                                "field" : "tweetIds",
+                                "type" : "JsonArray",
+                                "description": "Array of ids of each tweet that should be returned in the response.",
+                                "content":[
+                                    "int"
+                                ]
+                            },
+                            {
+                                "field" : "filters",
+                                "type" : "JsonObject",
+                                "description": "Object that contain combinations of filters, follow the documentation for further details on filters.",
+                                "content":[
+                                    "JsonObject"
+                                ]
+                            }
                         ],
-                        "description": "Array of ids of each tweet that should be returned in the response."
-                    },
-                    {
-                        "field" : "filters",
-                        "type" : "JsonArray",
-                        "content":[
-                            "JsonObject"
-                        ],
-                        "description": "Array of filters, follow the documentation for further details on filters."
+                        "output": [
+                            {
+                                "field" : "tweetsMetrics",
+                                "type" : "JsonObject",
+                                "description": "An array of tweets metrics, inside this object there are all the statistics on the engagement of the tweets requested.",
+                                "contentTypes":[
+                                    "float"
+                                ],
+                                "content":[
+                                    {
+                                        "field" : "retweet_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the number of retweets associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "reply_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the number of comments of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "like_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of likes associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "quote_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the number of retweets with a quote of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "engagement_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the engaement metric associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "retweet_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the number of retweets associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "reply_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the number of comments of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "like_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of likes associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "quote_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the number of retweets with a quote of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "engagement_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the engaement metric associated to the passed tweets."
+                                    }
+                                ]
+                            }
+                        ]
                     }
-                ]
-            }
-            ```
-            </details>
+                }
+                ```
+                </details>
+
+            - **Example**
+
+                <details>
+
+                <summary style="color: red"><b> Click to expand json </b></summary>
+
+                ```json
+                {
+                    "tweetIds" : [
+                        23454,
+                        345676,
+                        456778563
+                    ],
+                    "filters" : {
+                        "$or": [
+                            {"created_at": {"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
+                            {"created_at": {"$bt": ["2022-01-07T14:07:05Z", "2022-01-08T14:07:02Z"]}},
+                            {"like_count": {"$gt": 1000}}
+                        ]
+                    {
+                }
+                ```
+                </details>
+
+        - #### **Reqest by user id**
+            
+            <table 
+                style="width:100%" 
+                border="2" 
+                bordercolor = "#fffff">
+            <tbody>
+            <tr>
+            <td style="width:30%"> Request route</td>
+            <td>localhost:8080/user/:userId/metrics</td>
+            </tr>
+            <tr>
+            <td style="width:30%"> Metadata request route</td>
+            <td>localhost:8080/user/metrics/metadata</td>
+            </tr>
+            </tbody>
+            </table>
+
+            - **Metadata**
+
+                <details>
+
+                <summary style="color: red"><b> Click to expand json </b></summary>
+
+                ```json
+                {
+                    "metadata":{
+                        "input": [
+                            {
+                                "field" : "filters",
+                                "type" : "JsonObject",
+                                "description": "Object that contain combinations of filters, follow the documentation for further details on filters.",
+                                "content":[
+                                    "JsonObject"
+                                ]
+                            }
+                        ],
+                        "output": [
+                            {
+                                "field" : "tweetsMetrics",
+                                "type" : "JsonObject",
+                                "description": "An array of tweets metrics, inside this object there are all the statistics on the engagement of the tweets requested.",
+                                "contentTypes":[
+                                    "float"
+                                ],
+                                "content":[
+                                    {
+                                        "field" : "retweet_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the number of retweets associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "reply_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the number of comments of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "like_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of likes associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "quote_count_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the number of retweets with a quote of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "engagement_mean",
+                                        "type" : "float",
+                                        "description": "Mean of the engaement metric associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "retweet_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the number of retweets associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "reply_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the number of comments of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "like_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of likes associated to the passed tweets."
+                                    },
+                                    {
+                                        "field" : "quote_count_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the number of retweets with a quote of the passed tweets."
+                                    },
+                                    {
+                                        "field" : "engagement_variance",
+                                        "type" : "float",
+                                        "description": "Variance of the engaement metric associated to the passed tweets."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+                ```
+                </details>
+    
+            - **Example**
+
+                <details>
+
+                <summary style="color: red"><b> Click to expand json </b></summary>
+
+                ```json
+                {
+                    "filters" : {
+                        "$or": [
+                            {"created_at": {"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
+                            {"created_at": {"$bt": ["2022-01-07T14:07:05Z", "2022-01-08T14:07:02Z"]}},
+                            {"like_count": {"$gt": 1000}}
+                        ]
+                    {
+                }
+                ```
+                </details>
+
+    - **Output**
 
         - **Example**
 
             <details>
 
-            <summary>Click to expand json</summary>
+            <summary style="color: red"><b> Click to expand json </b></summary>
 
             ```json
             {
@@ -547,64 +900,7 @@ Below there is an example:
                 ] 
             }
             ```
-            </details>
-
-    - #### **Reqest by user id**
-        
-        - **Metadata**
-
-            <details>
-
-            <summary>Click to expand json</summary>
-
-            ```json
-            {
-                "metadata":[
-                    {
-                        "field" : "tweetIds",
-                        "type" : "JsonArray",
-                        "content":[
-                            "int"
-                        ],
-                        "description": "Array of ids of each tweet that should be returned in the response."
-                    },
-                    {
-                        "field" : "filters",
-                        "type" : "JsonArray",
-                        "content":[
-                            "JsonObject"
-                        ],
-                        "description": "Array of filters, follow the documentation for further details on filters."
-                    }
-                ]
-            }
-            ```
-            </details>
-
-        - **Example**
-
-            <details>
-
-            <summary>Click to expand json</summary>
-
-            ```json
-            {
-                "tweetIds" : [
-                    23454,
-                    345676,
-                    456778563
-                ],
-                "filters" : [
-                    {
-                        
-                    },
-                    {
-
-                    }
-                ] 
-            }
-            ```
-            </details>
+            </details> </br>
 
 
 - #### **Requests body documentation**

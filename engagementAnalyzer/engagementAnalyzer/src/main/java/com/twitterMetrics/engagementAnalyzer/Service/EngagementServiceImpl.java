@@ -1,21 +1,22 @@
-package com.twitterMetrics.engagementAnalayzer.Service;
+package com.twitterMetrics.engagementAnalyzer.Service;
 
 import java.io.IOException;
+
+import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Parser.RequestParser;
 import com.twitterMetrics.engagementAnalyzer.Service.TwitterApiCaller.TwitterApiCaller;
 
-
+@Service
 public class EngagementServiceImpl implements EngagementService{
 	
-	public JsonObject getRawTweetsData(String requestBody) {
+	public JsonObject getRawTweetsData(JsonObject requestBody) {
 		
 		try {
 			
 			TwitterApiCaller api = new TwitterApiCaller();
-			RequestParser requestParser = new RequestParser(requestBody);
-			
+			RequestParser requestParser = new RequestParser(requestBody);	
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -31,7 +32,7 @@ public class EngagementServiceImpl implements EngagementService{
 		return new JsonObject();
 	}
 
-	public JsonObject getTweetsStats(String requestBody) {
+	public JsonObject getTweetsStats(JsonObject requestBody) {
 		// TODO Auto-generated method stub
 		
 		return new JsonObject();

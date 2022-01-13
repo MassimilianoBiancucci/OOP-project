@@ -8,6 +8,7 @@ public class EngagementAnalyzerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EngagementAnalyzerApplication.class, args);
+		System.out.println("engagementAnalyzer started ..");
 	}
 
 }

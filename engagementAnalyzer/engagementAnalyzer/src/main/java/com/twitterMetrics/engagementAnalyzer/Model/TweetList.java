@@ -1,4 +1,4 @@
-package com.twitterMetrics.engagementAnalayzer.Model;
+package com.twitterMetrics.engagementAnalyzer.Model;
 
 import java.util.ArrayList;
 

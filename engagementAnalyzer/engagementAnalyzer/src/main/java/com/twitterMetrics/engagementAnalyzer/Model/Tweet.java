@@ -1,10 +1,11 @@
-package com.twitterMetrics.engagementAnalayzer.Model;
+package com.twitterMetrics.engagementAnalyzer.Model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import com.google.gson.JsonObject;
+import com.twitterMetrics.engagementAnalyzer.Parser.DateParser;
 
 public class Tweet {
 	
@@ -12,7 +13,7 @@ public class Tweet {
 	private int tweetId = -1;
 	
 	// Tweet date of creation with ref to zulu time
-	private LocalDateTime date;
+	private DateParser date;
 	
 	// Tweet message 
 	private String msg = "";
@@ -39,6 +40,7 @@ public class Tweet {
 		
 		this.setTweetId(id);
 		this.setMsg(msg);
+		this.date = new DateParser(date);
 	}
 	
 	// constructor with engagement raw data 
@@ -78,34 +80,22 @@ public class Tweet {
 	}
 	
 	public LocalDateTime getDate() {
-		return this.date;
+		return this.date.getDate();
 	}
 	
 	// method for getting the date in a clean string format
 	public String getStringDate() {
-		return this.date.format(outputFormat);
+		return this.date.getSimpleDate();
 	}
 	
 	// method for getting the date in twitter string format
 	public String getTwitterDate() {
-		return this.date.format(outputFormat);
+		return this.date.getTwitterDate();
 	}
 	
 	// method for 
 	public void setDate(String stringDate) {
-		
-		try {
-			this.date = LocalDateTime.parse(stringDate, inputFormat);
-			
-		}catch(DateTimeParseException e) {
-			// for wrong formatted input string 
-			// TODO implement logging
-			
-		}catch(Exception e) {
-			// for any other Exception
-			// TODO implement logging
-			
-		}
+		this.date.setDate(stringDate);
 	}
 	
 	// getter and setter for tweet message

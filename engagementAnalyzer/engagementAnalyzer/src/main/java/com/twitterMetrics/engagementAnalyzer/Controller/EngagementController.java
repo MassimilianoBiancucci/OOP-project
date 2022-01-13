@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.twitterMetrics.engagementAnalayzer.Service.EngagementService;
+import com.google.gson.JsonObject;
+import com.twitterMetrics.engagementAnalyzer.Service.EngagementService;
 
 @RestController
 public class EngagementController {
@@ -23,9 +24,9 @@ public class EngagementController {
 	
 	// route that return raw tweets in json format with 
 	@RequestMapping(value = "/tweets", method = RequestMethod.GET)
-	public ResponseEntity<Object> getTweets(@RequestBody String requestParameters){
+	public ResponseEntity<Object> getTweets(@RequestBody JsonObject requestBody){
 		
-		
+		engagementService.getRawTweetsData(requestBody);
 		
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
@@ -43,7 +44,7 @@ public class EngagementController {
 	
 	// route that return raw tweets for certain user
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-	public ResponseEntity<Object> getUserTweets(@PathVariable("userId") int userId, @RequestBody String requestParameters){
+	public ResponseEntity<Object> getUserTweets(@PathVariable("userId") int userId, @RequestBody String requestBody){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
@@ -61,7 +62,7 @@ public class EngagementController {
 	
 	// route that return engagement statistics based on passed tweets
 	@RequestMapping(value = "/tweets/metrics", method = RequestMethod.GET)
-	public ResponseEntity<Object> getTweetsMetrics(@RequestBody String requestParameters){
+	public ResponseEntity<Object> getTweetsMetrics(@RequestBody String requestBody){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
@@ -79,7 +80,7 @@ public class EngagementController {
 	
 	// route that return engagement statistics based on tweets of specified user
 	@RequestMapping(value = "/user/{userId}/metrics", method = RequestMethod.GET)
-	public ResponseEntity<Object> getUserTweetsMetrics(@PathVariable("userId") int userId, @RequestBody String requestParameters){
+	public ResponseEntity<Object> getUserTweetsMetrics(@PathVariable("userId") int userId, @RequestBody String requestBody){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}

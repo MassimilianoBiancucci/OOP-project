@@ -12,21 +12,20 @@ public class RequestParser {
 	private JsonObject request;
 	private boolean empty = true;
 	
-	public RequestParser(String stringRequest) {
+	public RequestParser(JsonObject jsonRequest) {
 		
 		try {
 			
-			this.request = new JsonParser().parse(stringRequest).getAsJsonObject();
+			this.request = jsonRequest;
+			parseRequest();
 			
 		}catch(JsonSyntaxException e) {
 			// TODO do something if the json isn't formatted correctly
 			
 		}catch(Exception e) {
 			// TODO Implement behavior for all other possible exceptions
-			
+			throw e;
 		}
-		
-		
 		
 	}
 	
