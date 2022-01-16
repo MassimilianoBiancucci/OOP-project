@@ -11,21 +11,19 @@ import com.twitterMetrics.engagementAnalyzer.Service.TwitterApiCaller.TwitterApi
 @Service
 public class EngagementServiceImpl implements EngagementService{
 	
-	public JsonObject getRawTweetsData(JsonObject requestBody) {
+	
+	
+	// method that process the request of raw tweets
+	public JsonObject getRawTweetsData(JsonObject requestBody) throws Exception {
 		
-		try {
-			
-			TwitterApiCaller api = new TwitterApiCaller();
-			RequestParser requestParser = new RequestParser(requestBody);	
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		RequestParser requestParser = new RequestParser(requestBody);	
+		TwitterApiCaller api = new TwitterApiCaller(requestParser.getBearerToken());
+		
 		
 		return new JsonObject();
 	}
 
+	
 	public JsonObject getRawTweetsDataMeta() {
 		// TODO Auto-generated method stub
 		

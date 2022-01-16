@@ -26,9 +26,15 @@ public class EngagementController {
 	@RequestMapping(value = "/tweets", method = RequestMethod.GET)
 	public ResponseEntity<Object> getTweets(@RequestBody JsonObject requestBody){
 		
-		engagementService.getRawTweetsData(requestBody);
+		try {
+			engagementService.getRawTweetsData(requestBody);
+			return new ResponseEntity<>("success", HttpStatus.OK);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+		}
 		
-		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
 	// method that return the metadata request for the /tweets route
@@ -38,13 +44,13 @@ public class EngagementController {
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
-
+	
 	///////////////////////////////////////////////////////////////////////////////////
 	// REQUESTS FOR RAW TWEETS BY USER ID//////////////////////////////////////////////
 	
 	// route that return raw tweets for certain user
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-	public ResponseEntity<Object> getUserTweets(@PathVariable("userId") int userId, @RequestBody String requestBody){
+	public ResponseEntity<Object> getUserTweets(@PathVariable("userId") int userId, @RequestBody JsonObject requestBody){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
@@ -62,7 +68,7 @@ public class EngagementController {
 	
 	// route that return engagement statistics based on passed tweets
 	@RequestMapping(value = "/tweets/metrics", method = RequestMethod.GET)
-	public ResponseEntity<Object> getTweetsMetrics(@RequestBody String requestBody){
+	public ResponseEntity<Object> getTweetsMetrics(@RequestBody JsonObject requestBody){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
@@ -74,13 +80,13 @@ public class EngagementController {
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 	
-		
+	
 	///////////////////////////////////////////////////////////////////////////////////
 	// REQUESTS FOR TWEETS METRICS BY USER ID /////////////////////////////////////////
 	
 	// route that return engagement statistics based on tweets of specified user
 	@RequestMapping(value = "/user/{userId}/metrics", method = RequestMethod.GET)
-	public ResponseEntity<Object> getUserTweetsMetrics(@PathVariable("userId") int userId, @RequestBody String requestBody){
+	public ResponseEntity<Object> getUserTweetsMetrics(@PathVariable("userId") int userId, @RequestBody JsonObject requestBody){
 		// TODO implement
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}

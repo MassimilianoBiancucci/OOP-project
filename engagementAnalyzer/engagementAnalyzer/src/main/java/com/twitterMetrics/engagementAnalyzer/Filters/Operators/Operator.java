@@ -23,6 +23,7 @@ public abstract class Operator {
 	
 	// Enum that encode all the operator symbols
 	public enum SymOp {
+		nop,
 		not,
 		or,
 		and,
@@ -36,6 +37,7 @@ public abstract class Operator {
 	}
 	
 	public static final Map<String, SymOp> symbolsMap = Map.ofEntries(
+		entry("$nop", SymOp.nop),
 	    entry("$not", SymOp.not),
 	    entry("$or", SymOp.or),
 	    entry("$and", SymOp.and),
@@ -48,7 +50,8 @@ public abstract class Operator {
 	    entry("$bt", SymOp.bt)
 	);
 	
-	public static final Map<SymOp, String> symbolsMap2String = Map.ofEntries(
+	public static final Map<SymOp, String> symbol2String = Map.ofEntries(
+		entry(SymOp.nop, "$nop"),
 		entry(SymOp.not, "$not"),
 		entry(SymOp.or , "$or" ),
 		entry(SymOp.and, "$and"),
@@ -84,28 +87,27 @@ public abstract class Operator {
 			}else if(values instanceof OperatorFilterValues) {
 				validateValues((OperatorFilterValues) values);
 				
+			}else if(values == null) {
+				// if the passed values is null check if the symbol is $nop else throw an exception
+				if(this.symbol != SymOp.nop)
+					throw new IncorrectOperatorValuesException(
+						"the value null passed to the operator " + 
+						symbol2String.get(this.symbol) + "dosen't match the allowed types!\n" + 
+						"only the $nop operator accept it!");
 			}
 		}
 		
 	}
 	
 	// method that verify if the passed symbol is allowed
-	private boolean validateSymbol(String sym) throws Exception {
-		
-		if(!symbolsMap.containsKey(sym)) {
-			// if the symbol isn't acceptable
-			throw new IncorrectOperatorSymbolException("the symbol passed it's not an operator!");
-		}
-		
-		this.symbol = symbolsMap.get(sym);
-		return true;
-	}
+	// if allowed load the symbol inside, this function change for each type of operator
+	protected abstract boolean validateSymbol(String sym) throws Exception;
 	
 	// method that verify if the values int passed are coherent with the symbol
 	private boolean validateValues(OperatorIntValues values) throws Exception {
 		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.in, SymOp.nin, SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
 		if(!allowedSymbols.contains(this.symbol)) {
-			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbolsMap2String.get(this.symbol) + "dosen't match the allowed types!");
+			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
 		
 		this.operatorValues = values;
@@ -116,7 +118,7 @@ public abstract class Operator {
 	private boolean validateValues(OperatorStringValues values) throws Exception {
 		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.in, SymOp.nin, SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
 		if(!allowedSymbols.contains(this.symbol)) {
-			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbolsMap2String.get(this.symbol) + "dosen't match the allowed types!");
+			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
 		
 		this.operatorValues = values;
@@ -127,7 +129,7 @@ public abstract class Operator {
 	private boolean validateValues(OperatorDateValues values) throws Exception {
 		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.in, SymOp.nin, SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
 		if(!allowedSymbols.contains(this.symbol)) {
-			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbolsMap2String.get(this.symbol) + "dosen't match the allowed types!");
+			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
 		
 		this.operatorValues = values;
@@ -136,9 +138,9 @@ public abstract class Operator {
 	
 	// method that verify if the values LocalDate passed are coherent with the symbol
 	private boolean validateValues(OperatorOperatorValues values) throws Exception {
-		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.or, SymOp.and, SymOp.not));
+		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.or, SymOp.and, SymOp.not, SymOp.nop));
 		if(!allowedSymbols.contains(this.symbol)) {
-			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbolsMap2String.get(this.symbol) + "dosen't match the allowed types!");
+			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
 		
 		this.operatorValues = values;
@@ -147,9 +149,9 @@ public abstract class Operator {
 	
 	// method that verify if the filters passed are coherent with the symbol
 	private boolean validateValues(OperatorFilterValues values) throws Exception {
-		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.or, SymOp.and, SymOp.not));
+		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.or, SymOp.and, SymOp.not, SymOp.nop));
 		if(!allowedSymbols.contains(this.symbol)) {
-			throw new IncorrectOperatorValuesException("the values passed: " + values.toString() + " \n to the operator " + symbolsMap2String.get(this.symbol) + "dosen't match the allowed types!");
+			throw new IncorrectOperatorValuesException("the values passed: " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
 		
 		this.operatorValues = values;

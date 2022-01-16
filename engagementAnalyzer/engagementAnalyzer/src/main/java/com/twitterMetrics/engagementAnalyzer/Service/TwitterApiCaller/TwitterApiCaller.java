@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -21,13 +24,13 @@ public class TwitterApiCaller {
 	}
 	
 	// principal constructor
-	public TwitterApiCaller(String passedToken) {
+	public TwitterApiCaller(String BearerToken) {
 		// load the API token passed
-		this.token = passedToken;
+		this.token = BearerToken;
 	}
 	
 	// method that retrieve the tweets from the Twitter API with the tweets ids
-	public String getTweetsFromIds(String[] tweetIds) throws IllegalArgumentException{
+	public JsonObject getTweetsFromIds(String[] tweetIds) throws IllegalArgumentException{
 		
 		if(!(tweetIds.length > 0)) throw new IllegalArgumentException("TwitterApiCaller.getTweetsFromIds() must have at least one tweet id as argument!");
 		
@@ -47,24 +50,31 @@ public class TwitterApiCaller {
 			  .addHeader("Authorization", "Bearer " + this.token)
 			  .build();
 		
-		String responseBody = "";
+		JsonObject jsonResponseBody = new JsonObject();
 		
 		// execution of the call with the handle of the responseBody
 		try {
-			Response response = client.newCall(request).execute();
-			responseBody = response.body().string();
+			
+			Response response = client.newCall(request).execute(); // execute the twitter API call
+			String responseBody = response.body().string(); // parse the response in String format
+			jsonResponseBody = JsonParser.parseString(responseBody).getAsJsonObject(); // Parse the response from string in JsonObject format
+
 		} catch (IOException e) {
+			// catch IO exception
 			e.printStackTrace();
+		} catch (JsonSyntaxException je) {
+			// catch exception raised during the response body parsing from string to Gson object
+			je.printStackTrace();
 		}
 		
 		// return the body response as string
-		return responseBody;
+		return jsonResponseBody;
 
 	}
 	
 	// method that retrieve the tweets from the user id
-	public String getTweetsFromUserId(String userId){
-		return "";
+	public JsonObject getTweetsFromUserId(String userId){
+		return new JsonObject();
 	}
 	
 	

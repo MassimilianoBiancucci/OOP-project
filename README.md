@@ -55,9 +55,9 @@ In this section are explained the principal frameworks and components used in th
 ### **API overview**
 
 ### **Filters**
-Filters are an important part of the API, they can be passed trough the body of the request, in a json format, to determine which tweets will be used for the engagement evaluation, they could be selected based on the text of the tweet, or maybe based on the date because only a certain temporal interval matter.
+The filters are an important part of the API, they can be passed trough the body of the request, in a json format, to determine which tweets will be used for the engagement evaluation. the tweets could be selected based on the text of the tweet, or maybe based on the date because only a certain temporal interval matter.
 
-In this implementation of these filters there are 3 important chuncks that make the filter, those are: `field`, `operator` and `operator's value`. The operators and the values inside, specifies the requirements that the field must satisfy, and the field specifie to which field the requirement should be applied.
+In this implementation of these filters there are 3 important chuncks that make the filter, those are: `field`, `operator` and `operator's values`. The operators and the values inside, specifies the requirements that the field must satisfy, and the field specifie to which field the requirement should be applied.
 
 Below there is an example:
 ```json
@@ -70,16 +70,18 @@ Below there is an example:
 { "created_at": {"$gt": "2022-01-06T18:29:41.000Z"}}
 ```
 - #### **Filter operators** 
-    There are tree types of operators, 2 normal and one special. The special ones are the `logical operators`, those opratars can be used either on other operators either on well formed filters, but not together.
+    There are tree types of operators, 2 normal and one special. The special ones are the `logic operators`, those opratars can be used either on other operators either on well formed filters, but not together.
     The other ones are the `match operators` that could be used for match or unmatch list of values while the `conditional operators` are used for specify interval of values accepted, below there are more accurate explenation of each type.
 
-    - **Logical operators** </br>
-        The `logical operators` can't be applied alone, they are used for:
-        - filter combination or coniugation. 
-        - operator combinations or coniugation.
+    - **Logic operators** </br>
+        The `logic operators` can't be applied alone, they are used for:
+        - filter(s) combination or coniugation. 
+        - operator(s) combinations or coniugation.
+
+        <b>NOTE: It's important to figure out that one limitation of the operators `$or` and `$and`, is that they can take more then one object inside, but these objects must be of the same type, or all `filters` or all `operators`.</b>
 
         They are 3 operators, that permit to create unions, intersections or inversion on ensembles, if you consider all the tweets as the starting enseble and each well formed filter or operator as a subset of the general ensamble, these operators could be used for create ensables operations between these subsets.
-        If the `logical operators` are used with other operators inside, they are considered operators and should be included inside a filter, if they are used with filters inside, they are considered filters itself.
+        If the `logic operators` are used with other operators inside, they are considered operators and should be included inside a filter, if they are used with filters inside, they are considered filters itself.
         This type of operator should be used only on `operators` or only on `filters`, otherwise the mix of the two will bring to an exeception, and to the refuse of the request.
 
         <table style="width:100%" border="2" bordercolor = "#fffff">
@@ -91,17 +93,17 @@ Below there is an example:
         </tr>
         <tr>
             <td>$not</td>
-            <td>Negation logical operator</td>
+            <td>Negation logic operator</td>
             <td>{"$not" : {filter or operator}}</td>
         </tr>
         <tr>
             <td>$or</td>
-            <td>Logical operator</td>
+            <td>Logic operator</td>
             <td>{"$or": [{filter1 or operator1},{filter2 or operator2},...]}</td>
         </tr>
         <tr>
             <td>$and</td>
-            <td>Logical operator</td>
+            <td>Logic operator</td>
             <td>{"$and": [{filter1 or operator1},{filter2 or operator2},...]}</td>
         </tr>
         </tbody>
@@ -184,58 +186,66 @@ Below there is an example:
         <td>
         The count of retweet on the original tweet, even if the current tweet is<br>
         retwetted from another author, this value is considered from the original one.<br>
-        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
+        This field can be applied to <b>match operators</b> and to <b>conditional operators</b>,<br> not on <b>logical operators</b>.
         </td>
     </tr>
     <tr>
         <td>reply_count</td>
         <td>int</td>
         <td>The number of replies or comments to the tweet.<br>
-        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
+        This field can be applied to <b>match operators</b> and to <b>conditional operators</b>,<br> not on <b>logical operators</b>.
         </td>
     </tr>
     <tr>
         <td>like_count</td>
         <td>int</td>
         <td>The count of likes.<br>
-        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
+        This field can be applied to <b>match operators</b> and to <b>conditional operators</b>,<br> not on <b>logical operators</b>.
         </td>
     </tr>
     <tr>
         <td>quote_count</td>
         <td>int</td>
         <td>The number of quote, that are retweets with a comments ahead.<br>
-        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
+        This field can be applied to <b>match operators</b> and to <b>conditional operators</b>,<br> not on <b>logical operators.
         </td>
     </tr>
     <tr>
         <td>engagement</td>
         <td>int</td>
         <td>The value of engagement calculated from the tweet responses.<br>
-        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
+        This field can be applied to <b>match operators</b> and to <b>conditional operators</b>,<br> not on <b>logical operators.
         </td>
     </tr>
     <tr>
         <td>text</td>
         <td>String</td>
         <td>The text content of the tweet.<br>
-        This field can be applied only to match operators.
+        This field can be applied only to <b>match operators</b>.
         </td>
     </tr>
     <tr>
         <td>created_at</td>
         <td>Date</td>
-        <td>The publication date of the tweet.<br>
-        This field can be applied to match operators and to conditional operators,<br> not on logical operators.
+        <td>The publication date and time of the tweet.<br>
+        This field can be applied to <b>match operators</b> and to <b>conditional operators</b>,<br> not on <b>logical operators.
+        </td>
+    </tr>
+    <tr>
+        <td>created_in_timeslot</td>
+        <td>Time</td>
+        <td>This parameter is a subparameter of created_at, beacuse it consider<br>
+        only the time (hours, minutes and seconds), for each day,<br>
+        this mean that can be used for filter tweets in certain time slots.<br>
+        This field can be applied to <b>match operators</b> and to <b>conditional operators</b>,<br> not on <b>logical operators</b>.
         </td>
     </tr>
     </tbody>
     </table>
 
-- #### **Filter combinations**
+- #### **Filter and operators combinations**
 
     In this section will be shown some examples of filters combinations, to highlight what can be passed to the API in the request body and what will throw an error.
-    
     By combination of filters it is meant an extensive usage of the `logical operators` to combine other operators or filters, below the examples:
     - **Combinations of operators:**
         ```json
@@ -281,22 +291,22 @@ Below there is an example:
         This filters implementation can garant a good flexibility and interchangeability thanks to the extensive usage of classes Inheritance.
         As shown before there are three main componetns of each filter: the `field`, the `operator` and the `operator's values`. there are many field with different characteristics, and many operators that accept only certain type of values, so there is an abstract class for each one of this "abstract" concepts that are extended for each subcase. In this way each class that accept a certain abstract class can accept all the subclasses and apply a different behaviour for each one, for example accept it or throw an exception where the combination of filter, operator and operatorValues can't work together. 
 
-        ![Filters package uml](UMLs/Filters%20package%20diagram.png)
-
-    - Date filters
-
+        ![Filters package uml](UMLs/Filters%20V2%20package%20diagram.png)
 
     - Metric filters
 
-
     - Message filters
+
+    - Date filters
+
+    - TimeSlot filters
 
 
 ### **Routes**
 This api has two main functionalities, the first is the request of the raw tweets directly taken from the twitter api, with the application of the passed filters. The second functionality is the request of some statistics on the tweets requested after the application of the passed filters.
 Each functionality can be requested with two different routes (four routes in total), each one enable to request the same functionality in two different ways. The fisrt by passing a list of tweets ids in the request, the second by specifying the user id in the route.
 
-Note that for each route are present on more route for the metadata request, that explain with a schematic format the structure of the response, with field names, fields types, and some special structure for explain the inner structure of nested objects and arrays. The documentation for the metadata json is present below: [Metadata formt documentation](#metadata-formt-documentation).
+Note that for each route are present one more route for the metadata request, that explain with a schematic format the structure of the expected request body and the response body, with field names, fields types, and some special structure for explain the inner structure of nested objects and arrays. The documentation for the metadata json is present below: [Metadata formt documentation](#metadata-formt-documentation).
 
 Here there is the comprensive table with all the routes of this API:
 
@@ -392,12 +402,13 @@ Below all the routes are explained in detail, with example of requests and examp
                     The request by tweets id has a static route, all the parameters are in the request body.
                 - #### **Request body parameters**
                     The request body must be in json format, below the parameters:
+                    - `TwitterBearerToken`: String that contain your OAuth 2.0 Bearer token issued from Twitter in your [Twitter Developer portal](https://developer.twitter.com/en/portal/dashboard), this field must be filled with a valid token or the API will throw an exception and the request will fail.
                     - `tweetIds`: json array of int, that constain the id's of each tweet that the service will query from the Twitter API, and where the passed filters will be applied.
                     - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
             - #### **Metadata**
                 For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/tweets/metadata` route:
-
+                
                 <details>
 
                 <summary style="color: red"><b> Click to expand json </b></summary>
@@ -406,6 +417,11 @@ Below all the routes are explained in detail, with example of requests and examp
                 {
                     "metadata":{
                         "input": [
+                            {
+                                "field" : "TwitterBearerToken",
+                                "type" : "String",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                            },
                             {
                                 "field" : "tweetIds",
                                 "type" : "JsonArray",
@@ -496,6 +512,7 @@ Below all the routes are explained in detail, with example of requests and examp
 
                 ```json
                 {
+                    "TwitterBearerToken": "AAAAAAAAAAAAAAAAAAASC5JzzAAMhUXwEAAAOU%3VcayzHCAGeyYBqAARFm871IloLWyHVYofv%2F0BNEfBoWWCds94xyPgxdVfdGHK8HZDijzgHsK",
                     "tweetIds" : [
                         23454,
                         345676,
@@ -507,7 +524,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {"created_at": {"$bt": ["2022-01-07T14:07:05Z", "2022-01-08T14:07:02Z"]}},
                             {"like_count": {"$gt": 1000}}
                         ]
-                    {
+                    }
                 }
                 ```
                 </details> </br>
@@ -547,6 +564,7 @@ Below all the routes are explained in detail, with example of requests and examp
 
                 - #### **Request body parameters**
                     The request body must be in json format, below the parameters:
+                    - `TwitterBearerToken`: String that contain your OAuth 2.0 Bearer token issued from Twitter in your [Twitter Developer portal](https://developer.twitter.com/en/portal/dashboard), this field must be filled with a valid token or the API will throw an exception and the request will fail.
                     - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
             - #### **Metadata**
@@ -560,6 +578,11 @@ Below all the routes are explained in detail, with example of requests and examp
                 {
                     "metadata":{
                         "input": [
+                            {
+                                "field" : "TwitterBearerToken",
+                                "type" : "String",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                            },
                             {
                                 "field" : "filters",
                                 "type" : "JsonArray",
@@ -642,11 +665,7 @@ Below all the routes are explained in detail, with example of requests and examp
 
                 ```json
                 {
-                    "tweetIds" : [
-                        23454,
-                        345676,
-                        456778563
-                    ],
+                    "TwitterBearerToken": "AAAAAAAAAAAAAAAAAAASC5JzzAAMhUXwEAAAOU%3VcayzHCAGeyYBqAARFm871IloLWyHVYofv%2F0BNEfBoWWCds94xyPgxdVfdGHK8HZDijzgHsK",
                     "filters" : {
                         "$or": [
                             {"created_at": {"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
@@ -775,6 +794,11 @@ Below all the routes are explained in detail, with example of requests and examp
                     "metadata":{
                         "input": [
                             {
+                                "field" : "TwitterBearerToken",
+                                "type" : "String",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                            },
+                            {
                                 "field" : "tweetIds",
                                 "type" : "JsonArray",
                                 "description": "Array of ids of each tweet that should be returned in the response.",
@@ -867,6 +891,7 @@ Below all the routes are explained in detail, with example of requests and examp
 
                 ```json
                 {
+                    "TwitterBearerToken": "AAAAAAAAAAAAAAAAAAASC5JzzAAMhUXwEAAAOU%3VcayzHCAGeyYBqAARFm871IloLWyHVYofv%2F0BNEfBoWWCds94xyPgxdVfdGHK8HZDijzgHsK",
                     "tweetIds" : [
                         23454,
                         345676,
@@ -878,7 +903,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {"created_at": {"$bt": ["2022-01-07T14:07:05Z", "2022-01-08T14:07:02Z"]}},
                             {"like_count": {"$gt": 1000}}
                         ]
-                    {
+                    }
                 }
                 ```
                 </details>
@@ -919,6 +944,11 @@ Below all the routes are explained in detail, with example of requests and examp
                 {
                     "metadata":{
                         "input": [
+                            {
+                                "field" : "TwitterBearerToken",
+                                "type" : "String",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                            },
                             {
                                 "field" : "filters",
                                 "type" : "JsonObject",
@@ -1004,13 +1034,14 @@ Below all the routes are explained in detail, with example of requests and examp
 
                 ```json
                 {
+                    "TwitterBearerToken": "AAAAAAAAAAAAAAAAAAASC5JzzAAMhUXwEAAAOU%3VcayzHCAGeyYBqAARFm871IloLWyHVYofv%2F0BNEfBoWWCds94xyPgxdVfdGHK8HZDijzgHsK",
                     "filters" : {
                         "$or": [
                             {"created_at": {"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
                             {"created_at": {"$bt": ["2022-01-07T14:07:05Z", "2022-01-08T14:07:02Z"]}},
                             {"like_count": {"$gt": 1000}}
                         ]
-                    {
+                    }
                 }
                 ```
                 </details>
