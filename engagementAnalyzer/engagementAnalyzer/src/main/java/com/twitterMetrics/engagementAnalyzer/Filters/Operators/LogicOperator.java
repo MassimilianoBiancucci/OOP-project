@@ -25,6 +25,10 @@ public class LogicOperator extends Operator{
 		
 	}
 	
+	public LogicOperator(SymOp sym, OperatorValues values) throws Exception {
+		this(symbol2String.get(sym), values);
+	}
+	
 	// Definition of the validation function for the symbol
 	protected boolean validateSymbol(String sym) throws Exception{
 		

@@ -4,7 +4,7 @@ University project for the object oriented programming course.
 ## **Overview**
 This project aims to create a simple java application using the Springboot framework. This application runs a Tomcat server that provides a local RESTful API over HTTP protocol, for the analysis of the people engagement on Twitter, based on the responses on some tweets. 
 
-This application use the Twitter API to retrieve the tweets informations, applying to them modular filters, enabling the client to request metrics only on specific tweets.
+This application use the Twitter API to retrieve the tweets informations, and applying to them modular filters, enabling the client to request engagement metrics only on specific tweets.
 
 # **Index**
 
@@ -78,12 +78,13 @@ Below there is an example:
         - filter(s) combination or coniugation. 
         - operator(s) combinations or coniugation.
 
-        <b>NOTE: It's important to figure out that one limitation of the operators `$or` and `$and`, is that they can take more then one object inside, but these objects must be of the same type, or all `filters` or all `operators`.</b>
+        <b>NOTE: Logic operator can be used only before a Filter field object. If one logic operator will be passed inside a Filter field object, the API will rise an exception and the request will fail.</b>
 
-        They are 3 operators, that permit to create unions, intersections or inversion on ensembles, if you consider all the tweets as the starting enseble and each well formed filter or operator as a subset of the general ensamble, these operators could be used for create ensables operations between these subsets.
-        If the `logic operators` are used with other operators inside, they are considered operators and should be included inside a filter, if they are used with filters inside, they are considered filters itself.
-        This type of operator should be used only on `operators` or only on `filters`, otherwise the mix of the two will bring to an exeception, and to the refuse of the request.
-
+        They are 3+1 operators, that permit to create unions, intersections or inversion on ensembles, if you consider all the tweets as the starting enseble and each well formed filter or operator as a subset of the general ensamble, these operators could be used for create ensables operations between these subsets.
+        If the `logic operators` must not be used inside a filter, but only with filters inside.
+        
+        Note that 3+1 operators indicate that there are 3 meaningful operators that should be used, the "+1" is for the $nop operator that as the name suggest does nothing, simply wrap another operator or a filter. The purpose of this operator is internal.
+        
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
         <tr>
@@ -92,19 +93,24 @@ Below there is an example:
             <th>Example of condition</th>
         </tr>
         <tr>
+            <td>$nop</td>
+            <td>No operation logic operator</td>
+            <td>{"$nop" : {filter or logicOperator}}</td>
+        </tr>
+        <tr>
             <td>$not</td>
             <td>Negation logic operator</td>
-            <td>{"$not" : {filter or operator}}</td>
+            <td>{"$not" : {filter or logicOperator}}</td>
         </tr>
         <tr>
             <td>$or</td>
             <td>Logic operator</td>
-            <td>{"$or": [{filter1 or operator1},{filter2 or operator2},...]}</td>
+            <td>{"$or": [{filter1 or logicOperator1},{filter2 or logicOperator2},...]}</td>
         </tr>
         <tr>
             <td>$and</td>
             <td>Logic operator</td>
-            <td>{"$and": [{filter1 or operator1},{filter2 or operator2},...]}</td>
+            <td>{"$and": [{filter1 or logicOperator1},{filter2 or logicOperator2},...]}</td>
         </tr>
         </tbody>
         </table>
@@ -246,7 +252,37 @@ Below there is an example:
 - #### **Filter and operators combinations**
 
     In this section will be shown some examples of filters combinations, to highlight what can be passed to the API in the request body and what will throw an error.
-    By combination of filters it is meant an extensive usage of the `logical operators` to combine other operators or filters, below the examples:
+    By combination of filters it is meant an extensive usage of the `logical operators` to combine many filters, below the examples:
+
+    - **Combinations of filters:**
+        ```json
+        {
+            "filters":{
+                "$or":[
+                    {"like_count": {"$gt": 1000}},
+                    {"created_at": {"$gt": "2022-01-01T14:07:02Z"}},
+                    {"text": {"$in": ["deeplearning", "transformers", "cnn"]}}
+                ]
+            }
+        }
+        ```
+
+        ```json
+        {
+            "filters":{
+                "$or":[
+                    {"like_count": {"$gt": 1000}},
+                    {"created_at": {"$gt": "2022-01-01T14:07:02Z"}},
+                    {"text": {"$in": ["deeplearning", "transformers", "cnn"]}}
+                ]
+            }
+        }
+        ```
+
+        This filter select all the tweets in the given set that satisfy at least on of these conditions: has more than 1000 likes, or that are created after the given date or that contain in the text one word in the list.
+
+        This case is clearly a combination of filters, in this case the logical operator is used for combine filters for differents fields together, more filters for the same fields are allowed but the insertion of another operator (without filters inside) in the $or operator would meaning nothing and would throw an error.
+
     - **Combinations of operators:**
         ```json
         {
@@ -266,22 +302,6 @@ Below there is an example:
         It's clear that this one is only one filter because there is only one field.
         
         Note that put another filter inside the and operator of the first filter would make no sense and would generate an error.
-
-    - **Combinations of filters:**
-        ```json
-        {
-            "filters":{
-                "$or":[
-                    {"like_count": {"$gt": 1000}},
-                    {"created_at": {"$gt": "2022-01-01T14:07:02Z"}},
-                    {"text": {"$in": ["deeplearning", "transformers", "cnn"]}}
-                ]
-            }
-        }
-        ```
-        This filter select all the tweets in the given set that satisfy at least on of these conditions: has more than 1000 likes, or that are created after the given date or that contain in the text one word in the list.
-
-        This case is clearly a combination of filters, in this case the logical operator is used for combine filters for differents fields together, more filters for the same fields are allowed but the insertion of another operator (without filters inside) in the $or operator would meaning nothing and would throw an error.
 
 - #### **Filters package**
     

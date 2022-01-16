@@ -17,6 +17,11 @@ public class DateParser {
 	// selected format flag
 	private boolean isTimeFlag = false;
 	
+	// Empty constructor
+	public DateParser() {
+		this.date = LocalDateTime.now();
+	}
+
 	// Constructor for the date argument
 	public DateParser(String date) {
 		this.setDate(date);

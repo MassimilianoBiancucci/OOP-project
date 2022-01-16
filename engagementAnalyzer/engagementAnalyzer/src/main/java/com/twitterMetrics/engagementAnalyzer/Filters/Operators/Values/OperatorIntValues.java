@@ -9,30 +9,40 @@ public class OperatorIntValues implements OperatorValues{
 	
 	private int[] values;
 	
-	public OperatorIntValues(int... values) {
-		this.values = values;
-	}
-	
-	public OperatorIntValues(JsonArray values) throws IncorrectOperatorValuesException{
-		this.values = new int[values.size()];
+	public OperatorIntValues(JsonPrimitive values) throws IncorrectOperatorValuesException{
 		
 		if(!checkValues(values))
 			throw new IncorrectOperatorValuesException("OperatorIntValues initialized with wrong values.");
 		
-		int idx = 0;
-		for(JsonElement je: values) {
-			this.values[idx++] = je.getAsJsonPrimitive().getAsInt();
-		}
 	}
 	
 	// method that check if the jsonArray contain data acceptable from OperatorIntValues
-	public boolean checkValues(JsonArray values) {
-		// TODO debug
-		for(JsonElement je: values) {
-			JsonPrimitive primitive = je.getAsJsonPrimitive();
-			if(!primitive.isNumber()) {
-				return false;
+	public boolean checkValues(JsonPrimitive values) {
+		
+		if(values.isJsonArray()) {
+			
+			int idx = 0;
+			JsonArray ja = values.getAsJsonArray();
+			this.values = new int[ja.size()];
+			
+			for(JsonElement je: ja) {
+				JsonPrimitive jp = je.getAsJsonPrimitive();
+				if(jp.isNumber()) {
+					// if the data inside the json isn't a Number the check is failed
+					this.values[idx++] = jp.getAsInt();
+				}else {
+					return false;
+				}
 			}
+			
+		}else if(values.isNumber()) {
+			
+			// if the value of an operator is only one number load it.
+			this.values = new int[1];
+			this.values[0] = values.getAsInt();
+					
+		}else {
+			return false;
 		}
 		
 		return true;

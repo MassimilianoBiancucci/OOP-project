@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectFilterFieldException;
+import com.twitterMetrics.engagementAnalyzer.Filters.Filter.Field;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
 
 public class MetricFilter extends Filter{
@@ -22,7 +23,11 @@ public class MetricFilter extends Filter{
 		
 		super(field, op);
 	}
-
+	
+	public MetricFilter(Field field, Operator op) throws Exception {
+		this(field2String.get(field), op);
+	}
+	
 	@Override
 	protected boolean validateField(String field) throws Exception {
 		if(!metricMap.containsKey(field)) {
@@ -51,4 +56,8 @@ public class MetricFilter extends Filter{
 		return metricMap.containsKey(field);
 	}
 	
+	// method that return true if the symbol match an operator 
+	public static boolean isField(Field op) {
+		return metricMap.containsValue(op);
+	}
 }

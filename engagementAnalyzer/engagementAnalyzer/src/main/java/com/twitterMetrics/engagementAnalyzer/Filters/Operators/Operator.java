@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Filters.Filter;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorFilterValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorIntValues;
+import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorLogicOperatorValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorDateValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorOperatorValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorStringValues;
@@ -84,6 +85,9 @@ public abstract class Operator {
 			}else if(values instanceof OperatorOperatorValues) {
 				validateValues((OperatorOperatorValues) values);
 				
+			}else if(values instanceof OperatorLogicOperatorValues) {
+				validateValues((OperatorLogicOperatorValues) values);
+				
 			}else if(values instanceof OperatorFilterValues) {
 				validateValues((OperatorFilterValues) values);
 				
@@ -99,13 +103,15 @@ public abstract class Operator {
 		
 	}
 	
+	
+	
 	// method that verify if the passed symbol is allowed
 	// if allowed load the symbol inside, this function change for each type of operator
 	protected abstract boolean validateSymbol(String sym) throws Exception;
 	
 	// method that verify if the values int passed are coherent with the symbol
 	private boolean validateValues(OperatorIntValues values) throws Exception {
-		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.in, SymOp.nin, SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
+		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
 		if(!allowedSymbols.contains(this.symbol)) {
 			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
@@ -116,7 +122,7 @@ public abstract class Operator {
 	
 	// method that verify if the values String passed are coherent with the symbol
 	private boolean validateValues(OperatorStringValues values) throws Exception {
-		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.in, SymOp.nin, SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
+		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.in, SymOp.nin));
 		if(!allowedSymbols.contains(this.symbol)) {
 			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
@@ -127,7 +133,7 @@ public abstract class Operator {
 	
 	// method that verify if the values LocalDate passed are coherent with the symbol
 	private boolean validateValues(OperatorDateValues values) throws Exception {
-		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.in, SymOp.nin, SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
+		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
 		if(!allowedSymbols.contains(this.symbol)) {
 			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
 		}
@@ -138,6 +144,17 @@ public abstract class Operator {
 	
 	// method that verify if the values LocalDate passed are coherent with the symbol
 	private boolean validateValues(OperatorOperatorValues values) throws Exception {
+		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.or, SymOp.and, SymOp.not, SymOp.nop));
+		if(!allowedSymbols.contains(this.symbol)) {
+			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
+		}
+		
+		this.operatorValues = values;
+		return true;
+	}
+	
+	// method that verify if the values LogicOperator passed are coherent with the symbol
+	private boolean validateValues(OperatorLogicOperatorValues values) throws Exception {
 		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.or, SymOp.and, SymOp.not, SymOp.nop));
 		if(!allowedSymbols.contains(this.symbol)) {
 			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");

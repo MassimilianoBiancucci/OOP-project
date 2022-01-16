@@ -61,9 +61,14 @@ public abstract class Filter {
 				validateOperator((MatchOperator) op);
 			}else if(op instanceof ConditionalOperator) {
 				validateOperator((ConditionalOperator) op);
+			}else {
+				throw new Exception("Operator passed to a filter must be initialized!");
 			}
 		}
-		
+	}
+	
+	public Filter(Field field, Operator op) throws Exception {
+		this(field2String.get(field), op);
 	}
 	
 	// method that verify if the passed symbol is allowed
@@ -72,21 +77,16 @@ public abstract class Filter {
 	
 	
  	// method that verify if the operator passed is coherent with the field
+	// NOTE the Logic operator can't be inside any Filter, so this method every time raise an exception.
 	private boolean validateOperator(LogicOperator op) throws Exception {
-		ArrayList<Field> allowedFields = new ArrayList<>(Arrays.asList(Field.retweet, Field.reply, Field.like, Field.quote, Field.engagement, Field.text, Field.date, Field.time));
-		if(!allowedFields.contains(this.field)) {
-			throw new IncorrectOperatorSymbolException("");
-		}
-		
-		this.op = op;
-		return true;
+		throw new IncorrectOperatorSymbolException("Logic Operators aren't accepted inside a filter.");
 	}
 	
 	// method that verify if the operator passed is coherent with the field
 	private boolean validateOperator(MatchOperator op) throws Exception {
-		ArrayList<Field> allowedFields = new ArrayList<>(Arrays.asList(Field.retweet, Field.reply, Field.like, Field.quote, Field.engagement, Field.text, Field.date, Field.time));
+		ArrayList<Field> allowedFields = new ArrayList<>(Arrays.asList(Field.text));
 		if(!allowedFields.contains(this.field)) {
-			throw new IncorrectOperatorSymbolException("");
+			throw new IncorrectOperatorSymbolException("Match Operators are accepted only inside a text Filter.");
 		}
 		
 		this.op = op;
@@ -97,7 +97,7 @@ public abstract class Filter {
 	private boolean validateOperator(ConditionalOperator op) throws Exception {
 		ArrayList<Field> allowedFields = new ArrayList<>(Arrays.asList(Field.retweet, Field.reply, Field.like, Field.quote, Field.engagement, Field.date, Field.time));
 		if(!allowedFields.contains(this.field)) {
-			throw new IncorrectOperatorSymbolException("");
+			throw new IncorrectOperatorSymbolException("Conditional Operators aren't accepted only inside a text Filter.");
 		}
 		
 		this.op = op;
@@ -112,5 +112,10 @@ public abstract class Filter {
 	// method that return true if the symbol match an operator 
 	public static boolean isField(String op) {
 		return fieldsMap.containsKey(op);
+	}
+	
+	// method that return true if the symbol match an operator 
+	public static boolean isField(Field op) {
+		return fieldsMap.containsValue(op);
 	}
 }

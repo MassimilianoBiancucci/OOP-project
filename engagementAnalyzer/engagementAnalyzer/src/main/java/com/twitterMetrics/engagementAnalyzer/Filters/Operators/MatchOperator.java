@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorSymbolException;
+import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator.SymOp;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorValues;
 
 public class MatchOperator extends Operator{
@@ -21,6 +22,10 @@ public class MatchOperator extends Operator{
 		// validity of each symbol and values
 		super(sym, values);
 		
+	}
+	
+	public MatchOperator(SymOp sym, OperatorValues values) throws Exception {
+		this(symbol2String.get(sym), values);
 	}
 	
 	// Definition of the validation function for the symbol

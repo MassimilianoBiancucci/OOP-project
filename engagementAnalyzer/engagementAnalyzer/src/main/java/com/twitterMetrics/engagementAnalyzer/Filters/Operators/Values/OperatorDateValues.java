@@ -9,42 +9,55 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
 import com.twitterMetrics.engagementAnalyzer.Parser.DateParser;
+import com.twitterMetrics.engagementAnalyzer.Parser.FiltersParser;
+import com.twitterMetrics.engagementAnalyzer.supportTypes.DateValue;
 
 public class OperatorDateValues implements OperatorValues{
 	
 	private LocalDateTime[] values;
 	private DateParser dateParser;
 	
-	public OperatorDateValues(JsonArray values) throws IncorrectOperatorValuesException{
-		this.values = new LocalDateTime[values.size()];
+	public OperatorDateValues(JsonPrimitive values) throws IncorrectOperatorValuesException{
+		
+		dateParser = new DateParser();
 		
 		if(!checkValues(values))
 			throw new IncorrectOperatorValuesException("OperatorIntValues initialized with wrong values.");
 		
-		int idx = 0;
-		for(JsonElement je: values) {
-			dateParser.setDate(je.getAsJsonPrimitive().getAsString());
-			this.values[idx++] = dateParser.getDate();
-		}
 	}
 	
 	
 	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonArray values) {
-		// TODO debug
-		for(JsonElement je: values) {
-			JsonPrimitive primitive = je.getAsJsonPrimitive();
-			if(!primitive.isString()) {
-				// if the data inside the json isn't string the check is failed
-				return false;
-			}else{
-				try {
-					dateParser.setDate(primitive.getAsString());
-				}catch(DateTimeParseException e) {
-					// if the parser fail in the parsing of the date the check is failed
+	public boolean checkValues(JsonPrimitive values) {
+
+		if(values.isJsonArray()) {
+			
+			int idx = 0;
+			JsonArray ja = values.getAsJsonArray();
+			this.values = new LocalDateTime[ja.size()];
+			
+			for(JsonElement je: ja) {
+				// checking the class of this element
+				// this method retrive the class of the element
+				// and if is a string check the sub type date and time
+				Class elemClass = FiltersParser.getElementClass(je);
+				
+				if(elemClass == DateValue.class) {
+					// if the element is a Data load it
+					this.values[idx++] = dateParser.setDate(je.getAsString()).getDate();
+				}else {
 					return false;
 				}
 			}
+			
+		}else if(FiltersParser.getElementClass(values) == DateValue.class) {
+			
+			// if the value of an operator is only one String load it.
+			this.values = new LocalDateTime[1];
+			this.values[0] = dateParser.setDate(values.getAsString()).getDate();
+					
+		}else {
+			return false;
 		}
 		
 		return true;

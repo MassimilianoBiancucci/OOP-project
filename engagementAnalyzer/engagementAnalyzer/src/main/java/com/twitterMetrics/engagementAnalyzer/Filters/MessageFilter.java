@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectFilterFieldException;
+import com.twitterMetrics.engagementAnalyzer.Filters.Filter.Field;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
 
 public class MessageFilter extends Filter{
@@ -18,7 +19,11 @@ public class MessageFilter extends Filter{
 		
 		super(field, op);
 	}
-
+	
+	public MessageFilter(Field field, Operator op) throws Exception {
+		this(field2String.get(field), op);
+	}
+	
 	@Override
 	protected boolean validateField(String field) throws Exception {
 		if(!messageFieldsMap.containsKey(field)) {
@@ -45,6 +50,11 @@ public class MessageFilter extends Filter{
 	// method that return true if the field match a Message Filter 
 	public static boolean isField(String field) {
 		return messageFieldsMap.containsKey(field);
+	}
+	
+	// method that return true if the symbol match an operator 
+	public static boolean isField(Field op) {
+		return messageFieldsMap.containsValue(op);
 	}
 	
 }

@@ -6,32 +6,50 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
+import com.twitterMetrics.engagementAnalyzer.Parser.FiltersParser;
 
 public class OperatorStringValues implements OperatorValues{
 	
 	private String[] values;
 	
-	public OperatorStringValues(JsonArray values) throws IncorrectOperatorValuesException {
-		this.values = new String[values.size()];
+	public OperatorStringValues(JsonPrimitive values) throws IncorrectOperatorValuesException {
 		
 		if(!checkValues(values))
 			throw new IncorrectOperatorValuesException("OperatorIntValues initialized with wrong values.");
 		
-		int idx = 0;
-		for(JsonElement je: values) {
-			this.values[idx++] = je.getAsJsonPrimitive().getAsString();
-		}
 	}
 	
 	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonArray values) {
-		// TODO debug
-		for(JsonElement je: values) {
-			JsonPrimitive primitive = je.getAsJsonPrimitive();
-			if(!primitive.isString()) {
-				// if the data inside the json isn't string the check is failed
-				return false;
+	public boolean checkValues(JsonPrimitive values) {
+
+		if(values.isJsonArray()) {
+			
+			int idx = 0;
+			JsonArray ja = values.getAsJsonArray();
+			this.values = new String[ja.size()];
+			
+			for(JsonElement je: ja) {
+				// checking the class of this element
+				// this method retrive the class of the element
+				// and if is a string check the sub type date and time
+				Class elemClass = FiltersParser.getElementClass(je);
+				
+				if(elemClass == String.class) {
+					// if the element is a string load it
+					this.values[idx++] = je.getAsString();
+				}else {
+					return false;
+				}
 			}
+			
+		}else if(FiltersParser.getElementClass(values) == String.class) {
+			
+			// if the value of an operator is only one String load it.
+			this.values = new String[1];
+			this.values[0] = values.getAsString();
+					
+		}else {
+			return false;
 		}
 		
 		return true;

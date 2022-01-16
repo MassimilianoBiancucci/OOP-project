@@ -1,38 +1,37 @@
 package com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
+import com.twitterMetrics.engagementAnalyzer.Filters.Operators.LogicOperator;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
 
 public class OperatorOperatorValues implements OperatorValues{
 	
 private Operator[] operators;
 	
-	public OperatorOperatorValues(JsonArray values) throws IncorrectOperatorValuesException {
+	public OperatorOperatorValues(Operator[] ops) throws IncorrectOperatorValuesException{
 		
-		this.operators = new Operator[values.size()];
+		// Effettua il controllo sul tipo di operatore
+		for(Operator op: ops)
+			if(op instanceof LogicOperator) 
+				throw new IncorrectOperatorValuesException("OperatorOperatorValues can't accept LogicOperators as argument");
 		
-		if(!checkValues(values))
-			throw new IncorrectOperatorValuesException("OperatorIntValues initialized with wrong values.");
-		
-		
+		operators = ops;
 	}
 	
-	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonArray values) {
-		// TODO debug
-		for(JsonElement je: values) {
-			JsonPrimitive primitive = je.getAsJsonPrimitive();
-			if(!primitive.isJsonObject()) {
-				// if the data inside the json isn't a jsonObject the check is failed
-				return false;
-			}
-			// TODO check if the content of the jsonObject is a supported Operator!
-		}
+	public OperatorOperatorValues(Operator op) throws IncorrectOperatorValuesException{
 		
-		return true;
+		// Effettua il controllo sul tipo di operatore
+		if(op instanceof LogicOperator) 
+			throw new IncorrectOperatorValuesException("OperatorOperatorValues can't accept LogicOperators as argument");
+		
+		operators = new Operator[1];
+		operators[0] = op;
+	}
+	
+	private void checkValues() {
+		
 	}
 	
 	public int getCount() {
