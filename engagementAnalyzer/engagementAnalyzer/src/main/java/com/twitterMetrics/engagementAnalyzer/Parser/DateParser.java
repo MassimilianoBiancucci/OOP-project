@@ -9,9 +9,9 @@ public class DateParser {
 	// inner date field
 	private LocalDateTime date;
 	
-	// Date time format consider 'Z' character for time with zero offset or Zulu time.
+	// Date time format consider 'Z' character for time with zero offset from Greenwich or Zulu time.
 	private static DateTimeFormatter twitterFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-	private static DateTimeFormatter simpleFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
+	private static DateTimeFormatter simpleFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); 
 	private static DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
 	
 	// selected format flag

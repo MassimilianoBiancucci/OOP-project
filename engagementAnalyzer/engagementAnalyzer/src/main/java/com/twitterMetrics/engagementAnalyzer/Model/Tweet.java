@@ -3,9 +3,14 @@ package com.twitterMetrics.engagementAnalyzer.Model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Parser.DateParser;
+import com.twitterMetrics.engagementAnalyzer.Parser.FiltersParser;
+import com.twitterMetrics.engagementAnalyzer.supportTypes.DateValue;
 
 public class Tweet {
 	
@@ -44,7 +49,7 @@ public class Tweet {
 	}
 	
 	// constructor with engagement raw data 
-	public Tweet(int id, String msg, int retweet, int reply, int like, int quote) {
+	public Tweet(int id, String msg, String date, int retweet, int reply, int like, int quote) {
 		
 		this.setTweetId(id);
 		this.setMsg(msg);
@@ -53,8 +58,84 @@ public class Tweet {
 		this.setReply(reply);
 		this.setLike(like);
 		this.setQuote(quote);
+		
+		this.date = new DateParser(date);
 	}
 	
+	// constructor with engagement raw data 
+	public Tweet(JsonObject jo) throws Exception{
+		
+		// unfold the json object and load all the needed fields inside the object
+		for(Map.Entry<String, JsonElement> entry : jo.entrySet()) {
+			
+			JsonElement je = entry.getValue();
+		    switch(entry.getKey()) {
+		    	
+		    	// case that parse the 
+			    case "id":
+			    		if(je.getAsJsonPrimitive().isNumber()) this.setTweetId(je.getAsInt());
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+			    	// case that parse the 
+			    case "text":
+				    	if(je.getAsJsonPrimitive().isString()) this.setMsg(je.getAsString());
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+			    	// case that parse the 
+			    case "created_at":
+				    	if(je.getAsJsonPrimitive().isString()) {
+				    		Class elemClass = FiltersParser.getElementClass(je);
+				    		if(elemClass == DateValue.class) {
+				    			this.date = new DateParser(je.getAsString());
+				    		}
+				    		else throw new Exception("Tweet object initialized with malformed json object!");
+				    	}
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+			    	// case that parse the 
+			    case "public_metrics":
+				    	if(je.isJsonObject()) {
+				    		setPublicMetrics(je.getAsJsonObject());
+				    	}
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+		    }
+		}
+	}
+	
+	public void setPublicMetrics(JsonObject jo) throws Exception {
+		if(jo.size() != 4) throw new Exception("Tweet object initialized with malformed json object!");
+		
+		// unfold the json object and load all the needed fields inside the object
+		for(Map.Entry<String, JsonElement> entry : jo.entrySet()) {
+			
+			JsonElement je = entry.getValue();
+		    switch(entry.getKey()) {
+		    	
+		    	// case that parse the 
+			    case "retweet_count":
+			    		if(je.getAsJsonPrimitive().isNumber()) this.setRetweet(je.getAsInt());
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+			    	// case that parse the 
+			    case "reply_count":
+			    		if(je.getAsJsonPrimitive().isNumber()) this.setReply(je.getAsInt());
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+			    	// case that parse the 
+			    case "like_count":
+			    		if(je.getAsJsonPrimitive().isNumber()) this.setLike(je.getAsInt());
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+			    	// case that parse the 
+			    case "quote_count":
+			    		if(je.getAsJsonPrimitive().isNumber()) this.setQuote(je.getAsInt());
+			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    	break;
+		    }
+		}
+	}
+		
 	// method for setting specific weight for each engagement value
 	public void setWeights(double retweetWeight, double replyWeight, double likeWeight, double quoteWeight) {
 		

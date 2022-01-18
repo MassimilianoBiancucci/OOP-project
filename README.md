@@ -105,12 +105,12 @@ Below there is an example:
         <tr>
             <td>$or</td>
             <td>Logic operator</td>
-            <td>{"$or": [{filter1 or logicOperator1},{filter2 or logicOperator2},...]}</td>
+            <td>{"$or": [{filter or logicOperator},{filter or logicOperator},...]}</td>
         </tr>
         <tr>
             <td>$and</td>
             <td>Logic operator</td>
-            <td>{"$and": [{filter1 or logicOperator1},{filter2 or logicOperator2},...]}</td>
+            <td>{"$and": [{filter or logicOperator},{filter or logicOperator},...]}</td>
         </tr>
         </tbody>
         </table>
@@ -516,6 +516,11 @@ Below all the routes are explained in detail, with example of requests and examp
                                         }
                                     ]
                                 }
+                            },
+                            {
+                                "field" : "errors",
+                                "type" : "JsonArray",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
                             }
                         ]
                     }
@@ -534,6 +539,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 {
                     "TwitterBearerToken": "AAAAAAAAAAAAAAAAAAASC5JzzAAMhUXwEAAAOU%3VcayzHCAGeyYBqAARFm871IloLWyHVYofv%2F0BNEfBoWWCds94xyPgxdVfdGHK8HZDijzgHsK",
                     "tweetIds" : [
+                        24,
                         23454,
                         345676,
                         456778563
@@ -669,6 +675,11 @@ Below all the routes are explained in detail, with example of requests and examp
                                         }
                                     ]
                                 }
+                            },
+                            {
+                                "field" : "errors",
+                                "type" : "JsonArray",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
                             }
                         ]
                     }
@@ -711,6 +722,7 @@ Below all the routes are explained in detail, with example of requests and examp
             - `reply_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of replies of the corresponding tweet.
             - `like_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of likes of the corresponding tweet.
             - `quote_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of quotes of the corresponding tweet.
+            - `errors`: This field contains a json array with each error passed from the Twitter API, see the Twitter API V2 documentation for further details.
 
         - #### **Example**
             In this section there is an example of response from the api that could be returned from a call to the `/tweets` or `/user/:userId` routes, passing the correct json request body:
@@ -721,17 +733,6 @@ Below all the routes are explained in detail, with example of requests and examp
             ```json
             {
                 "tweets": [
-                    {
-                        "id": "23454",
-                        "text": "just setting up my twttr",
-                        "created_at": "2006-03-21T20:50:14.000Z",
-                        "public_metrics": {
-                            "retweet_count": 121701,
-                            "reply_count": 10062,
-                            "like_count": 173362,
-                            "quote_count": 17802
-                        }
-                    },
                     {
                         "id": "345676",
                         "text": "just setting up my twttr",
@@ -753,6 +754,27 @@ Below all the routes are explained in detail, with example of requests and examp
                             "like_count": 3491,
                             "quote_count": 152
                         }
+                    }
+                ],
+                "errors": [
+                    {
+                        "resource_id": "23454",
+                        "parameter": "ids",
+                        "resource_type": "tweet",
+                        "section": "data",
+                        "title": "Authorization Error",
+                        "value": "23454",
+                        "detail": "Sorry, you are not authorized to see the Tweet with ids: [23454].",
+                        "type": "https://api.twitter.com/2/problems/not-authorized-for-resource"
+                    },
+                    {
+                        "value": "24",
+                        "detail": "Could not find tweet with ids: [24].",
+                        "title": "Not Found Error",
+                        "resource_type": "tweet",
+                        "parameter": "ids",
+                        "resource_id": "24",
+                        "type": "https://api.twitter.com/2/problems/resource-not-found"
                     }
                 ]
             }
@@ -895,6 +917,11 @@ Below all the routes are explained in detail, with example of requests and examp
                                         "description": "Variance of the engaement metric associated to the passed tweets."
                                     }
                                 ]
+                            },
+                            {
+                                "field" : "errors",
+                                "type" : "JsonArray",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
                             }
                         ]
                     }
@@ -1038,6 +1065,11 @@ Below all the routes are explained in detail, with example of requests and examp
                                         "description": "Variance of the engaement metric associated to the passed tweets."
                                     }
                                 ]
+                            },
+                            {
+                                "field" : "errors",
+                                "type" : "JsonArray",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
                             }
                         ]
                     }
@@ -1082,6 +1114,7 @@ Below all the routes are explained in detail, with example of requests and examp
             - `like_count_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of likes in the filtered group of passed tweets.
             - `quote_count_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of quote in the filtered group of passed tweets.
             - `engagement_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of the engagement value in the filtered group of passed tweets.
+            - `errors`: This field contains a json array with each error passed from the Twitter API, see the Twitter API V2 documentation for further details.
 
         - #### **Example**
             In this section there is an example of response from the api that could be returned from a call to the `/tweets/metrics` or `/user/:userId/metrics` routes, passing the correct json request body: 
@@ -1103,7 +1136,28 @@ Below all the routes are explained in detail, with example of requests and examp
                     "like_count_variance":      1.0,
                     "quote_count_variance":     1.0,
                     "engagement_variance":      1.0
-                }
+                },
+                "errors": [
+                    {
+                        "resource_id": "23454",
+                        "parameter": "ids",
+                        "resource_type": "tweet",
+                        "section": "data",
+                        "title": "Authorization Error",
+                        "value": "23454",
+                        "detail": "Sorry, you are not authorized to see the Tweet with ids: [23454].",
+                        "type": "https://api.twitter.com/2/problems/not-authorized-for-resource"
+                    },
+                    {
+                        "value": "24",
+                        "detail": "Could not find tweet with ids: [24].",
+                        "title": "Not Found Error",
+                        "resource_type": "tweet",
+                        "parameter": "ids",
+                        "resource_id": "24",
+                        "type": "https://api.twitter.com/2/problems/resource-not-found"
+                    }
+                ]
             }
             ```
             </details> </br>

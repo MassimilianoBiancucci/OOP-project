@@ -17,7 +17,7 @@ public class RequestParser {
 	
 	private String bearerToken = "";
 	private String[] tweetIds;
-	private Operator filters;
+	private LogicOperator filters;
 	
 	public RequestParser(JsonObject jsonRequest) throws 
 		Exception {
@@ -35,7 +35,7 @@ public class RequestParser {
 		
 		for(Map.Entry<String, JsonElement> entry : this.request.entrySet()) {
 			
-		    System.out.println("Key = " + entry.getKey() + " Value = " + entry.getValue() );
+		    //System.out.println("Key = " + entry.getKey() + " Value = " + entry.getValue() );
 		    
 		    switch(entry.getKey()) {
 		    	
@@ -66,7 +66,7 @@ public class RequestParser {
 			    // case that parse the filters field
 		    	case "filters":
 		    		try {
-		    			this.filters = new FiltersParser(entry.getValue().getAsJsonObject()).getFilter();
+		    			this.filters = new FiltersParser(entry.getValue().getAsJsonObject()).getOp();
 		    		}catch(Exception e) {
 		    			e.printStackTrace();
 		    		}

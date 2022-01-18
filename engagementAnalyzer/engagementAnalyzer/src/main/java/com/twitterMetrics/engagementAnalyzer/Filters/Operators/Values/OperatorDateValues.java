@@ -17,7 +17,7 @@ public class OperatorDateValues implements OperatorValues{
 	private LocalDateTime[] values;
 	private DateParser dateParser;
 	
-	public OperatorDateValues(JsonPrimitive values) throws IncorrectOperatorValuesException{
+	public OperatorDateValues(JsonElement values) throws IncorrectOperatorValuesException{
 		
 		dateParser = new DateParser();
 		
@@ -28,7 +28,7 @@ public class OperatorDateValues implements OperatorValues{
 	
 	
 	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonPrimitive values) {
+	public boolean checkValues(JsonElement values) {
 
 		if(values.isJsonArray()) {
 			

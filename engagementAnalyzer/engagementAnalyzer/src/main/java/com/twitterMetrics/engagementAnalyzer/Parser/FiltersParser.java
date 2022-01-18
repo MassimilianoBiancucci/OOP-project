@@ -22,6 +22,8 @@ import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorDateValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorFilterValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorIntValues;
+import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorLogicOperatorValues;
+import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorOperatorValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorStringValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorTimeValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorValues;
@@ -30,62 +32,33 @@ import com.twitterMetrics.engagementAnalyzer.supportTypes.TimeValue;
 
 public class FiltersParser {
 	
-	private Operator op;
+	private LogicOperator op;
 	
 	public FiltersParser(JsonObject jsonFilters) throws Exception{
-		parse(jsonFilters);
+		op = parse(jsonFilters);
 	}
 	
-	public Operator getOp() {
+	public LogicOperator getOp() {
 		return op;
-	}
-	
-	private void parse(JsonObject tree) throws Exception {
-		
-		// extract the field inside the jsonObject passed, at this point 2 event can happen,
-		// there is an logic operator or there is a filter
-		for(Map.Entry<String, JsonElement> entry : tree.entrySet()) {
-		    //System.out.println("Key = " + entry.getKey() + " Value = " + entry.getValue() );
-			
-			
-			if(Filter.isField(entry.getKey())) {
-				// verifico se l'elemento è un field
-				// se è un field posso considerare tutti i seguenti elementi come
-				// combinazioni logiche di operatori applicati a questo filtro
-				
-				
-			}else if(LogicOperator.isOperator(entry.getKey())) {
-				// verifico se l'elemnto è un logic operator
-				// se è un operatore logico devo continuare considerare i successivi 
-				// il primo deve essere tassativamente un logic operator 
-				
-				
-			}else {
-				// se non è nessuno dei precedenti sollevo un eccezione
-				throw new Exception("Wrong field in the filter tree");
-			}
-			
-		}
-		
 	}
 	
 	// method that check the richt filter formulation
 	// the jsonObject passed at this point must be the content of the
 	// of the "filters" key inside the Request Body.
-	private LogicOperator checkFiltersTree(JsonObject tree) throws Exception{
+	private LogicOperator parse(JsonObject tree) throws Exception{
 		// extract the field inside the jsonObject passed, at this point 2 event can happen,
 		// there is an logic operator or there is a filter
+		if(tree.size() > 1) throw new Exception("Only one key is allowed in the first level of the filter tree");
 		for(Map.Entry<String, JsonElement> entry : tree.entrySet()) {
 		    //System.out.println("Key = " + entry.getKey() + " Value = " + entry.getValue() );
-			
 			
 			if(Filter.isField(entry.getKey())) {
 				// verifico se l'elemento è un field
 				// se è un field posso considerare tutti i seguenti elementi come
 				// combinazioni logiche di operatori applicati a questo filtro
 				Filter filter = checkFilter(entry.getValue(), Filter.fieldsMap.get(entry.getKey()));
-				LogicOperator opl = new LogicOperator(Operator.SymOp.nop, new OperatorFilterValues(filter));
-				return opl;
+				return new LogicOperator(Operator.SymOp.nop, new OperatorFilterValues(filter));
+
 				
 			}else if(LogicOperator.isOperator(entry.getKey())) {
 				// verifico se l'elemnto è un logic operator
@@ -109,8 +82,11 @@ public class FiltersParser {
 			// expected a jsonObject as filter content
 			
 			Filter filter = null;
+			JsonObject jo = subTree.getAsJsonObject();
 			
-			int keysCount = 0;
+			// se all'intenro dell'oggetto c'è piu di una chiave non è un filtro e il controllo è fallito
+			if(jo.size() > 1) throw new Exception("the Filter content must have only one key.");
+			
 			for(Map.Entry<String, JsonElement> entry : subTree.getAsJsonObject().entrySet()) {
 				// the filter content must be a non-logic operator otherwise the check will fail
 				if(MatchOperator.isOperator(entry.getKey()) | ConditionalOperator.isOperator(entry.getKey())) {
@@ -121,10 +97,7 @@ public class FiltersParser {
 					throw new Exception("The Filter's content must be a non-logic Operator.");
 				}
 				
-				// se all'intenro dell'oggetto c'è piu di una chiave non è un filtro e il controllo è fallito
-				if(keysCount++ > 0) throw new Exception("the Filter content must have only one key.");
 			}
-			
 			
 			//qui posso ritornare il filtro caricato
 			return filter;
@@ -136,7 +109,6 @@ public class FiltersParser {
 	}
 	
 	private LogicOperator checkLogicOperator(String op, JsonElement subTree) throws Exception {
-		
 		
 		Operator.SymOp symOp = Operator.symbolsMap.get(op);
 		
@@ -154,15 +126,22 @@ public class FiltersParser {
 			// if the logical operator are $or or $and the content of the operator must be a JsonArray
 			if(subTree.isJsonArray()) {
 				
-				for(JsonElement je: subTree.getAsJsonArray()) {
+				int idx = 0;
+				JsonArray ja = subTree.getAsJsonArray();
+				LogicOperator opls[] = new LogicOperator[ja.size()];
+				
+				for(JsonElement je: ja) {
 					if(je.isJsonObject()) {
 						// Inside a logic operator can be passed filter and logic operators together
 						// but at compilatio time filters will be wrapped inside nop operators.
-						checkLogicOperatorContent(je);
+						opls[idx++] = checkLogicOperatorContent(je);
 					}else {
 						throw new Exception("Inside a logic Operator $or or $and must be passed an jsonArray of JsonObjects.");
 					}
 				}
+				
+				OperatorLogicOperatorValues opOplValues = new OperatorLogicOperatorValues(opls);
+				return new LogicOperator(symOp, opOplValues);
 				
 			}else {
 				throw new Exception("the content of the operator " + op + " must be a jsonArray!");
@@ -186,8 +165,7 @@ public class FiltersParser {
 			if(Filter.isField(entry.getKey())){
 				// if the logic operator has inside a Filter
 				Filter filter = checkFilter(entry.getValue(), Filter.fieldsMap.get(entry.getKey()));
-				LogicOperator opl = new LogicOperator(Operator.SymOp.nop, new OperatorFilterValues(filter));
-				return opl;
+				return new LogicOperator(Operator.SymOp.nop, new OperatorFilterValues(filter));
 				
 			}else if(LogicOperator.isOperator(entry.getKey())) {
 				// if the logic operator has inside a another logic operator
@@ -195,7 +173,6 @@ public class FiltersParser {
 				
 			}else if(Operator.isOperator(entry.getKey())){
 				throw new Exception("A non-logic Operator can't be passed inside a Logic Operator.");
-				
 			}
 		}
 		
@@ -225,19 +202,19 @@ public class FiltersParser {
 					// qui ho il filtro, l'operatore e i valori.
 					// devo risolvere la procedura dicreazione dell'oggetto filtro
 					
-					OperatorIntValues values = new OperatorIntValues(subTree.getAsJsonPrimitive());
+					OperatorIntValues values = new OperatorIntValues(subTree);
 					condOp = new ConditionalOperator(op, values);
 					
 				}else if(elemClass == DateValue.class) {
 					// if the agument has Date type 
 					
-					OperatorDateValues values = new OperatorDateValues(subTree.getAsJsonPrimitive());
+					OperatorDateValues values = new OperatorDateValues(subTree);
 					condOp = new ConditionalOperator(op, values);
 					
 				}else if(elemClass == TimeValue.class) {
 					// if the agument has Time type 
 					
-					OperatorTimeValues values = new OperatorTimeValues(subTree.getAsJsonPrimitive());
+					OperatorTimeValues values = new OperatorTimeValues(subTree);
 					condOp = new ConditionalOperator(op, values);
 					
 				}else{
@@ -261,19 +238,19 @@ public class FiltersParser {
 						if(firstElemClass == int.class) {
 							// here should start the came back to the start
 							
-							OperatorIntValues values = new OperatorIntValues(subTree.getAsJsonPrimitive());
+							OperatorIntValues values = new OperatorIntValues(subTree);
 							condOp = new ConditionalOperator(op, values);
 							
 						}else if(firstElemClass == DateValue.class) {
 							// here should start the came back to the start
 							
-							OperatorDateValues values = new OperatorDateValues(subTree.getAsJsonPrimitive());
+							OperatorDateValues values = new OperatorDateValues(subTree);
 							condOp = new ConditionalOperator(op, values);
 							
 						}else if(firstElemClass == TimeValue.class) {
 							// here should start the came back to the start
 							
-							OperatorTimeValues values = new OperatorTimeValues(subTree.getAsJsonPrimitive());
+							OperatorTimeValues values = new OperatorTimeValues(subTree);
 							condOp = new ConditionalOperator(op, values);
 							
 						}else {
@@ -333,7 +310,7 @@ public class FiltersParser {
 					// if the type is string check if compatible with the filter
 					// here should start the came back to the start
 					
-					OperatorStringValues values = new OperatorStringValues(subTree.getAsJsonPrimitive());
+					OperatorStringValues values = new OperatorStringValues(subTree);
 					macthOp = new MatchOperator(op, values);
 					
 				}else {

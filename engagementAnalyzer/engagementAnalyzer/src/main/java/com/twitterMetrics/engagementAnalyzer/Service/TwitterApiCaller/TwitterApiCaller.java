@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -49,7 +51,7 @@ public class TwitterApiCaller {
 			  .method("GET", null)
 			  .addHeader("Authorization", "Bearer " + this.token)
 			  .build();
-		
+
 		JsonObject jsonResponseBody = new JsonObject();
 		
 		// execution of the call with the handle of the responseBody
@@ -57,8 +59,8 @@ public class TwitterApiCaller {
 			
 			Response response = client.newCall(request).execute(); // execute the twitter API call
 			String responseBody = response.body().string(); // parse the response in String format
-			jsonResponseBody = JsonParser.parseString(responseBody).getAsJsonObject(); // Parse the response from string in JsonObject format
-
+			jsonResponseBody = JsonParser.parseString(responseBody).getAsJsonObject(); // Parse the response from string in JsonObject format		
+			
 		} catch (IOException e) {
 			// catch IO exception
 			e.printStackTrace();

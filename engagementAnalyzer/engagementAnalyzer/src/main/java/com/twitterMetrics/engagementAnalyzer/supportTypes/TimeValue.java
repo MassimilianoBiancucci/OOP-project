@@ -1,5 +1,5 @@
 package com.twitterMetrics.engagementAnalyzer.supportTypes;
 
-public class TimeValue {
-
-}
+//This is only a placeholder class 
+//encode the type of LocalDateTime that encode a time value
+public class TimeValue {}

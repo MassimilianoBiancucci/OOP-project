@@ -9,7 +9,7 @@ public class OperatorIntValues implements OperatorValues{
 	
 	private int[] values;
 	
-	public OperatorIntValues(JsonPrimitive values) throws IncorrectOperatorValuesException{
+	public OperatorIntValues(JsonElement values) throws IncorrectOperatorValuesException{
 		
 		if(!checkValues(values))
 			throw new IncorrectOperatorValuesException("OperatorIntValues initialized with wrong values.");
@@ -17,7 +17,7 @@ public class OperatorIntValues implements OperatorValues{
 	}
 	
 	// method that check if the jsonArray contain data acceptable from OperatorIntValues
-	public boolean checkValues(JsonPrimitive values) {
+	public boolean checkValues(JsonElement values) {
 		
 		if(values.isJsonArray()) {
 			
@@ -35,14 +35,18 @@ public class OperatorIntValues implements OperatorValues{
 				}
 			}
 			
-		}else if(values.isNumber()) {
-			
-			// if the value of an operator is only one number load it.
-			this.values = new int[1];
-			this.values[0] = values.getAsInt();
-					
 		}else {
-			return false;
+			
+			JsonPrimitive jp = values.getAsJsonPrimitive();
+			if(jp.isNumber()) {
+			
+				// if the value of an operator is only one number load it.
+				this.values = new int[1];
+				this.values[0] = jp.getAsInt();
+					
+			}else {
+				return false;
+			}	
 		}
 		
 		return true;

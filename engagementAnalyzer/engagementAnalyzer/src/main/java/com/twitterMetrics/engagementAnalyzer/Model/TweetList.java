@@ -2,6 +2,8 @@ package com.twitterMetrics.engagementAnalyzer.Model;
 
 import java.util.ArrayList;
 
+import com.google.gson.JsonObject;
+
 public class TweetList {
 
 	private ArrayList<Tweet> tweets;
@@ -18,6 +20,10 @@ public class TweetList {
 	
 	public void add(Tweet tweet) {
 		tweets.add(tweet);
+	}
+	
+	public void add(JsonObject tweet) throws Exception {
+		tweets.add(new Tweet(tweet));
 	}
 	
 	public String toString() {

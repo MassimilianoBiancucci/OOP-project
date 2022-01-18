@@ -12,7 +12,7 @@ public class OperatorStringValues implements OperatorValues{
 	
 	private String[] values;
 	
-	public OperatorStringValues(JsonPrimitive values) throws IncorrectOperatorValuesException {
+	public OperatorStringValues(JsonElement values) throws IncorrectOperatorValuesException {
 		
 		if(!checkValues(values))
 			throw new IncorrectOperatorValuesException("OperatorIntValues initialized with wrong values.");
@@ -20,7 +20,7 @@ public class OperatorStringValues implements OperatorValues{
 	}
 	
 	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonPrimitive values) {
+	public boolean checkValues(JsonElement values) {
 
 		if(values.isJsonArray()) {
 			
