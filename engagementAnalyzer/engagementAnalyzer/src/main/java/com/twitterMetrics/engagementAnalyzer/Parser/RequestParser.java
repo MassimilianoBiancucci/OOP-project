@@ -46,7 +46,7 @@ public class RequestParser {
 			    		
 			    	}catch(Exception e) {
 			    		e.printStackTrace();
-			    		throw new UnexpectedRequestBodyFieldValueException("unexpected value inside the field TwitterBearerToken, unexpected value: " + entry.getValue());
+			    		throw new UnexpectedRequestBodyFieldValueException("Unexpected value inside the field TwitterBearerToken, unexpected value: " + entry.getValue());
 			    	}
 			    	break;
 			    // case that parse the array of tweets
@@ -60,7 +60,7 @@ public class RequestParser {
 			    		
 			    	}catch(Exception e) {
 			    		e.printStackTrace();
-			    		throw new UnexpectedRequestBodyFieldValueException("unexpected value inside the field tweetIds, unexpected value: " + entry.getValue());
+			    		throw new UnexpectedRequestBodyFieldValueException("Unexpected value inside the field tweetIds, unexpected value: " + entry.getValue());
 			    	}
 			    	break;
 			    // case that parse the filters field
@@ -69,6 +69,7 @@ public class RequestParser {
 		    			this.filters = new FiltersParser(entry.getValue().getAsJsonObject()).getOp();
 		    		}catch(Exception e) {
 		    			e.printStackTrace();
+		    			throw new UnexpectedRequestBodyFieldValueException("Unexpected value inside the field filters, unexpected value: " + entry.getValue());
 		    		}
 			    	break;
 			    default:
@@ -99,7 +100,7 @@ public class RequestParser {
 	// Method for request the parsed filters from the extern of the class
 	// filters aren't a mandatory field, if not present return an empty $nop (no operation operator)
 	// if there are filters in the request return always a $nop operator, but with at least one filter inside.
-	public Operator getFilters() {
+	public LogicOperator getFilters() {
 		// TODO implement special behavior
 		return filters;
 	}

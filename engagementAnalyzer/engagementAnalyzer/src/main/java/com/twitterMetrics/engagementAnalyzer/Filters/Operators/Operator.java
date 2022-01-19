@@ -5,18 +5,16 @@ import java.util.Arrays;
 import java.util.Map;
 import static java.util.Map.entry;
 
-import java.time.LocalDate;
-
 import com.google.gson.JsonObject;
-import com.twitterMetrics.engagementAnalyzer.Filters.Filter;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorFilterValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorIntValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorLogicOperatorValues;
+import com.twitterMetrics.engagementAnalyzer.Filters.Filter.Field;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorDateValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorOperatorValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorStringValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorValues;
-import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorSymbolException;
+import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
 
 
@@ -174,6 +172,11 @@ public abstract class Operator {
 		this.operatorValues = values;
 		return true;
 	}
+	
+	// This method is implemented only inside MatchOperators and on conditional Operators 
+	// on logic Operator this method will throw an exception.
+	// this method effectivly launche the filtering of tweets based on field, operator and the operator values.
+	public abstract TweetList applayFilters(TweetList tweetList, Field field) throws Exception;
 	
 	public abstract String toString();
 	

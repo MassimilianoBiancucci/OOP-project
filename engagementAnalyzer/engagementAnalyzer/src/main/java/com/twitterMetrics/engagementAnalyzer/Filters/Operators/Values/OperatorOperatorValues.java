@@ -1,10 +1,11 @@
 package com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonPrimitive;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
+import com.twitterMetrics.engagementAnalyzer.Exceptions.NotImplementedException;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.LogicOperator;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
+import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 
 public class OperatorOperatorValues implements OperatorValues{
 	
@@ -30,8 +31,8 @@ private Operator[] operators;
 		operators[0] = op;
 	}
 	
-	private void checkValues() {
-		
+	public TweetList[] applayFilters(TweetList tweetList) throws Exception {
+		throw new NotImplementedException("OperatorOperatorValues dosen't have the method applayFilters() implemented");
 	}
 	
 	public int getCount() {

@@ -15,7 +15,7 @@ import com.twitterMetrics.engagementAnalyzer.supportTypes.DateValue;
 public class Tweet {
 	
 	// Tweet id, used as uniq identifier
-	private int tweetId = -1;
+	private long tweetId = -1;
 	
 	// Tweet date of creation with ref to zulu time
 	private DateParser date;
@@ -36,10 +36,6 @@ public class Tweet {
 	private static double likeWeight = 1.0;
 	private static double quoteWeight = 1.0;
 	
-	// Date time format consider 'Z' character for time with zero offset or Zulu time.
-	private static DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-	private static DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS"); 
-	
 	// basic constructor
 	public Tweet(int id, String msg, String date) {
 		
@@ -49,7 +45,7 @@ public class Tweet {
 	}
 	
 	// constructor with engagement raw data 
-	public Tweet(int id, String msg, String date, int retweet, int reply, int like, int quote) {
+	public Tweet(long id, String msg, String date, int retweet, int reply, int like, int quote) {
 		
 		this.setTweetId(id);
 		this.setMsg(msg);
@@ -73,8 +69,10 @@ public class Tweet {
 		    	
 		    	// case that parse the 
 			    case "id":
-			    		if(je.getAsJsonPrimitive().isNumber()) this.setTweetId(je.getAsInt());
-			    		else throw new Exception("Tweet object initialized with malformed json object!");
+			    		if(je.getAsJsonPrimitive().isString()) {
+			    			if(isNumeric(je.getAsString())) this.setTweetId(je.getAsLong());
+			    			else throw new Exception("Tweet object initialized with malformed json object!");
+			    		}else throw new Exception("Tweet object initialized with malformed json object!");
 			    	break;
 			    	// case that parse the 
 			    case "text":
@@ -84,7 +82,8 @@ public class Tweet {
 			    	// case that parse the 
 			    case "created_at":
 				    	if(je.getAsJsonPrimitive().isString()) {
-				    		Class elemClass = FiltersParser.getElementClass(je);
+				    		@SuppressWarnings("rawtypes")
+							Class elemClass = FiltersParser.getElementClass(je);
 				    		if(elemClass == DateValue.class) {
 				    			this.date = new DateParser(je.getAsString());
 				    		}
@@ -152,11 +151,11 @@ public class Tweet {
 	}
 	
 	// getter and setter for tweet id
-	public int getTweetId() {
+	public long getTweetId() {
 		return tweetId;
 	}
 
-	public void setTweetId(int tweetId) {
+	public void setTweetId(long tweetId) {
 		this.tweetId = tweetId;
 	}
 	
@@ -265,6 +264,12 @@ public class Tweet {
 	}
 	
 	@Override
+	public Tweet clone() {
+		// this method create another object with the same content
+		return new Tweet(this.tweetId, this.msg, getStringDate(), this.retweet, this.reply, this.like, this.quote);
+	}
+	
+	@Override
 	public String toString() {
 		
 		String stringTweet = "---------------\n";
@@ -273,9 +278,9 @@ public class Tweet {
 		stringTweet = stringTweet + "tweet msg:__" + this.msg + "\n";
 		stringTweet = stringTweet + "-- engagement values --\n";
 		stringTweet = stringTweet + "Retweet:____" + this.retweet + "\n";
-		stringTweet = stringTweet + "Reply:______" + this.tweetId + "\n";
-		stringTweet = stringTweet + "Like:_______" + this.tweetId + "\n";
-		stringTweet = stringTweet + "Quote:______" + this.tweetId + "\n";
+		stringTweet = stringTweet + "Reply:______" + this.reply + "\n";
+		stringTweet = stringTweet + "Like:_______" + this.like + "\n";
+		stringTweet = stringTweet + "Quote:______" + this.quote + "\n";
 		stringTweet = stringTweet + "-- engagement metric --\n";
 		stringTweet = stringTweet + "Engagement:_" + getEngagement();
 		
@@ -285,17 +290,27 @@ public class Tweet {
 	public JsonObject toJson() {
 		
 		JsonObject jsonTweet = new JsonObject();
-		jsonTweet.addProperty("id", getTweetId());
-		jsonTweet.addProperty("date", getStringDate());
-		jsonTweet.addProperty("msg", getMsg());
-		jsonTweet.addProperty("engagementMetric", getEngagement());
+		jsonTweet.addProperty("id", Long.toString(getTweetId()));
+		jsonTweet.addProperty("created_at", getStringDate());
+		jsonTweet.addProperty("text", getMsg());
+		jsonTweet.addProperty("engagement", getEngagement());
 		JsonObject engagementValues = new JsonObject();
-		engagementValues.addProperty("retweet", "");
-		engagementValues.addProperty("reply", "");
-		engagementValues.addProperty("like", "");
-		engagementValues.addProperty("quote", "");
-		jsonTweet.add("engagementValues", engagementValues);
+		engagementValues.addProperty("retweet_count", this.retweet);
+		engagementValues.addProperty("reply_count", this.reply);
+		engagementValues.addProperty("like_count", this.like);
+		engagementValues.addProperty("quote_count", this.quote);
+		jsonTweet.add("public_metrics", engagementValues);
 		
 		return jsonTweet;
+	}
+	
+	// simple method to check if string is a number
+	private boolean isNumeric(String num) {
+		try {  
+		    Double.parseDouble(num);  
+		    return true;
+	  	} catch(NumberFormatException e){  
+		    return false;  
+	  	}  
 	}
 }

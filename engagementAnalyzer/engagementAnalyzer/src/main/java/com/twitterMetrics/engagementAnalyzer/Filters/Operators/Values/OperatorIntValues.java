@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
+import com.twitterMetrics.engagementAnalyzer.Exceptions.NotImplementedException;
+import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 
 public class OperatorIntValues implements OperatorValues{
 	
@@ -52,10 +54,29 @@ public class OperatorIntValues implements OperatorValues{
 		return true;
 	}
 	
+	
+	public TweetList[] applayFilters(TweetList tweetList) throws Exception {
+		throw new NotImplementedException("OperatorIntValues dosen't have the method applayFilters() implemented.");
+	}
+	
+	// values getter
+	public int getValue() throws Exception {
+		if(getCount() != 1) throw new Exception("OperatorIntValues: Unexpected number of values calling getValue()");
+		return this.values[0];
+	}
+	
+	// values getter
+	public int[] getValues() throws Exception {
+		if(getCount() < 1) throw new Exception("OperatorIntValues: Unexpected number of values calling getValues()");
+		return this.values;
+	}
+	
+	// get the count of values
 	public int getCount() {
 		return this.values.length;
 	}
 	
+	// conversion methods
 	public JsonArray toJson() {
 		
 		JsonArray jsonValues = new JsonArray();

@@ -116,7 +116,7 @@ Below there is an example:
         </table>
 
     - **Match operators** </br>
-        The `match operators` are used for filter tweets based on list of values that their fields should match or not match. This type of filters could be used on numeric values like metrics, on dates or on strings, the only limitation is that if used, the list of values inside should be of only one type and this tye should be coerent with the filter field, otherwise the request will throw an exception.
+        The `match operators` are used for filter tweets based on list of values that their fields should match or not match. This type of filters could be used only with strings otherwise the request will throw an exceptionand fail.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
         <tr>
@@ -139,7 +139,7 @@ Below there is an example:
 
 
     - **Conditional operators** </br>
-        The last one are the `conditional operators`, and can be used only on numeric values like metrics and on dates, so they can't be used only with strings. The usage if these operators with string values will throw an exception. Another exception will be raised even if these operators are applied to string fields.
+        The last one are the `conditional operators`, and can be used only on numeric values like metrics and on dates and timetables, so they can't be used only with strings. The usage if these operators with general string values will throw an exception. Another exception will be raised even if these operators are applied to string fields like `text`.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
         <tr>
@@ -440,7 +440,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "TwitterBearerToken",
                                 "type" : "String",
-                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter."
                             },
                             {
                                 "field" : "tweetIds",
@@ -460,6 +460,16 @@ Below all the routes are explained in detail, with example of requests and examp
                             }
                         ],
                         "output": [
+                            {
+                                "field" : "status",
+                                "type" : "String",
+                                "description": "Message that explain the actual status of the request, normaly the value should be 'success'."
+                            },
+                            {
+                                "field" : "tweets_count",
+                                "type" : "int",
+                                "description": "The number of tweets retrived before the filtering process, the maximum should be 100, but the retrived number depend to the twitter api."
+                            },
                             {
                                 "field" : "tweets",
                                 "type" : "JsonArray",
@@ -483,6 +493,11 @@ Below all the routes are explained in detail, with example of requests and examp
                                             "field" : "created_at",
                                             "type" : "String",
                                             "description": "date of creation of the corresponding tweet."
+                                        },
+                                        {
+                                            "field" : "engagement",
+                                            "type" : "double",
+                                            "description": "function that return a general value of the engagement calculated by public_metrics values."
                                         },
                                         {
                                             "field" : "public_metrics",
@@ -520,7 +535,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "errors",
                                 "type" : "JsonArray",
-                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details."
                             }
                         ]
                     }
@@ -607,7 +622,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "TwitterBearerToken",
                                 "type" : "String",
-                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter."
                             },
                             {
                                 "field" : "filters",
@@ -619,6 +634,16 @@ Below all the routes are explained in detail, with example of requests and examp
                             }
                         ],
                         "output": [
+                            {
+                                "field" : "status",
+                                "type" : "String",
+                                "description": "Message that explain the actual status of the request, normaly the value should be 'success'."
+                            },
+                            {
+                                "field" : "tweets_count",
+                                "type" : "int",
+                                "description": "The number of tweets retrived before the filtering process, the maximum should be 100, but the retrived number depend to the twitter api."
+                            },
                             {
                                 "field" : "tweets",
                                 "type" : "JsonArray",
@@ -642,6 +667,11 @@ Below all the routes are explained in detail, with example of requests and examp
                                             "field" : "created_at",
                                             "type" : "String",
                                             "description": "date of creation of the corresponding tweet."
+                                        },
+                                        {
+                                            "field" : "engagement",
+                                            "type" : "double",
+                                            "description": "function that return a general value of the engagement calculated by public_metrics values."
                                         },
                                         {
                                             "field" : "public_metrics",
@@ -679,7 +709,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "errors",
                                 "type" : "JsonArray",
-                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details."
                             }
                         ]
                     }
@@ -737,6 +767,7 @@ Below all the routes are explained in detail, with example of requests and examp
                         "id": "345676",
                         "text": "just setting up my twttr",
                         "created_at": "2006-03-21T20:51:43.000Z",
+                        "engagement": 10963,
                         "public_metrics": {
                             "retweet_count": 6105,
                             "reply_count": 147,
@@ -748,6 +779,7 @@ Below all the routes are explained in detail, with example of requests and examp
                         "id": "456778563",
                         "text": "just setting up my twttr",
                         "created_at": "2006-03-21T21:00:54.000Z",
+                        "engagement": 8487,
                         "public_metrics": {
                             "retweet_count": 4767,
                             "reply_count": 77,
@@ -838,7 +870,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "TwitterBearerToken",
                                 "type" : "String",
-                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter."
                             },
                             {
                                 "field" : "tweetIds",
@@ -858,6 +890,16 @@ Below all the routes are explained in detail, with example of requests and examp
                             }
                         ],
                         "output": [
+                            {
+                                "field" : "status",
+                                "type" : "String",
+                                "description": "Message that explain the actual status of the request, normaly the value should be 'success'."
+                            },
+                            {
+                                "field" : "tweets_count",
+                                "type" : "int",
+                                "description": "The number of tweets retrived before the filtering process, the maximum should be 100, but the retrived number depend to the twitter api."
+                            },
                             {
                                 "field" : "tweetsMetrics",
                                 "type" : "JsonObject",
@@ -921,7 +963,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "errors",
                                 "type" : "JsonArray",
-                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details."
                             }
                         ]
                     }
@@ -994,7 +1036,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "TwitterBearerToken",
                                 "type" : "String",
-                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter.",
+                                "description": "String that contain your OAuth 2.0 Bearer token issued from Twitter."
                             },
                             {
                                 "field" : "filters",
@@ -1006,6 +1048,16 @@ Below all the routes are explained in detail, with example of requests and examp
                             }
                         ],
                         "output": [
+                            {
+                                "field" : "status",
+                                "type" : "String",
+                                "description": "Message that explain the actual status of the request, normaly the value should be 'success'."
+                            },
+                            {
+                                "field" : "tweets_count",
+                                "type" : "int",
+                                "description": "The number of tweets retrived before the filtering process, the maximum should be 100, but the retrived number depend to the twitter api."
+                            },
                             {
                                 "field" : "tweetsMetrics",
                                 "type" : "JsonObject",
@@ -1069,7 +1121,7 @@ Below all the routes are explained in detail, with example of requests and examp
                             {
                                 "field" : "errors",
                                 "type" : "JsonArray",
-                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details.",
+                                "description": "An array of errors passed directly from the Twitter API, see the Twitter API V2 documentation for further details."
                             }
                         ]
                     }

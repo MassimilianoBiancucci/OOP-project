@@ -116,8 +116,8 @@ public class FiltersParser {
 			// if the logical operator are $nop or $not the content of the operator must be a JsonObject
 			if(subTree.isJsonObject()) {
 				
-				// esegue il controllo di corretezza per 
-				return checkLogicOperatorContent(subTree);
+				// esegue il controllo di corretezza e restituisce l'operatore logico con il contenuto del subtree
+				return new LogicOperator(symOp, new OperatorLogicOperatorValues(checkLogicOperatorContent(subTree)));
 				
 			}else {
 				throw new Exception("the content of the operator " + op + " must be an jsonObject!");

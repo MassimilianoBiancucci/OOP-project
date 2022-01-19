@@ -1,11 +1,10 @@
 package com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values;
 
-import java.time.format.DateTimeParseException;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
+import com.twitterMetrics.engagementAnalyzer.Exceptions.NotImplementedException;
+import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 import com.twitterMetrics.engagementAnalyzer.Parser.FiltersParser;
 
 public class OperatorStringValues implements OperatorValues{
@@ -32,6 +31,7 @@ public class OperatorStringValues implements OperatorValues{
 				// checking the class of this element
 				// this method retrive the class of the element
 				// and if is a string check the sub type date and time
+				@SuppressWarnings("rawtypes")
 				Class elemClass = FiltersParser.getElementClass(je);
 				
 				if(elemClass == String.class) {
@@ -53,6 +53,16 @@ public class OperatorStringValues implements OperatorValues{
 		}
 		
 		return true;
+	}
+	
+	public TweetList[] applayFilters(TweetList tweetList) throws Exception {
+		throw new NotImplementedException("OperatorStringValues dosen't have the method applayFilters() implemented.");
+	}
+	
+	// values getter
+	public String[] getValues() throws Exception {
+		if(getCount() < 1) throw new Exception("OperatorStringValues: Unexpected number of values calling getValues()");
+		return this.values;
 	}
 	
 	public int getCount() {

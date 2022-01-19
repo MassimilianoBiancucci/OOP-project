@@ -6,8 +6,8 @@ import java.util.Map;
 
 import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectFilterFieldException;
-import com.twitterMetrics.engagementAnalyzer.Filters.Filter.Field;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
+import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 
 public class TimeFilter extends Filter{
 	
@@ -55,5 +55,10 @@ public class TimeFilter extends Filter{
 	// method that return true if the symbol match an operator 
 	public static boolean isField(Field op) {
 		return timeFieldsMap.containsValue(op);
+	}
+
+	@Override
+	public TweetList applayFilters(TweetList tweetList) throws Exception {
+		return op.applayFilters(tweetList, field);
 	}
 }

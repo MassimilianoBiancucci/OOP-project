@@ -12,6 +12,7 @@ import com.twitterMetrics.engagementAnalyzer.Filters.Operators.ConditionalOperat
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.LogicOperator;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.MatchOperator;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
+import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 
 
 public abstract class Filter {
@@ -104,6 +105,9 @@ public abstract class Filter {
 		return true;
 	}
 
+	
+	// method that will apply all the subfilters to the passed tweetList
+	public abstract TweetList applayFilters(TweetList tweetList) throws Exception;
 	
 	public abstract String toString();
 	
