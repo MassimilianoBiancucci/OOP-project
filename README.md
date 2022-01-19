@@ -311,7 +311,7 @@ Below there is an example:
         This filters implementation can garant a good flexibility and interchangeability thanks to the extensive usage of classes Inheritance.
         As shown before there are three main componetns of each filter: the `field`, the `operator` and the `operator's values`. there are many field with different characteristics, and many operators that accept only certain type of values, so there is an abstract class for each one of this "abstract" concepts that are extended for each subcase. In this way each class that accept a certain abstract class can accept all the subclasses and apply a different behaviour for each one, for example accept it or throw an exception where the combination of filter, operator and operatorValues can't work together. 
 
-        ![Filters package uml](UMLs/Filters%20V2%20package%20diagram.png)
+        ![Filters package uml](UMLs/Filters%20package%20diagram.png)
 
     - Metric filters
 
