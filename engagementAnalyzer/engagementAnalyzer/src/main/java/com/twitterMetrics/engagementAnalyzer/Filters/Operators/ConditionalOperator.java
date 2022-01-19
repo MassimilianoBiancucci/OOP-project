@@ -3,6 +3,7 @@ package com.twitterMetrics.engagementAnalyzer.Filters.Operators;
 import static java.util.Map.entry;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Map;
 
@@ -254,17 +255,16 @@ public class ConditionalOperator extends Operator{
 		
 		TweetList resultTweetList = new TweetList();
 		
-		ZoneOffset offset = ZoneOffset.of("+00:00");
 		long compVal;
 		
 		switch(this.symbol) {
 			case gt:
 				// application of the operator 'greater' on Time field
 				
-				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toEpochSecond(offset);
+				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toSecondOfDay();
 				for(int i = 0; i < tweetList.size(); i++) {
 					
-					if(tweetList.getDate(i).toEpochSecond(offset) > compVal) {
+					if(tweetList.getTime(i).toSecondOfDay() > compVal) {
 						resultTweetList.add(tweetList.get(i));
 					}
 				}
@@ -273,10 +273,10 @@ public class ConditionalOperator extends Operator{
 			case gte:
 				// application of the operator 'greater or equal' on Time field
 				
-				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toEpochSecond(offset);
+				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toSecondOfDay();
 				for(int i = 0; i < tweetList.size(); i++) {
 					
-					if(tweetList.getDate(i).toEpochSecond(offset) >= compVal) {
+					if(tweetList.getTime(i).toSecondOfDay() >= compVal) {
 						resultTweetList.add(tweetList.get(i));
 					}
 				}
@@ -285,10 +285,10 @@ public class ConditionalOperator extends Operator{
 			case lt:
 				// application of the operator 'less than' on Time field
 				
-				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toEpochSecond(offset);
+				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toSecondOfDay();
 				for(int i = 0; i < tweetList.size(); i++) {
 					
-					if(tweetList.getDate(i).toEpochSecond(offset) < compVal) {
+					if(tweetList.getTime(i).toSecondOfDay() < compVal) {
 						resultTweetList.add(tweetList.get(i));
 					}
 				}
@@ -297,10 +297,10 @@ public class ConditionalOperator extends Operator{
 			case lte:
 				// application of the operator 'less then or equal' on Time field
 				
-				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toEpochSecond(offset);
+				compVal = ((OperatorTimeValues) this.operatorValues).getValue().toSecondOfDay();
 				for(int i = 0; i < tweetList.size(); i++) {
 					
-					if(tweetList.getDate(i).toEpochSecond(offset) <= compVal) {
+					if(tweetList.getTime(i).toSecondOfDay() <= compVal) {
 						resultTweetList.add(tweetList.get(i));
 					}
 				}
@@ -308,17 +308,17 @@ public class ConditionalOperator extends Operator{
 				
 			case bt:
 				// application of the operator 'between' on Time field
-				LocalDateTime[] compValues = ((OperatorTimeValues) this.operatorValues).getValues();
+				LocalTime[] compValues = ((OperatorTimeValues) this.operatorValues).getValues();
 				
 				if(compValues.length != 2) 
 					throw new Exception("applyCond2Time() unexpected number of values inside $bt operator.");
 				
 				for(int i = 0; i < tweetList.size(); i++) {
 					
-					long tweetFieldVal = tweetList.getDate(i).toEpochSecond(offset);
+					int tweetFieldVal = tweetList.getTime(i).toSecondOfDay();
 					
-					if( tweetFieldVal >= compValues[0].toEpochSecond(offset) && 
-						tweetFieldVal <= compValues[1].toEpochSecond(offset)) {
+					if( tweetFieldVal >= compValues[0].toSecondOfDay() && 
+						tweetFieldVal <= compValues[1].toSecondOfDay()) {
 						
 						resultTweetList.add(tweetList.get(i));
 					}

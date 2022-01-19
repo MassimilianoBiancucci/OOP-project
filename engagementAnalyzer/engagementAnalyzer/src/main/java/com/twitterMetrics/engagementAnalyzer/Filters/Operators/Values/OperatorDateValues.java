@@ -1,6 +1,8 @@
 package com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -16,7 +18,7 @@ public class OperatorDateValues implements OperatorValues{
 	private LocalDateTime[] values;
 	private DateParser dateParser;
 	
-	public OperatorDateValues(JsonElement values) throws IncorrectOperatorValuesException{
+	public OperatorDateValues(JsonElement values) throws DateTimeParseException, Exception{
 		
 		dateParser = new DateParser();
 		
@@ -27,7 +29,7 @@ public class OperatorDateValues implements OperatorValues{
 	
 	
 	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonElement values) {
+	public boolean checkValues(JsonElement values) throws DateTimeParseException, Exception {
 
 		if(values.isJsonArray()) {
 			

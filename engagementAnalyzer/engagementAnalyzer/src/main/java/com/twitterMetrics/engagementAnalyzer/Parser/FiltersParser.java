@@ -1,13 +1,10 @@
 package com.twitterMetrics.engagementAnalyzer.Parser;
 
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.twitterMetrics.engagementAnalyzer.Filters.DateFilter;
@@ -23,10 +20,8 @@ import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorDa
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorFilterValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorIntValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorLogicOperatorValues;
-import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorOperatorValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorStringValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorTimeValues;
-import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorValues;
 import com.twitterMetrics.engagementAnalyzer.supportTypes.DateValue;
 import com.twitterMetrics.engagementAnalyzer.supportTypes.TimeValue;
 
@@ -195,6 +190,7 @@ public class FiltersParser {
 				symOp == Operator.SymOp.lte) {
 				// these operators accept only one (int | date | time) as content
 				
+				@SuppressWarnings("rawtypes")
 				Class elemClass = getElementClass(subTree);
 				
 				if(elemClass == int.class) {
@@ -233,6 +229,7 @@ public class FiltersParser {
 						// check the types of the values inside the array
 						
 						JsonElement firstElem = getFirstElement(subTree.getAsJsonArray());
+						@SuppressWarnings("rawtypes")
 						Class firstElemClass = getElementClass(firstElem);
 						
 						if(firstElemClass == int.class) {
@@ -301,6 +298,7 @@ public class FiltersParser {
 				// check the type of the values inside, if the homogenity control is passed it's only need
 				// the check of the class of the first element of the array
 				JsonElement firstElem = getFirstElement(ja);
+				@SuppressWarnings("rawtypes")
 				Class firstElemClass = getElementClass(firstElem);
 				
 				// the only type allowed inside the Match operator is String 
@@ -353,6 +351,7 @@ public class FiltersParser {
 	}
 	
 	// method that return the type of a json element
+	@SuppressWarnings("rawtypes")
 	public static Class getElementClass(JsonElement je) {
 		
 	    if (!je.isJsonPrimitive()) {
@@ -399,6 +398,7 @@ public class FiltersParser {
 	private boolean checkJsonArrayValuesTypesHomogeneity(JsonArray ja) throws Exception {
 		
 		JsonElement firstElem = getFirstElement(ja);
+		@SuppressWarnings("rawtypes")
 		Class firstElemClass = getElementClass(firstElem);
 		
 		for(JsonElement je: ja) {

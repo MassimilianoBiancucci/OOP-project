@@ -1,11 +1,8 @@
 package com.twitterMetrics.engagementAnalyzer.Model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Map;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.twitterMetrics.engagementAnalyzer.Parser.DateParser;
@@ -159,7 +156,7 @@ public class Tweet {
 		this.tweetId = tweetId;
 	}
 	
-	public LocalDateTime getDate() {
+	public LocalDateTime getDate() throws Exception {
 		return this.date.getDate();
 	}
 	
@@ -273,16 +270,15 @@ public class Tweet {
 	public String toString() {
 		
 		String stringTweet = "---------------\n";
-		stringTweet = stringTweet + "tweet id:___" + this.tweetId + "\n";
-		stringTweet = stringTweet + "tweet date:_" + getStringDate() + "\n";
-		stringTweet = stringTweet + "tweet msg:__" + this.msg + "\n";
-		stringTweet = stringTweet + "-- engagement values --\n";
-		stringTweet = stringTweet + "Retweet:____" + this.retweet + "\n";
-		stringTweet = stringTweet + "Reply:______" + this.reply + "\n";
-		stringTweet = stringTweet + "Like:_______" + this.like + "\n";
-		stringTweet = stringTweet + "Quote:______" + this.quote + "\n";
-		stringTweet = stringTweet + "-- engagement metric --\n";
-		stringTweet = stringTweet + "Engagement:_" + getEngagement();
+		stringTweet = stringTweet + "tweet id:   " + this.tweetId + "\n";
+		stringTweet = stringTweet + "tweet date: " + getStringDate() + "\n";
+		stringTweet = stringTweet + "tweet msg:  " + this.msg + "\n\n";
+		stringTweet = stringTweet + "# Engagement values:\n";
+		stringTweet = stringTweet + "retweet:    " + this.retweet + "\n";
+		stringTweet = stringTweet + "reply:      " + this.reply + "\n";
+		stringTweet = stringTweet + "like:       " + this.like + "\n";
+		stringTweet = stringTweet + "quote:      " + this.quote + "\n";
+		stringTweet = stringTweet + "engagement: " + getEngagement() + "\n";
 		
 		return stringTweet;
 	}

@@ -9,11 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.twitterMetrics.engagementAnalyzer.Exceptions.UnexpectedRequestBodyFieldValueException;
 import com.twitterMetrics.engagementAnalyzer.Service.EngagementService;
 import com.twitterMetrics.engagementAnalyzer.Service.RoutesMetadata;
 

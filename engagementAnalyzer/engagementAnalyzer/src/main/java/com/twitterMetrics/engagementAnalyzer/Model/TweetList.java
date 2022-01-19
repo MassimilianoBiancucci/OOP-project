@@ -1,6 +1,7 @@
 package com.twitterMetrics.engagementAnalyzer.Model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.google.gson.JsonArray;
@@ -39,8 +40,12 @@ public class TweetList {
 		}
 	}
 	
-	public LocalDateTime getDate(int idx) {
+	public LocalDateTime getDate(int idx) throws Exception {
 		return tweets.get(idx).getDate();
+	}
+	
+	public LocalTime getTime(int idx) throws Exception {
+		return tweets.get(idx).getDate().toLocalTime();
 	}
 	
 	public String getMsg(int idx) {

@@ -1,6 +1,7 @@
 package com.twitterMetrics.engagementAnalyzer.Parser;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -8,6 +9,7 @@ public class DateParser {
 	
 	// inner date field
 	private LocalDateTime date;
+	private LocalTime time;
 	
 	// Date time format consider 'Z' character for time with zero offset from Greenwich or Zulu time.
 	private static DateTimeFormatter twitterFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -34,34 +36,36 @@ public class DateParser {
 	
 	public DateParser setDate(String date) throws DateTimeParseException {
 		
-		LocalDateTime parsedDate;
-		
 		try {
 			// parse the string with the twitter format
-			parsedDate = LocalDateTime.parse(date, twitterFormat);
+			LocalDateTime parsedDate = LocalDateTime.parse(date, twitterFormat);
+			this.date =  parsedDate;
 		}catch(DateTimeParseException e) {
 			// if the twitter format don't work try the simple format
 			try {
 				// parse the string with the simple format
-				parsedDate = LocalDateTime.parse(date, simpleFormat);
+				LocalDateTime parsedDate = LocalDateTime.parse(date, simpleFormat);
+				this.date =  parsedDate;
 			}catch(DateTimeParseException ex) {
 				// if the simple format don't work try the time format
 				try {
 					// parse the string with the time format
 					// if the timeFormat is selected rise the corresponding flag
-					parsedDate = LocalDateTime.parse(date, timeFormat);
+					LocalTime parsedTime = LocalTime.parse(date, timeFormat);
+					this.time =  parsedTime;
 					isTimeFlag = true;
 				}catch(DateTimeParseException exx) {
 					// if neither the simple format work the format isn't accepted
 					// so initialize the LocalDateTime to now and rise the error flag
 					// then throw the exception
-					parsedDate = LocalDateTime.now();
+					LocalDateTime parsedDate = LocalDateTime.now();
+					this.date =  parsedDate;
 					throw exx;
 				}
 			}
 		}
 		
-		this.date =  parsedDate;
+		
 		return this;
 	}
 	
@@ -70,8 +74,19 @@ public class DateParser {
 		return this;
 	}
 	
-	public LocalDateTime getDate() {
+	public LocalDateTime getDate() throws Exception {
+		isDate();
 		return date;
+	}
+	
+	public DateParser setTime(LocalTime time) {
+		this.time = time;
+		return this;
+	}
+	
+	public LocalTime getTime() throws Exception {
+		isTime();
+		return time;
 	}
 	
 	public String getTwitterDate() {
@@ -82,8 +97,8 @@ public class DateParser {
 		return date.format(simpleFormat);
 	}
 	
-	public String getTime() {
-		return date.format(timeFormat);
+	public String getStrTime() {
+		return time.format(timeFormat);
 	}
 	
 	// method that check if the date-time string passed has only the time, if it doesn't happen throw an exception.

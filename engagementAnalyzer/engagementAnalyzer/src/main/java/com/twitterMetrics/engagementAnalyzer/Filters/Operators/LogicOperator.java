@@ -146,19 +146,22 @@ public class LogicOperator extends Operator{
 			// only with objects presents in all the lists 
 			
 			int nLists = resultTweetLists.length;
+			boolean accepted = true;
 			
 			// iter all the elements of the first retrived list
 			for(int i = 0; i < resultTweetLists[0].size(); i++) {
 				
 				Tweet targetTweet = resultTweetLists[0].get(i);
-				boolean accepted = false;
+				
+				// resetting the match variable
+				accepted = true;
 				
 				// check if that tweet is present in all the other lists
 				for(int j = 1; j < nLists; j++) {
 					accepted &= resultTweetLists[j].containsTweet(targetTweet.getTweetId());
 				}
 				
-				// if present load it in the new list
+				// if present in all the other lists load it in the new list
 				if(accepted) intersecList.add(targetTweet);
 			}
 			

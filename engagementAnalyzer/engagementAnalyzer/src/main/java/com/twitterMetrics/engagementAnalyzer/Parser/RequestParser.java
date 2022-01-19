@@ -31,7 +31,7 @@ public class RequestParser {
 	
 	// Method for parsing of requests for raw tweets by a list of tweets ids
 	// fields: TwitterBearerToken, tweetIds, filters
-	private void parseRequest() throws UnexpectedRequestBodyFieldException, UnexpectedRequestBodyFieldValueException {
+	private void parseRequest() throws Exception {
 		
 		for(Map.Entry<String, JsonElement> entry : this.request.entrySet()) {
 			
@@ -68,8 +68,11 @@ public class RequestParser {
 		    		try {
 		    			this.filters = new FiltersParser(entry.getValue().getAsJsonObject()).getOp();
 		    		}catch(Exception e) {
-		    			e.printStackTrace();
-		    			throw new UnexpectedRequestBodyFieldValueException("Unexpected value inside the field filters, unexpected value: " + entry.getValue());
+		    			if(e.getMessage() != null) {
+		    				throw e;
+		    			}else {
+		    				throw new UnexpectedRequestBodyFieldValueException("Unexpected value inside the field filters, unexpected value: " + entry.getValue());
+		    			}
 		    		}
 			    	break;
 			    default:

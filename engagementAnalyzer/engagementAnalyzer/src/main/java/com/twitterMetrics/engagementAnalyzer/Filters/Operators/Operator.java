@@ -13,6 +13,7 @@ import com.twitterMetrics.engagementAnalyzer.Filters.Filter.Field;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorDateValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorOperatorValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorStringValues;
+import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorTimeValues;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values.OperatorValues;
 import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesException;
@@ -80,6 +81,9 @@ public abstract class Operator {
 			}else if(values instanceof OperatorDateValues) {
 				validateValues((OperatorDateValues) values);
 				
+			}else if(values instanceof OperatorTimeValues) {
+				validateValues((OperatorTimeValues) values);
+				
 			}else if(values instanceof OperatorOperatorValues) {
 				validateValues((OperatorOperatorValues) values);
 				
@@ -131,6 +135,17 @@ public abstract class Operator {
 	
 	// method that verify if the values LocalDate passed are coherent with the symbol
 	private boolean validateValues(OperatorDateValues values) throws Exception {
+		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
+		if(!allowedSymbols.contains(this.symbol)) {
+			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
+		}
+		
+		this.operatorValues = values;
+		return true;
+	}
+	
+	// method that verify if the values LocalDate passed are coherent with the symbol
+	private boolean validateValues(OperatorTimeValues values) throws Exception {
 		ArrayList<SymOp> allowedSymbols = new ArrayList<>(Arrays.asList(SymOp.gt, SymOp.gte, SymOp.lt, SymOp.lte, SymOp.bt));
 		if(!allowedSymbols.contains(this.symbol)) {
 			throw new IncorrectOperatorValuesException("the values passed " + values.toString() + " \n to the operator " + symbol2String.get(this.symbol) + "dosen't match the allowed types!");
