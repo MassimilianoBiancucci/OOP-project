@@ -8,24 +8,66 @@ This application use the Twitter API to retrieve the tweets informations, and ap
 
 # **Index**
 
-- [**Project struscture**](#--project-struscture--)
-- [**Project components**](#--project-components--)
-  * [**SpringBoot framework**](#--springboot-framework--)
-  * [**Twitter API V2**](#--twitter-api-v2--)
-    + [**Authentication**](#--authentication--)
-- [**RESTful API docs**](#--restful-api-docs--)
-  * [**Routes**](#--routes--)
-    + [**Requests for raw tweets** </br>](#--requests-for-raw-tweets-----br-)
-    + [**Reqest by tweets id**](#--reqest-by-tweets-id--)
-    + [**Reqest by user id**](#--reqest-by-user-id--)
-    + [**Requests for tweets metrics**](#--requests-for-tweets-metrics--)
-    + [**Requests body documentation**](#--requests-body-documentation--)
-- [**Junit tests**](#--junit-tests--)
-- [**UML diagrams**](#--uml-diagrams--)
-- [**USEFUL LINKS**](#--useful-links--)
-  * [SpringBoot](#springboot)
-  * [Twitter API docs](#twitter-api-docs)
-
+* [**Project struscture**](#project-struscture)
+* [**Project components**](#project-components)
+    + [**SpringBoot framework**](#springboot-framework)
+    + [**Twitter API V2**](#twitter-api-v2)
+        - [**Authentication**](#authentication)
+* [**RESTful API docs**](#restful-api-docs)
++ [**API overview**](#api-overview)
++ [**Filters**](#filters)
+    - [**Filter operators**](#filter-operators)
+        - [**Logic operators** </br>](#logic-operators)
+        - [**Match operators** </br>](#match-operators)
+        - [**Specific fields and properties**](#specific-fields-and-properties)
+        - [**Filter and operators combinations**](#filter-and-operators-combinations)
+    - [**Filters package**](#filters-package)
+        - [**Inheritance and associations**](#inheritance-and-associations)
++ [**Routes**](#routes)
+    - [**1 - Requests for raw tweets**](#1-requests-for-raw-tweets)
+        - [**1 - Input**](#1-input)
+            - [**1.1 - Reqest by tweets id**](#1.1-reqest-by-tweets-id)
+                - [**1.1 - Request parameters**](#1.1-request-parameters)
+                - [**1.1 - Route parameters**](#1.1-route-parameters)
+                - [**1.1 - Request body parameters**](#1.1-request-body-parameters)
+                - [**1.1 - Metadata**](#1.1-metadata)
+                - [**1.1 - Example**](#1.1-example)
+            - [**1.2 - Reqest by user id**](#1.2-reqest-by-user-id)
+                - [**1.2 - Request parameters**](#1.2-request-parameters)
+                - [**1.2 - Route parameters**](#1.2-route-parameters)
+                - [**1.2 - Request body parameters**](#12-request-body-parameters)
+                - [**1.2 - Metadata**](#1.2-metadata)
+                - [**1.2 - Example**](#1.2-example)
+        - [**1 - Output**](#1-output)
+            - [**1 - Response body parameters**](#1-response-body-parameters)
+            - [**1 - Example**](#1-example)
+    - [**2 - Requests for tweets metrics**](#2-requests-for-tweets-metrics)
+        - [**2 - Input**](#2-input)
+            - [**2.1 - Reqest by tweets id**](#2.1-reqest-by-tweets-id)
+                - [**2.1 - Request parameters**](#2.1-request-parameters)
+                - [**2.1 - Route parameters**](#2.1-route-parameters)
+                - [**2.1 - Request body parameters**](#2.1-request-body-parameters)
+                - [**2.1 - Metadata**](#2.1-metadata)
+                - [**2.1 - Example**](#2.1-example)
+            - [**2.2 - Reqest by tweets id**](#2.2-reqest-by-tweets-id)
+                - [**2.2 - Request parameters**](#2.2-request-parameters)
+                - [**2.2 - Route parameters**](#2.2-route-parameters)
+                - [**2.2 - Request body parameters**](#2.2-request-body-parameters)
+                - [**2.2 - Metadata**](#2.2-metadata)
+                - [**2.2 - Example**](#2.2-example)
+        - [**2 - Output**](#2-output)
+            - [**2 - Response body parameters**](#2-response-body-parameters)
+            - [**2 - Example**](#2-example)
+    - [**Route parameters**](#route-parameters)
+    - [**Request body parameters**](#request-body-parameters)
+    - [**Response to failed requests**](#response-to-failed-requests)
+* [**Junit tests**](#junit-tests)
+* [**Postman examples**](#postman-examples)
+* [**USEFUL LINKS**](#useful-links)
+    + [SpringBoot](#springboot)
+    + [Twitter API docs](#twitter-api-docs)
+    + [Docs tools](#docs-tools)
+    + [Utils](#utils)
 
 ---
 ## **Project struscture**
@@ -33,10 +75,97 @@ This application use the Twitter API to retrieve the tweets informations, and ap
 Below is shown the structure of the project and what is the content of each folder, with a little description of each one. 
 
 ```text
-
-
+src
+├───main
+│   └───java.com.twitterMetrics
+│               └───engagementAnalyzer
+│                   │   EngagementAnalyzerApplication.java
+│                   │   
+│                   ├───Controller
+│                   │       EngagementController.java
+│                   │       
+│                   ├───Exceptions
+│                   │       IncorrectFilterFieldException.java
+│                   │       IncorrectOperatorSymbolException.java
+│                   │       IncorrectOperatorValuesException.java
+│                   │       NotImplementedException.java
+│                   │       RequestBodyFieldNotPresentException.java
+│                   │       UnexpectedRequestBodyFieldException.java
+│                   │       UnexpectedRequestBodyFieldValueException.java
+│                   │       
+│                   ├───Filters
+│                   │   │   DateFilter.java
+│                   │   │   Filter.java
+│                   │   │   MessageFilter.java
+│                   │   │   MetricFilter.java
+│                   │   │   TimeFilter.java
+│                   │   │   
+│                   │   └───Operators
+│                   │       │   ConditionalOperator.java
+│                   │       │   LogicOperator.java
+│                   │       │   MatchOperator.java
+│                   │       │   Operator.java
+│                   │       │   
+│                   │       └───Values
+│                   │               OperatorDateValues.java
+│                   │               OperatorFilterValues.java
+│                   │               OperatorIntValues.java
+│                   │               OperatorLogicOperatorValues.java
+│                   │               OperatorOperatorValues.java
+│                   │               OperatorStringValues.java
+│                   │               OperatorTimeValues.java
+│                   │               OperatorValues.java
+│                   │               
+│                   ├───Model
+│                   │       Statistic.java
+│                   │       StatisticsList.java
+│                   │       Tweet.java
+│                   │       TweetList.java
+│                   │       
+│                   ├───Parser
+│                   │       DateParser.java
+│                   │       FiltersParser.java
+│                   │       RequestParser.java
+│                   │       TwitterResponseParser.java
+│                   │       
+│                   ├───Service
+│                   │   │   EngagementService.java
+│                   │   │   EngagementServiceImpl.java
+│                   │   │   RoutesMetadata.java
+│                   │   │   
+│                   │   └───TwitterApiCaller
+│                   │           TwitterApiCaller.java
+│                   │           
+│                   └───supportTypes
+│                           DateValue.java
+│                           TimeValue.java
+└───test
+    └───java
+        └───com
+            └───twitterAnalyzer
+                └───engagementAnalyzer
+                    │   EngagementAnalyzerApplicationTests.java
+                    │   
+                    └───TestService
+                            EngagementTestServiceFakeData.java
+                            EngagementTestServiceImpl.java
 ```
+<b>main/java/</b>
+- `com.twitterMetrics.engagementAnalyzer`: Principal package of the project.
+- `com.twitterMetrics.engagementAnalyzer.Controller`: Package that contain the calss that manage the requests and run the requested code. 
+- `com.twitterMetrics.engagementAnalyzer.Exceptions`: Package that contain all the Exceptions defined for the project.
+- `com.twitterMetrics.engagementAnalyzer.Filters`: Package that contain all the filters classes and all the related subpackages.
+- `com.twitterMetrics.engagementAnalyzer.Filters.Operators`: Package that contain the operators classes and all the related subpackages.
+- `com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values`: Package that contain all the operator's values classes.
+- `com.twitterMetrics.engagementAnalyzer.Model`: Package that contain the principal data models, like the class that abstracts the tweet and a list of tweets, in the same way this package contain the statistic of one tweet field and a list of statistics abstracted as classes.
+- `com.twitterMetrics.engagementAnalyzer.Parser`: Package that contain all the classes used for the parsing operaton for various type of objects.
+- `com.twitterMetrics.engagementAnalyzer.Service`: Package that contain all the classes that coordinate all the other classes of the project for the creation of the requested result. these classes are used inside the controller.
+- `com.twitterMetrics.engagementAnalyzer.Service.TwitterApiCaller`: A sub-package of the Service package, used for the interface with the Twitter API.
+- `com.twitterMetrics.engagementAnalyzer.supportTypes`: Package with some empty classes used inside the project as placeholder. 
 
+<b>test/java/</b>
+- `com.twitterMetrics.engagementAnalyzer`: Principla test package, contain the tests.
+- `com.twitterMetrics.engagementAnalyzer.TestService`: Package that contains a modified version of the original service, in that version everything is the same except for the Twitter API caller that isn't used in the test and is replaced by a static result for repeatability.
 ---
 ## **Project components**
 
@@ -73,7 +202,7 @@ Below there is an example:
     There are tree types of operators, 2 normal and one special. The special ones are the `logic operators`, those opratars can be used either on other operators either on well formed filters, but not together.
     The other ones are the `match operators` that could be used for match or unmatch list of values while the `conditional operators` are used for specify interval of values accepted, below there are more accurate explenation of each type.
 
-    - **Logic operators** </br>
+    - #### **Logic operators** </br>
         The `logic operators` can't be applied alone, they are used for:
         - filter(s) combination or coniugation. 
         - operator(s) combinations or coniugation.
@@ -115,7 +244,7 @@ Below there is an example:
         </tbody>
         </table>
 
-    - **Match operators** </br>
+    - #### **Match operators** </br>
         The `match operators` are used for filter tweets based on list of values that their fields should match or not match. This type of filters could be used only with strings otherwise the request will throw an exceptionand fail.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
@@ -138,7 +267,7 @@ Below there is an example:
         </table>
 
 
-    - **Conditional operators** </br>
+    - #### **Conditional operators** </br>
         The last one are the `conditional operators`, and can be used only on numeric values like metrics and on dates and timetables, so they can't be used only with strings. The usage if these operators with general string values will throw an exception. Another exception will be raised even if these operators are applied to string fields like `text`.
         <table style="width:100%" border="2" bordercolor = "#fffff">
         <tbody>
@@ -385,13 +514,13 @@ bordercolor = "#fffff">
 
 Below all the routes are explained in detail, with example of requests and examples of responses for each case. 
 
-- #### **Requests for raw tweets**
+- #### **1 - Requests for raw tweets**
     This funcionality enable to request the raw tweets as they are returned by the twitter API, with the possibility of applying to them some filters if needed, so it's possible to query the tweets with the twitter api format, but for example applying to them a filter for retrive only tweets with certain words in the text field, or all other type of filters above explained. As metioned there are two methods for retrive these tweet's raw data, by a list of tweets ids or by a twitter user id and specifing the number of tweets needed, note that in that way only the last tweets are taken.
 
-    - #### **Input**
+    - #### **1 - Input**
         In this section there are the two methods routes for the <b>requests of raw tweets</b> explained in detail with a formal documentation that explain each parameter in the route and in the request body with an example request for the two routes.
 
-        - #### **Reqest by tweets id**
+        - #### **1.1 - Reqest by tweets id**
             In the table there are the two routes relative to the service for the request of the raw tweets by a list of tweets ids. The first is the route for the effective service, the second one always returns the same result, a special json that encode the structure of the response with types and descriptions of each field.
             <table 
                 style="width:100%" 
@@ -416,17 +545,17 @@ Below all the routes are explained in detail, with example of requests and examp
             </tbody>
             </table>
 
-            - #### **Request parameters**
+            - #### **1.1 - Request parameters**
                 In this section there is the list of parameters that should be in the request, in the body and in the route:
-                - #### **Route parameters**
+                - #### **1.1 - Route parameters**
                     The request by tweets id has a static route, all the parameters are in the request body.
-                - #### **Request body parameters**
+                - #### **1.1 - Request body parameters**
                     The request body must be in json format, below the parameters:
                     - `TwitterBearerToken`: String that contain your OAuth 2.0 Bearer token issued from Twitter in your [Twitter Developer portal](https://developer.twitter.com/en/portal/dashboard), this field must be filled with a valid token or the API will throw an exception and the request will fail.
                     - `tweetIds`: json array of int, that constain the id's of each tweet that the service will query from the Twitter API, and where the passed filters will be applied.
                     - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
-            - #### **Metadata**
+            - #### **1.1 - Metadata**
                 For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/tweets/metadata` route:
                 
                 <details>
@@ -543,7 +672,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details> </br>
 
-            - #### **Example**
+            - #### **1.1 - Example**
                 Below there is an example of API call to the `/tweets` route:
 
                 <details>
@@ -570,7 +699,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details> </br>
 
-        - #### **Reqest by user id**
+        - #### **1.2 - Reqest by user id**
             
             <table 
                 style="width:100%" 
@@ -595,20 +724,20 @@ Below all the routes are explained in detail, with example of requests and examp
             </tbody>
             </table>
 
-            - #### **Request parameters**
+            - #### **1.2 - Request parameters**
                 In this section there is the list of parameters that should be in the body and in the route:
                 
-                - #### **Route parameters**
+                - #### **1.2 - Route parameters**
                     The request by user id has only one parameter in the route, showed in the above table with the following placeholder:
 
                     - `:userId`: should be replaced with the Twitter user id of the user of which we want retrive the tweets. this parameter its simply a number. 
 
-                - #### **Request body parameters**
+                - #### **1.2 - Request body parameters**
                     The request body must be in json format, below the parameters:
                     - `TwitterBearerToken`: String that contain your OAuth 2.0 Bearer token issued from Twitter in your [Twitter Developer portal](https://developer.twitter.com/en/portal/dashboard), this field must be filled with a valid token or the API will throw an exception and the request will fail.
                     - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
-            - #### **Metadata**
+            - #### **1.2 - Metadata**
                 For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/user/metadata` route:
 
                 <details>
@@ -717,7 +846,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details> </br>
 
-            - #### **Example**
+            - #### **1.2 - Example**
                 Below there is an example of API call to the `/user/:userId` route:
 
                 <details>
@@ -738,10 +867,10 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details> </br>
 
-    - #### **Output**
+    - #### **1 - Output**
         In this section there is the output explenation of the response from the api that return calling the `/tweets` and `/user/:userId` routes, note that the result from this two routes are the same. All the variables in the respose of this routes are a subset of the parameters that could be retrived directly from the Twitter API.
 
-        - #### **Response body parameters**
+        - #### **1 - Response body parameters**
             In this section are explained all the parameters that return from the call of the above mentioned routes:
             - `tweets`: the tweets field it's an array of json obects, each java object contain all the information of one tweetthat are: id, text, created_at and public metrics.
             - `id`: This field is contained inside each object inside the <b>tweets</b> array, it's an <b>int</b> field and indicates the id of the corresponding tweet.
@@ -754,7 +883,7 @@ Below all the routes are explained in detail, with example of requests and examp
             - `quote_count`:This field is contained inside the <b>public_metrics</b> object, it's a <b>float</b> field and indicates the number of quotes of the corresponding tweet.
             - `errors`: This field contains a json array with each error passed from the Twitter API, see the Twitter API V2 documentation for further details.
 
-        - #### **Example**
+        - #### **1 - Example**
             In this section there is an example of response from the api that could be returned from a call to the `/tweets` or `/user/:userId` routes, passing the correct json request body:
             <details>
 
@@ -815,15 +944,15 @@ Below all the routes are explained in detail, with example of requests and examp
             ```
             </details> </br>
 
-- #### **Requests for tweets metrics**
+- #### **2 - Requests for tweets metrics**
     This functionality enable to request statistics on the engagement that are relative to a group of tweets passed through a list of tweets ids or by a twitter user id and specifing the number of tweets needed. 
     
     These statistics are calculated based on the tweets passed in one of the two ways, but if there are filters specified in the json request body, the tweets used for the statistics calculation will be only the filterd tweets.
 
-    - #### **Input**
+    - #### **2 - Input**
         In this section there are the two routes for the requests of <b>tweets engagement metrics</b>, showed in detail with a formal documentation that explain each parameter in the route and in the request body with an example request for the two routes.
 
-        - #### **Reqest by tweets id**
+        - #### **2.1 - Reqest by tweets id**
 
             <table 
                 style="width:100%"
@@ -848,7 +977,7 @@ Below all the routes are explained in detail, with example of requests and examp
             </tbody>
             </table>
 
-            - #### **Request parameters**
+            - #### **2.1 - Request parameters**
                 In this section there is the list of parameters that should be in the request, in the body and in the route:
                 - #### **Route parameters**
                     The request by tweets id has a static route, all the parameters are in the request body.
@@ -999,7 +1128,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details>
 
-        - #### **Reqest by user id**
+        - #### **2.2 - Reqest by user id**
             
             <table 
                 style="width:100%" 
@@ -1024,7 +1153,7 @@ Below all the routes are explained in detail, with example of requests and examp
             </tbody>
             </table>
 
-            - #### **Metadata**
+            - #### **2.2 - Metadata**
                 For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/user/metrics/metadata` route:
 
                 <details>
@@ -1131,7 +1260,7 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details> </br>
 
-            - #### **Example**
+            - #### **2.2 - Example**
                 Below there is an example of API call to the `/user/:userId/metrics` route:
 
                 <details>
@@ -1152,10 +1281,10 @@ Below all the routes are explained in detail, with example of requests and examp
                 ```
                 </details>
 
-    - #### **Output**
+    - #### **2 - Output**
         In this section there is the output explenation of the response from the api that return calling the `/tweets/metrics` and `/user/:userId/metrics` routes, note that the result from this two routes are the same. All the variables in the respose of this routes are the means and the variances of the main engagement variables of each filterd tweet, with one more variable that is the combination of all those values, the engagement parameter.
 
-        - #### **Response body parameters**
+        - #### **2 - Response body parameters**
             In this section are explained all the parameters that return from the call of the above mentioned routes:
             - `tweetsMetrics`: the tweetsMetrics field it's an object that contain all the statistics about the engagement metrics (all the parameters below).
             - `retweet_count_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of the number of retweets in the filtered group of passed tweets.
@@ -1170,7 +1299,7 @@ Below all the routes are explained in detail, with example of requests and examp
             - `engagement_variace`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the variance of the engagement value in the filtered group of passed tweets.
             - `errors`: This field contains a json array with each error passed from the Twitter API, see the Twitter API V2 documentation for further details.
 
-        - #### **Example**
+        - #### **2 - Example**
             In this section there is an example of response from the api that could be returned from a call to the `/tweets/metrics` or `/user/:userId/metrics` routes, passing the correct json request body: 
             
             <details>
@@ -1220,6 +1349,9 @@ Below all the routes are explained in detail, with example of requests and examp
 
 ---
 ## **Junit tests**
+
+---
+## **Postman examples**
 
 ---
 ## **USEFUL LINKS**
