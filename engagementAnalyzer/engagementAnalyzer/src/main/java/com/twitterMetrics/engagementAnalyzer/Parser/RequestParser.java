@@ -54,11 +54,13 @@ public class RequestParser {
 			    		JsonArray tweetIdsArray = entry.getValue().getAsJsonArray();
 			    		this.tweetIds = new String[tweetIdsArray.size()];
 			    		int idx = 0;
-			    		for(JsonElement elem: tweetIdsArray)
-			    			this.tweetIds[idx++] = elem.getAsString();
 			    		
+			    		for(JsonElement elem: tweetIdsArray) {
+			    			if(!elem.getAsJsonPrimitive().isNumber()) throw new Exception();
+			    			this.tweetIds[idx++] = elem.getAsString();
+			    		}
+			    			
 			    	}catch(Exception e) {
-			    		e.printStackTrace();
 			    		throw new UnexpectedRequestBodyFieldValueException("Unexpected value inside the field tweetIds, unexpected value: " + entry.getValue());
 			    	}
 			    	break;

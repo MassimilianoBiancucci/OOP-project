@@ -111,9 +111,7 @@ public class EngagementController {
 		}catch(Exception e) {
 			
 			JsonObject errorResponse = new JsonObject();
-
 			String exceptionMessage = e.getMessage();
-			if(exceptionMessage == null) exceptionMessage = "for unknown error.";
 			
 			errorResponse.addProperty("status", "Request failed");
 			errorResponse.addProperty("detail", exceptionMessage);
@@ -131,9 +129,7 @@ public class EngagementController {
 		}catch(Exception e) {
 			
 			JsonObject errorResponse = new JsonObject();
-
 			String exceptionMessage = e.getMessage();
-			if(exceptionMessage == null) exceptionMessage = "for unknown error.";
 			
 			errorResponse.addProperty("status", "Request failed");
 			errorResponse.addProperty("detail", exceptionMessage);

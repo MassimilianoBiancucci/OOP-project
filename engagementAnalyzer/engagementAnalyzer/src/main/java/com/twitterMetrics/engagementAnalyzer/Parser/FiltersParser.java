@@ -63,7 +63,7 @@ public class FiltersParser {
 				
 			}else {
 				// se non è nessuno dei precedenti sollevo un eccezione
-				throw new Exception("Wrong field in the filter tree");
+				throw new Exception("Wrong field: " + entry.getKey() + " in the filter tree");
 			}
 		}
 		

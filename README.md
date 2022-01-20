@@ -1216,13 +1216,10 @@ Below all the routes are explained in detail, with example of requests and examp
             ```
             </details> </br>
 
-- #### **Metadata format documentation**
+- #### **Response to failed requests**
 
 ---
 ## **Junit tests**
-
----
-## **UML diagrams**
 
 ---
 ## **USEFUL LINKS**
@@ -1231,10 +1228,14 @@ Below all the routes are explained in detail, with example of requests and examp
 - [SpringBoot initializer](https://start.spring.io/)
 
 ### Twitter API docs
+- [Twitter Developer portal](https://developer.twitter.com/en/portal/dashboard)
 - [Twitter API v2 homepage](https://developer.twitter.com/en/docs/twitter-api)
+- [Twitter API v2 postman collection](https://developer.twitter.com/en/docs/tutorials/postman-getting-started)
 - [Twitter API v2: Tweets lookup](https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/introduction)
 - [Twitter API v2: Timelines](https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/introduction)
-
 ### Docs tools
 - [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/)
 - [tables generator](https://www.tablesgenerator.com/html_tables)
+
+### Utils
+- [Json formatter](https://jsonformatter.org/json-pretty-print)

@@ -1,42 +1,25 @@
-package com.twitterMetrics.engagementAnalyzer.Service;
+package com.twitterAnalyzer.engagementAnalyzer.TestService;
 
-import org.springframework.stereotype.Service;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.LogicOperator;
 import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 import com.twitterMetrics.engagementAnalyzer.Parser.RequestParser;
 import com.twitterMetrics.engagementAnalyzer.Parser.TwitterResponseParser;
-import com.twitterMetrics.engagementAnalyzer.Service.TwitterApiCaller.TwitterApiCaller;
+import com.twitterMetrics.engagementAnalyzer.Service.EngagementService;
 
-@Service
-public class EngagementServiceImpl implements EngagementService{
-	
-	
-	// method that process the request of raw tweets
+public class EngagementTestServiceImpl implements EngagementService{
+
 	@Override
 	public JsonObject getRawTweetsData(JsonObject requestBody, String userId) throws Exception {
 		
-		RequestParser requestParser = new RequestParser(requestBody);	
-		TwitterApiCaller api = new TwitterApiCaller(requestParser.getBearerToken());
+		// In this test method the request is processed but not used,
+		// due to the fake implementation of the Twitter API caller
+		RequestParser requestParser = new RequestParser(requestBody);
 		
-		JsonObject tweeterApiResponse;
-		
-		// if the request passed is by userId it will be passed
-		// otherwise the request should contain a list of tweet's ids
-		if(userId == null) {
-			tweeterApiResponse = api.getTweetsFromIds(requestParser.getTweetsIds());
-		}else {
-			tweeterApiResponse = api.getTweetsFromUserId(userId);
-		}
-		
-		//DEBUG #####################################################
-		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		//System.out.println(gson.toJson(tweeterApiResponse));
-		//System.out.println(" --- ");
-		// ##########################################################
+		// In the test service for avoid the usage of the twitterApiCaller will be used only fake data 
+		// similar to the original data but static, this response don't change for all the routes except for the metadata routes
+		JsonObject tweeterApiResponse = JsonParser.parseString(EngagementTestServiceFakeData.fakeTwitterApiResponse).getAsJsonObject();
 		
 		// at this point all the tweets are parsed
 		TwitterResponseParser tweeterApiResponseParsed = new TwitterResponseParser(tweeterApiResponse);
@@ -59,25 +42,14 @@ public class EngagementServiceImpl implements EngagementService{
 	// method that process the request of tweets engagement metrics
 	@Override
 	public JsonObject getTweetsStats(JsonObject requestBody, String userId) throws Exception {
-
+		
+		// In this test method the request is processed but not used,
+		// due to the fake implementation of the Twitter API caller
 		RequestParser requestParser = new RequestParser(requestBody);	
-		TwitterApiCaller api = new TwitterApiCaller(requestParser.getBearerToken());
 		
-		JsonObject tweeterApiResponse;
-		
-		// if the request passed is by userId it will be passed
-		// otherwise the request should contain a list of tweet's ids
-		if(userId == null) {
-			tweeterApiResponse = api.getTweetsFromIds(requestParser.getTweetsIds());
-		}else {
-			tweeterApiResponse = api.getTweetsFromUserId(userId);
-		}
-		
-		//DEBUG #####################################################
-		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		//System.out.println(gson.toJson(tweeterApiResponse));
-		//System.out.println(" --- ");
-		// ##########################################################
+		// In the test service for avoid the usage of the twitterApiCaller will be used only fake data 
+		// similar to the original data but static, this response don't change for all the routes except for the metadata routes
+		JsonObject tweeterApiResponse = JsonParser.parseString(EngagementTestServiceFakeData.fakeTwitterApiResponse).getAsJsonObject();
 		
 		// at this point all the tweets are parsed
 		TwitterResponseParser tweeterApiResponseParsed = new TwitterResponseParser(tweeterApiResponse);
@@ -95,5 +67,4 @@ public class EngagementServiceImpl implements EngagementService{
 		
 		return response;
 	}
-	
 }
