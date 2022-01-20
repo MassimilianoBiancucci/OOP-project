@@ -77,7 +77,9 @@ Below is shown the structure of the project and what is the content of each fold
 ```text
 src
 ├───main
-│   └───java.com.twitterMetrics
+│   └───java
+│       └───com
+│           └───twitterAnalyzer
 │               └───engagementAnalyzer
 │                   │   EngagementAnalyzerApplication.java
 │                   │   
@@ -380,7 +382,7 @@ Below there is an example:
 
 - #### **Filter and operators combinations**
 
-    In this section will be shown some examples of filters combinations, to highlight what can be passed to the API in the request body and what will throw an error.
+    In this section, some examples of filter combinations will be shown, to highlight what can be passed to the API in the request body and what will throw an error.
     By combination of filters it is meant an extensive usage of the `logical operators` to combine many filters, below the examples:
 
     - **Combinations of filters:**
@@ -395,50 +397,32 @@ Below there is an example:
             }
         }
         ```
+        This first example show how to combine multiple filters for the like count, the creation date and the text content with the or logic operator. Note that the conditional operators (es. $gt) and match operators (es. $in) are palced every time inside a field and not outside or inside another operaotr, otherwise the request will fail. 
+        
+        Another important error to avoid is to place a logic operator inside a filter, this way will bring to the request fail to. Logic operators must be placed outside a filter, there isn't limit to the number of nested logic operators but the filter elements must be the last elements of the tree, for each branch. Below the error just explained:
 
         ```json
         {
             "filters":{
                 "$or":[
-                    {"like_count": {"$gt": 1000}},
-                    {"created_at": {"$gt": "2022-01-01T14:07:02Z"}},
-                    {"text": {"$in": ["deeplearning", "transformers", "cnn"]}}
+                    {"like_count": 
+                    {
+                        "$and": [{"$gt": 1000}, {"$lt": 2000}]} <-- ERROR
+                    }
                 ]
             }
         }
         ```
 
-        This filter select all the tweets in the given set that satisfy at least on of these conditions: has more than 1000 likes, or that are created after the given date or that contain in the text one word in the list.
-
-        This case is clearly a combination of filters, in this case the logical operator is used for combine filters for differents fields together, more filters for the same fields are allowed but the insertion of another operator (without filters inside) in the $or operator would meaning nothing and would throw an error.
-
-    - **Combinations of operators:**
-        ```json
-        {
-            "filters":{
-                "created_at":{
-                    "$and":[
-                        {"$not":{"$bt": ["2022-01-04T14:07:05Z", "2022-01-05T14:07:02Z"]}},
-                        {"$gt": "2022-01-01T14:07:02Z"}
-                    ]
-                }
-            }
-        }
-        ```
-        This filter select a particular time interval, it select all the tweets of dates greater than the specified date and exclude from this interval one day, note that the operator between select the specified interval but the operator cogniugation specify that this sub interval is excluded.
-
-        In this example is passed one filter for only one field, the date, and the operator applied to this filter is a composition of four operators.
-        It's clear that this one is only one filter because there is only one field.
-        
-        Note that put another filter inside the and operator of the first filter would make no sense and would generate an error.
 
 - #### **Filters package**
     
     In this section there is an insight on how filters works under the hood. 
 
     - #### **Inheritance and associations**
-        This filters implementation can garant a good flexibility and interchangeability thanks to the extensive usage of classes Inheritance.
-        As shown before there are three main componetns of each filter: the `field`, the `operator` and the `operator's values`. there are many field with different characteristics, and many operators that accept only certain type of values, so there is an abstract class for each one of this "abstract" concepts that are extended for each subcase. In this way each class that accept a certain abstract class can accept all the subclasses and apply a different behaviour for each one, for example accept it or throw an exception where the combination of filter, operator and operatorValues can't work together. 
+        This filters implementation can garant a good flexibility thanks to the extensive usage of classes Inheritance.
+        As shown before there are three main componetns of each filter: the `field`, the `operator` and the `operator's values`. there are many field with different characteristics, and many operators that accept only certain type of values, so there is an abstract class for each one of this "abstract" concepts that are extended for each subcase. In this way each class that accept a certain abstract class can accept all the subclasses and apply a different behaviour for each one, for example accept it or throw an exception where the combination of filter, operator and operatorValues can't work together.
+        For example the MessageFilter class can work only with MatchOperator class and this one accept only OperatorStringValues, other combinations will throw an exception.
 
         ![Filters package uml](UMLs/Filters%20package%20diagram.png)
 
@@ -449,7 +433,7 @@ Below there is an example:
     - Date filters
 
     - TimeSlot filters
-
+        
 
 ### **Routes**
 This api has two main functionalities, the first is the request of the raw tweets directly taken from the twitter api, with the application of the passed filters. The second functionality is the request of some statistics on the tweets requested after the application of the passed filters.
@@ -553,7 +537,7 @@ Below all the routes are explained in detail, with example of requests and examp
                     The request body must be in json format, below the parameters:
                     - `TwitterBearerToken`: String that contain your OAuth 2.0 Bearer token issued from Twitter in your [Twitter Developer portal](https://developer.twitter.com/en/portal/dashboard), this field must be filled with a valid token or the API will throw an exception and the request will fail.
                     - `tweetIds`: json array of int, that constain the id's of each tweet that the service will query from the Twitter API, and where the passed filters will be applied.
-                    - `filters`: json object that can contain one filter or one logical operator, note that match operators or cnditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`, more than one operator can be passed inside one filter. For further detail on filters and operators nesting, check the [Filters](#filters) section.
+                    - `filters`: json object that can contain one filter or one logical operator, note that match operators or conditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`. For further detail on filters and operators nesting, check the [Filters](#filters) section.
 
             - #### **1-1- Metadata**
                 For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/tweets/metadata` route:
@@ -872,6 +856,8 @@ Below all the routes are explained in detail, with example of requests and examp
 
         - #### **1- Response body parameters**
             In this section are explained all the parameters that return from the call of the above mentioned routes:
+            - `status`: Message that explain the actual status of the request, normaly the value should be 'success'.
+            - `tweets_count`: The number of tweets retrived before the filtering process, the maximum should be 100, but the retrived number depend to the twitter api.
             - `tweets`: the tweets field it's an array of json obects, each java object contain all the information of one tweetthat are: id, text, created_at and public metrics.
             - `id`: This field is contained inside each object inside the <b>tweets</b> array, it's an <b>int</b> field and indicates the id of the corresponding tweet.
             - `text`: This field is contained inside each object inside the <b>tweets</b> array, it's a <b>String</b> field and indicates the message of the corresponding tweet.
@@ -1153,6 +1139,18 @@ Below all the routes are explained in detail, with example of requests and examp
             </tbody>
             </table>
 
+            - #### **2-2- Request parameters**
+                In this section there is the list of parameters that should be in the body and in the route:
+                
+                - #### **2-2- Route parameters**
+                    The request by user id has only one parameter in the route, showed in the above table with the following placeholder:
+
+                    - `:userId`: should be replaced with the Twitter user id of the user of which we want retrive the tweets. this parameter its simply a number. 
+
+                - #### **2-2- Request body parameters**
+                    The request body must be in json format, below the parameters:
+                    - `TwitterBearerToken`: String that contain your OAuth 2.0 Bearer token issued from Twitter in your [Twitter Developer portal](https://developer.twitter.com/en/portal/dashboard), this field must be filled with a valid token or the API will throw an exception and the request will fail.
+                    - `filters`: json object that can contain one filter or one logical operator, note that match operators or conditional operators aren't allowed in the first level. more than one filter can be passed inside a logical operator `$and` or `$or`. For further detail on filters and operators nesting, check the [Filters](#filters) section.
             - #### **2-2- Metadata**
                 For the metadata route there aren't any parameters to pass. Note that this method differ from the last method only for the absence of the list of tweets ids in the request body. Below there is the result of the API call to the `/user/metrics/metadata` route:
 
@@ -1286,6 +1284,8 @@ Below all the routes are explained in detail, with example of requests and examp
 
         - #### **2- Response body parameters**
             In this section are explained all the parameters that return from the call of the above mentioned routes:
+            - `status`: Message that explain the actual status of the request, normaly the value should be 'success'.
+            - `tweets_count`: The number of tweets retrived before the filtering process, the maximum should be 100, but the retrived number depend to the twitter api.
             - `tweetsMetrics`: the tweetsMetrics field it's an object that contain all the statistics about the engagement metrics (all the parameters below).
             - `retweet_count_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of the number of retweets in the filtered group of passed tweets.
             - `reply_count_mean`:This field is contained inside the <b>tweetsMetrics</b> object, it's a <b>float</b> field and indicates the mean of replies in the filtered group of passed tweets.
@@ -1308,6 +1308,8 @@ Below all the routes are explained in detail, with example of requests and examp
 
             ```json
             {
+                "status": "success",
+                "tweets_count": 2,
                 "tweetsMetrics" : {
                     "retweet_count_mean":       15.94,
                     "reply_count_mean":         56.22,

@@ -52,7 +52,7 @@ public class EngagementTestServiceFakeData {
 	
 	// ENGAGEMENT ANALYZER API WRONG REQUESTS
 	// In this section are present 4 json request body that are executed in the JUnit tests 
-	// these tests must rise an exception with a predictable error message the test is pased if the error is correct.
+	// these tests must rise an exception with a predictable error message, the test is pased if the error is correct.
 	
 	public static String wrongTweetIdsRequest = "{\"TwitterBearerToken\":\"<your bearer token here>\",\"tweetIds\":[20,21,\"test\",23,24,35,750,550,8569,58998]}";
 	
