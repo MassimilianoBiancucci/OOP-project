@@ -57,7 +57,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	@Test
@@ -76,7 +75,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	@Test
@@ -95,7 +93,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	@Test
@@ -114,7 +111,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	
@@ -138,7 +134,7 @@ class EngagementAnalyzerApplicationTests {
 			fail("This test should not fail!");
 		}
 	}
-		
+	
 	@Test
 	void tweetsMetricsMetricFiltersRequestTest() {
 		
@@ -155,7 +151,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	@Test
@@ -174,7 +169,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	@Test
@@ -193,7 +187,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	@Test
@@ -212,7 +205,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			fail("This test should not fail!");
 		}
-		
 	}
 	
 	
@@ -253,7 +245,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			assertEquals(expectedException, e.getMessage());
 		}
-		
 	}
 	
 	@Test
@@ -272,7 +263,6 @@ class EngagementAnalyzerApplicationTests {
 		}catch(Exception e) {
 			assertEquals(expectedException, e.getMessage());
 		}
-		
 	}
 	
 	@Test
@@ -290,7 +280,7 @@ class EngagementAnalyzerApplicationTests {
 			
 		}catch(Exception e) {
 			assertEquals(expectedException, e.getMessage());
-		}
-		
+		}	
 	}
+	
 }
