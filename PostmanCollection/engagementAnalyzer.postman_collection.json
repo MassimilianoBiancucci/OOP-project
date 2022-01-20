@@ -1,0 +1,859 @@
+{
+	"info": {
+		"_postman_id": "0fde6a34-beac-40d6-8834-537d6499ed96",
+		"name": "engagementAnalyzer",
+		"description": "This is a list of examples of the various routes available on this API, each example contain specific filters but filters can be combined with logic operators.\nThe various routes can be used for retrieve directly tweets from the twitter API filtering them, or use the tweets queried for engagement statistics calculations.\nNOTE: In all the requests the \"TwitterBearerToken\" field is missing so if you want that the API work you need to create your own twitter v2 API token on https://developer.twitter.com/en/portal/dashboard, from all the code given by the app creation only the Bearer Token is important for this API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Requests for raw tweets by tweets id",
+			"item": [
+				{
+					"name": "Request without filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets"
+							]
+						},
+						"description": "In this request no filters are applied, so all the requested filters are returned in the \"tweets\" field, except the tweets that return an error."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with metric filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"$or\": [\r\n            {\"quote_count\": {\"$bt\": [150, 300]}},\r\n            {\"like_count\": {\"$gt\": 3000}},\r\n            {\"reply_count\": {\"$gt\": 300}},\r\n            {\"retweet_count\": {\"$gt\": 300}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets"
+							]
+						},
+						"description": "In this request is shown how to apply filters on engagement metrics fields.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with message filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"text\": {\"$in\":[\"head\", \"studio\"]}\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets"
+							]
+						},
+						"description": "In this request is shown how to apply filters on the tweet text content.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with date filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"created_at\": {\"$gt\": \"2006-03-22 21:00:30\"}},\r\n            {\"$not\": {\"created_at\": {\"$bt\": [\"2006-06-03 17:40:27\", \"2006-08-03 17:40:27\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets"
+							]
+						},
+						"description": "In this request is shown how to apply filters on the creation date field.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with time slot filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"$or\": [\r\n            {\"created_in_timeslot\": {\"$gt\": \"22:00:00\"}},\r\n            {\"$not\": {\"created_in_timeslot\": {\"$bt\": [\"11:00:00\", \"20:00:00\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets"
+							]
+						},
+						"description": "In this request is shown how to apply filters on the time of creation of the tweet, considering only the time of the creation field, without considering the date.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request metadata",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tweets/metadata",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets",
+								"metadata"
+							]
+						},
+						"description": "This request return a static json that show in a structured way the syntax of the expected request, and the syntax of the response for the specified route, for more detail about look the route section on the docs: https://github.com/MassimilianoBiancucci/OOP-project#routes."
+					},
+					"response": []
+				}
+			],
+			"description": "These requests permit to get tweets from the twitter API, passing a list of tweets id. Those tweets can be filtered in many ways, look the docs for further details on filters: https://github.com/MassimilianoBiancucci/OOP-project#filter-operators."
+		},
+		{
+			"name": "Requests for raw tweets by user id",
+			"item": [
+				{
+					"name": "Request without filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request no filters are applied, so all the requested filters are returned in the \"tweets\" field, except the tweets that return an error."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with metric filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"quote_count\": {\"$bt\": [150, 300]}},\r\n            {\"like_count\": {\"$gt\": 3000}},\r\n            {\"reply_count\": {\"$gt\": 300}},\r\n            {\"retweet_count\": {\"$gt\": 300}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on engagement metrics fields.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with message filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"text\": {\"$in\":[\"moon\", \"doge\", \"Ok\", \"tesla\"]}},\r\n            {\"text\": {\"$nin\":[\"head\", \"studio\", \"vehicle\"]}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on the creation date field.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with date filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"created_at\": {\"$gt\": \"2022-01-07 23:30:00\"}},\r\n            {\"$not\": {\"created_at\": {\"$bt\": [\"2022-01-08 00:00:00\", \"2022-01-20 05:00:00\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on the creation date field.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with time slot filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"created_in_timeslot\": {\"$lt\": \"22:00:00\"}},\r\n            {\"$not\": {\"created_in_timeslot\": {\"$bt\": [\"11:00:00\", \"20:00:00\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on the time of creation of the tweet, considering only the time of the creation field, without considering the date.\nThis request will return a list of tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request metadata",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/metadata",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"metadata"
+							]
+						},
+						"description": "This request return a static json that show in a structured way the syntax of the expected request, and the syntax of the response for the specified route, for more detail about look the route section on the docs: https://github.com/MassimilianoBiancucci/OOP-project#routes."
+					},
+					"response": []
+				}
+			],
+			"description": "This request permit to get up to 100 tweets from the twitter API, passing as path variable the twitter user id of the target user. Those tweets can be filtered in many ways, look the docs for further details on filters: https://github.com/MassimilianoBiancucci/OOP-project#filter-operators"
+		},
+		{
+			"name": "Requests for tweets metrics by tweets id",
+			"item": [
+				{
+					"name": "Request without filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets",
+								"metrics"
+							]
+						},
+						"description": "In this request no filters are applied, so all the engagement statistics will return based on all the tweets list, except for the tweets that return an error."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with metric filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"$or\": [\r\n            {\"quote_count\": {\"$bt\": [150, 300]}},\r\n            {\"like_count\": {\"$gt\": 3000}},\r\n            {\"reply_count\": {\"$gt\": 300}},\r\n            {\"retweet_count\": {\"$gt\": 300}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets",
+								"metrics"
+							]
+						},
+						"description": "In this request is shown how to apply filters on engagement metrics fields.\nThis request will return engagement statistics based on tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with message filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"text\": {\"$in\":[\"moon\", \"doge\", \"Ok\", \"tesla\"]}},\r\n            {\"text\": {\"$nin\":[\"head\", \"studio\", \"vehicle\"]}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets",
+								"metrics"
+							]
+						},
+						"description": "In this request is shown how to apply filters on the tweet text content.\nThis request will return statistics based on tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with date filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"created_at\": {\"$gt\": \"2022-01-07 23:30:00\"}},\r\n            {\"$not\": {\"created_at\": {\"$bt\": [\"2022-01-08 00:00:00\", \"2022-01-20 05:00:00\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets",
+								"metrics"
+							]
+						},
+						"description": "In this request is shown how to apply filters on the creation date field.\nThis request will return engagement statistics based on tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with time slot filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"tweetIds\" : [ 20,21,22,23,24,35,750,550,8569,58998 ],\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"created_in_timeslot\": {\"$lt\": \"22:00:00\"}},\r\n            {\"$not\": {\"created_in_timeslot\": {\"$bt\": [\"11:00:00\", \"20:00:00\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tweets/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets",
+								"metrics"
+							]
+						},
+						"description": "In this request is shown how to apply filters on the time of creation of the tweet, considering only the time of the creation field, without considering the date.\nThis request will return statistics based on tweets that satisfy the given filters, between the passed tweet ids."
+					},
+					"response": []
+				},
+				{
+					"name": "Request metadata",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tweets/metrics/metadata",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tweets",
+								"metrics",
+								"metadata"
+							]
+						},
+						"description": "This request return a static json that show in a structured way the syntax of the expected request, and the syntax of the response for the specified route, for more detail about look the route section on the docs: https://github.com/MassimilianoBiancucci/OOP-project#routes."
+					},
+					"response": []
+				}
+			],
+			"description": "These requests permit to get engagement statistics on tweets from the twitter API, passing a list of tweets id. Those tweets can be filtered in many ways, look the docs for further details on filters: https://github.com/MassimilianoBiancucci/OOP-project#filter-operators.\nNote that the statistics will be based on the list of tweets after the filtering process."
+		},
+		{
+			"name": "Requests for tweets metrics by user id",
+			"item": [
+				{
+					"name": "Request without filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId",
+								"metrics"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request no filters are applied, so all the engagement statistics will return based on all the tweets retrieved for the specified user."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with metric filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"quote_count\": {\"$bt\": [150, 300]}},\r\n            {\"like_count\": {\"$gt\": 3000}},\r\n            {\"reply_count\": {\"$gt\": 300}},\r\n            {\"retweet_count\": {\"$gt\": 300}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId",
+								"metrics"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on engagement metrics fields.\nThis request will return engagement statistics based on tweets that satisfy the given filters, between the tweets retrieved for the given user."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with message filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"text\": {\"$in\":[\"moon\", \"doge\", \"Ok\", \"tesla\"]}},\r\n            {\"text\": {\"$nin\":[\"head\", \"studio\", \"vehicle\"]}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId",
+								"metrics"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on the tweet text content.\nThis request will return statistics based on tweets that satisfy the given filters, between the tweets retrieved for the given user."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with date filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"created_at\": {\"$gt\": \"2022-01-07 23:30:00\"}},\r\n            {\"$not\": {\"created_at\": {\"$bt\": [\"2022-01-08 00:00:00\", \"2022-01-20 05:00:00\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId",
+								"metrics"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on the creation date field.\nThis request will return engagement statistics based on tweets that satisfy the given filters, between the tweets retrieved for the given user."
+					},
+					"response": []
+				},
+				{
+					"name": "Request with time slot filters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TwitterBearerToken\": \"<your bearer token here>\",\r\n    \"filters\" : {\r\n        \"$and\": [\r\n            {\"created_in_timeslot\": {\"$lt\": \"22:00:00\"}},\r\n            {\"$not\": {\"created_in_timeslot\": {\"$bt\": [\"11:00:00\", \"20:00:00\"]}}}\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/:userId/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId",
+								"metrics"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "44196397",
+									"description": "The user's id of which recover the last 100 tweets."
+								}
+							]
+						},
+						"description": "In this request is shown how to apply filters on the time of creation of the tweet, considering only the time of the creation field, without considering the date.\nThis request will return statistics based on tweets that satisfy the given filters, between the tweets retrieved for the given user."
+					},
+					"response": []
+				},
+				{
+					"name": "Request metadata",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/metrics/metadata",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"metrics",
+								"metadata"
+							]
+						},
+						"description": "This request return a static json that show in a structured way the syntax of the expected request, and the syntax of the response for the specified route, for more detail about look the route section on the docs: https://github.com/MassimilianoBiancucci/OOP-project#routes."
+					},
+					"response": []
+				}
+			],
+			"description": "This request permit to get engagement statistics based on up to 100 tweets from the twitter API, passing as path variable the twitter user id of the target user. \nThose tweets can be filtered in many ways, look the docs for further details on filters: https://github.com/MassimilianoBiancucci/OOP-project#filter-operators.\nNote that the statistics will be based on the list of tweets after the filtering process."
+		}
+	]
+}

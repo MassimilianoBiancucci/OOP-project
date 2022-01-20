@@ -9,7 +9,6 @@ import com.twitterMetrics.engagementAnalyzer.Exceptions.RequestBodyFieldNotPrese
 import com.twitterMetrics.engagementAnalyzer.Exceptions.UnexpectedRequestBodyFieldException;
 import com.twitterMetrics.engagementAnalyzer.Exceptions.UnexpectedRequestBodyFieldValueException;
 import com.twitterMetrics.engagementAnalyzer.Filters.Operators.LogicOperator;
-import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
 
 public class RequestParser {
 	

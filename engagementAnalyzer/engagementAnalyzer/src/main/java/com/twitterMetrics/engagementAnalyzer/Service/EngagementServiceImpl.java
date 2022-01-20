@@ -84,10 +84,14 @@ public class EngagementServiceImpl implements EngagementService{
 		LogicOperator filterRoot = requestParser.getFilters();
 		TweetList filteredTweetList = filterRoot.applayFilters(tweeterApiResponseParsed.getTweets());
 		
-		// at this point from the filterd tweets will be calculated the engagement statistics
+		// Response buliding
+		JsonObject response = new JsonObject();
+		response.addProperty("status", "success");
+		response.addProperty("tweets_count", tweeterApiResponseParsed.getTweets().size());
+		response.add("tweetsMetrics", filteredTweetList.getStatistics().toJson());
+		response.add("errors", tweeterApiResponseParsed.getErrors());
 		
-		
-		return new JsonObject();
+		return response;
 	}
 	
 }

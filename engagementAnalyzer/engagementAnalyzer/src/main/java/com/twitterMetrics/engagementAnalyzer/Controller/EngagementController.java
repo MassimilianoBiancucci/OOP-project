@@ -26,30 +26,14 @@ public class EngagementController {
 	
 	// route that return raw tweets in json format with 
 	@RequestMapping(value = "/tweets", method = RequestMethod.GET)
-	public ResponseEntity<JsonObject> getTweets(@RequestBody JsonObject requestBody){
+	public ResponseEntity<JsonObject> getRawTweets(@RequestBody JsonObject requestBody){
 		
-		try {
-			
-			JsonObject response = engagementService.getRawTweetsData(requestBody, null);
-			return new ResponseEntity<JsonObject>(response, HttpStatus.OK);
-			
-		}catch(Exception e) {
-			
-			JsonObject errorResponse = new JsonObject();
-
-			String exceptionMessage = e.getMessage();
-			if(exceptionMessage == null) exceptionMessage = "for unknown error.";
-			
-			errorResponse.addProperty("status", "Request failed");
-			errorResponse.addProperty("detail", exceptionMessage);
-			return new ResponseEntity<JsonObject>(errorResponse, HttpStatus.BAD_REQUEST);
-		}
-		
+		return getTweetsGeneric(requestBody, null);
 	}
 	
 	// method that return the metadata request for the /tweets route
 	@RequestMapping(value = "/tweets/metadata", method = RequestMethod.GET)
-	public ResponseEntity<JsonObject> getTweetsMetadata(){
+	public ResponseEntity<JsonObject> getRawTweetsMetadata(){
 
 		JsonObject response = JsonParser.parseString(RoutesMetadata.rawTweetsRequestMetadta).getAsJsonObject();
 		return new ResponseEntity<JsonObject>(response, HttpStatus.OK);
@@ -61,29 +45,14 @@ public class EngagementController {
 	
 	// route that return raw tweets for certain user
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-	public ResponseEntity<JsonObject> getUserTweets(@PathVariable("userId") String userId, @RequestBody JsonObject requestBody){
+	public ResponseEntity<JsonObject> getRawUserTweets(@PathVariable("userId") String userId, @RequestBody JsonObject requestBody){
 
-		try {
-			
-			JsonObject response = engagementService.getRawTweetsData(requestBody, userId);
-			return new ResponseEntity<JsonObject>(response, HttpStatus.OK);
-			
-		}catch(Exception e) {
-			
-			JsonObject errorResponse = new JsonObject();
-
-			String exceptionMessage = e.getMessage();
-			if(exceptionMessage == null) exceptionMessage = "for unknown error.";
-			
-			errorResponse.addProperty("status", "Request failed");
-			errorResponse.addProperty("detail", exceptionMessage);
-			return new ResponseEntity<JsonObject>(errorResponse, HttpStatus.BAD_REQUEST);
-		}
+		return getTweetsGeneric(requestBody, userId);
 	}
 	
 	// method that return the metadata request for the /user/{userId} route
 	@RequestMapping(value = "/user/metadata", method = RequestMethod.GET)
-	public ResponseEntity<JsonObject> getUserTweetsMetadata(){
+	public ResponseEntity<JsonObject> getRawUserTweetsMetadata(){
 
 		JsonObject response = JsonParser.parseString(RoutesMetadata.rawTweetsRequestByUserIdMetadta).getAsJsonObject();
 		return new ResponseEntity<JsonObject>(response, HttpStatus.OK);
@@ -97,7 +66,7 @@ public class EngagementController {
 	@RequestMapping(value = "/tweets/metrics", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getTweetsMetrics(@RequestBody JsonObject requestBody){
 		
-		return new ResponseEntity<JsonObject>(new JsonObject(), HttpStatus.OK);
+		return getTweetsMetricsGeneric(requestBody, null);
 	}
 	
 	// method that return the metadata request of the /tweets/metrics route
@@ -116,7 +85,7 @@ public class EngagementController {
 	@RequestMapping(value = "/user/{userId}/metrics", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getUserTweetsMetrics(@PathVariable("userId") String userId, @RequestBody JsonObject requestBody){
 		
-		return new ResponseEntity<JsonObject>(new JsonObject(), HttpStatus.OK);
+		return getTweetsMetricsGeneric(requestBody, userId);
 	}
 	
 	// method that return the metadata request for the /user/{userId}/metrics route
@@ -127,4 +96,48 @@ public class EngagementController {
 		return new ResponseEntity<JsonObject>(response, HttpStatus.OK);
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+	// PRIVATE METHODS /////////////////////////////////////////
+	
+	private ResponseEntity<JsonObject> getTweetsGeneric(JsonObject requestBody, String userId){
+		
+		try {
+			
+			JsonObject response = engagementService.getRawTweetsData(requestBody, userId);
+			return new ResponseEntity<JsonObject>(response, HttpStatus.OK);
+			
+		}catch(Exception e) {
+			
+			JsonObject errorResponse = new JsonObject();
+
+			String exceptionMessage = e.getMessage();
+			if(exceptionMessage == null) exceptionMessage = "for unknown error.";
+			
+			errorResponse.addProperty("status", "Request failed");
+			errorResponse.addProperty("detail", exceptionMessage);
+			return new ResponseEntity<JsonObject>(errorResponse, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	private ResponseEntity<JsonObject> getTweetsMetricsGeneric(JsonObject requestBody, String userId){
+		
+		try {
+			
+			JsonObject response = engagementService.getTweetsStats(requestBody, userId);
+			return new ResponseEntity<JsonObject>(response, HttpStatus.OK);
+			
+		}catch(Exception e) {
+			
+			JsonObject errorResponse = new JsonObject();
+
+			String exceptionMessage = e.getMessage();
+			if(exceptionMessage == null) exceptionMessage = "for unknown error.";
+			
+			errorResponse.addProperty("status", "Request failed");
+			errorResponse.addProperty("detail", exceptionMessage);
+			return new ResponseEntity<JsonObject>(errorResponse, HttpStatus.BAD_REQUEST);
+		}
+	}
 }

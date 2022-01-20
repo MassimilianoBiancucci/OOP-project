@@ -762,6 +762,8 @@ Below all the routes are explained in detail, with example of requests and examp
 
             ```json
             {
+                "status": "success",
+                "tweets_count": 2,
                 "tweets": [
                     {
                         "id": "345676",

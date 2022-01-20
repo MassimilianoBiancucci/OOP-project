@@ -13,10 +13,13 @@ import com.twitterMetrics.engagementAnalyzer.Filters.Filter.Field;
 public class TweetList {
 
 	private ArrayList<Tweet> tweets;
+	private StatisticsList statistics;
+	private Field[] statFields = new Field[] {Field.retweet, Field.reply, Field.like, Field.quote, Field.engagement};
 	
 	public TweetList() {
 		// initialize the internal Array list
 		tweets = new ArrayList<Tweet>();
+		statistics = new StatisticsList(statFields);
 	}
 
 	public Tweet get(int idx) {
@@ -35,6 +38,23 @@ public class TweetList {
 				return tweets.get(idx).getQuote();
 			case engagement:
 				return (int) tweets.get(idx).getEngagement();
+			default:
+				throw new Exception("TweetList.getIntField() do not support the field: " + Filter.field2String.get(field) + ".");
+		}
+	}
+	
+	public double getDobleField(Field field, int idx) throws Exception{
+		switch(field) {
+			case retweet:
+				return tweets.get(idx).getRetweet();
+			case reply:
+				return tweets.get(idx).getReply();
+			case like:
+				return tweets.get(idx).getLike();
+			case quote:
+				return tweets.get(idx).getQuote();
+			case engagement:
+				return tweets.get(idx).getEngagement();
 			default:
 				throw new Exception("TweetList.getIntField() do not support the field: " + Filter.field2String.get(field) + ".");
 		}
@@ -104,11 +124,21 @@ public class TweetList {
 		return tweetListClone;
 	}
 	
-	/** if clone() don't work properly
-	public TweetList deepClone() {
-		// this method create another object with the same content,with even cloned tweets
-		return ;
-	}*/
+	public StatisticsList getStatistics() throws Exception {
+		
+		// remove all the values loaded before
+		statistics.clear();
+		
+		// load all the newest values inside the statistics objects
+		for (int i = 0; i < tweets.size(); i++) {
+			for(Field field: statFields) {
+				statistics.add(field, getDobleField(field, i));
+			}
+		}
+		
+		// return the statistics list
+		return statistics;
+	}
 	
 	public String toString() {
 		// TODO implement

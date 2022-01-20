@@ -89,7 +89,7 @@ public class FiltersParser {
 					filter = checkNonLogicOperator(entry.getKey(), entry.getValue(), filterParent);
 					
 				}else {
-					throw new Exception("The Filter's content must be a non-logic Operator.");
+					throw new Exception("Unexpected field " + entry.getKey() + " inside filter " + Filter.field2String.get(filterParent) + ". The Filter's content must be a non-logic Operator.");
 				}
 				
 			}
@@ -168,11 +168,13 @@ public class FiltersParser {
 				
 			}else if(Operator.isOperator(entry.getKey())){
 				throw new Exception("A non-logic Operator can't be passed inside a Logic Operator.");
+			}else {
+				throw new Exception("Unexpected field: " + entry.getKey() + " inside LogicOperator.");
 			}
 		}
 		
 		// the code should not reach this point
-		throw new Exception("[Error] Unexpected parse behaviour!!");
+		throw new Exception("Unexpected parse behaviour!!");
 	}
 	
 	private Filter checkNonLogicOperator(String op, JsonElement subTree, Filter.Field filterParent) throws Exception {
@@ -307,7 +309,6 @@ public class FiltersParser {
 				if(firstElemClass == String.class) {
 					// if the type is string check if compatible with the filter
 					// here should start the came back to the start
-					
 					OperatorStringValues values = new OperatorStringValues(subTree);
 					macthOp = new MatchOperator(op, values);
 					
