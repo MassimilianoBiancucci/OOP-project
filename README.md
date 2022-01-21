@@ -185,7 +185,7 @@ In this project only few functionalities of this API are integrated, specificall
     The access to the twitter API is free but is limited, to be used, the API requires a token, associated to a user that has limited API queries. For this reason this API (this project) need the token passed as a field of the json request body.
     For the creation of a Twitter API token you only need to go to the [Twittter developer portal](https://developer.twitter.com/en/portal/dashboard), access with your twitter account credentials and start an Essential plan that enable you to query 500'000 tweets per month. After the start of the plan you need to create a project and than on the project settings you can generate your tokens, for the purpose of make this api work you only need the Bearer token.
 
-    For the direct use of the Twitter API the Bearer token is requested in the Authorization field in the request Header, it should be passed after the keyword `Bearer`. Below a snipet of code that use `okHttp` a java library, to send a request to the twitter API:
+    For the direct use of the Twitter API the Bearer token is requested in the Authorization field in the request Header, it should be passed after the keyword `Bearer`. Below a snipet of code that use `OkHttp`, an efficient HTTP and HTTP/2 client for Android and Java applications, to send a request to the twitter API:
 
     ```java
     OkHttpClient client = new OkHttpClient();
@@ -204,7 +204,7 @@ In this project only few functionalities of this API are integrated, specificall
     // Parse the response from string in JsonObject
     JsonObject jsonResponseBody = JsonParser.parseString(responseBody).getAsJsonObject(); 	
     ```
-    
+
 ---
 ## **RESTful API docs**
 
