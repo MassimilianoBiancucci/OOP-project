@@ -14,53 +14,53 @@ This application use the Twitter API to retrieve tweets informations, and applyi
     + [**Twitter API V2**](#twitter-api-v2)
         - [**Authentication**](#authentication)
 * [**RESTful API docs**](#restful-api-docs)
-+ [**API overview**](#api-overview)
-+ [**Filters**](#filters)
-    - [**Filter operators**](#filter-operators)
-        - [**Logic operators**](#logic-operators)
-        - [**Match operators**](#match-operators)
-        - [**Specific fields and properties**](#specific-fields-and-properties)
-        - [**Filter and operators combinations**](#filter-and-operators-combinations)
-    - [**Filters package**](#filters-package)
-        - [**Inheritance and associations**](#inheritance-and-associations)
-+ [**Routes**](#routes)
-    - [**1- Requests for raw tweets**](#1--requests-for-raw-tweets)
-        - [**1- Input**](#1--input)
-            - [**1-1- Reqest by tweets id**](#1-1--reqest-by-tweets-id)
-                - [**1-1- Request parameters**](#1-1--request-parameters)
-                    - [**1-1- Route parameters**](#1-1-route-parameters)
-                    - [**1-1- Request body parameters**](#1-1--request-body-parameters)
-                - [**1-1- Metadata**](#1-1--metadata)
-                - [**1-1- Example**](#1-1--example)
-            - [**1-2- Reqest by user id**](#1-2--reqest-by-user-id)
-                - [**1-2- Request parameters**](#1-2--request-parameters)
-                    - [**1-2- Route parameters**](#1-2--route-parameters)
-                    - [**1-2- Request body parameters**](#1-2--request-body-parameters)
-                - [**1-2- Metadata**](#1-2--metadata)
-                - [**1-2- Example**](#1-2--example)
-        - [**1- Output**](#1--output)
-            - [**1- Response body parameters**](#1--response-body-parameters)
-            - [**1- Example**](#1-example)
-    - [**2- Requests for tweets metrics**](#2--requests-for-tweets-metrics)
-        - [**2- Input**](#2--input)
-            - [**2-1- Reqest by tweets id**](#2-1--reqest-by-tweets-id)
-                - [**2-1- Request parameters**](#2-1--request-parameters)
-                    - [**2-1- Route parameters**](#2-1--route-parameters)
-                    - [**2-1- Request body parameters**](#2-1-request-body-parameters)
-                - [**2-1- Metadata**](#2-1--metadata)
-                - [**2-1- Example**](#2-1--example)
-            - [**2-2- Reqest by tweets id**](#2-2--reqest-by-tweets-id)
-                - [**2-2- Request parameters**](#2-2--request-parameters)
-                    - [**2-2- Route parameters**](#2-2--route-parameters)
-                    - [**2-2- Request body parameters**](#2.2--request-body-parameters)
-                - [**2-2- Metadata**](#2-2--metadata)
-                - [**2-2- Example**](#2-2--example)
-        - [**2- Output**](#2--output)
-            - [**2- Response body parameters**](#2--response-body-parameters)
-            - [**2- Example**](#2--example)
-    - [**Route parameters**](#route-parameters)
-    - [**Request body parameters**](#request-body-parameters)
-    - [**Response to failed requests**](#response-to-failed-requests)
+    + [**API overview**](#api-overview)
+    + [**Filters**](#filters)
+        - [**Filter operators**](#filter-operators)
+            - [**Logic operators**](#logic-operators)
+            - [**Match operators**](#match-operators)
+            - [**Specific fields and properties**](#specific-fields-and-properties)
+            - [**Filter and operators combinations**](#filter-and-operators-combinations)
+        - [**Filters package**](#filters-package)
+            - [**Inheritance and associations**](#inheritance-and-associations)
+    + [**Routes**](#routes)
+        - [**1- Requests for raw tweets**](#1--requests-for-raw-tweets)
+            - [**1- Input**](#1--input)
+                - [**1-1- Reqest by tweets id**](#1-1--reqest-by-tweets-id)
+                    - [**1-1- Request parameters**](#1-1--request-parameters)
+                        - [**1-1- Route parameters**](#1-1-route-parameters)
+                        - [**1-1- Request body parameters**](#1-1--request-body-parameters)
+                    - [**1-1- Metadata**](#1-1--metadata)
+                    - [**1-1- Example**](#1-1--example)
+                - [**1-2- Reqest by user id**](#1-2--reqest-by-user-id)
+                    - [**1-2- Request parameters**](#1-2--request-parameters)
+                        - [**1-2- Route parameters**](#1-2--route-parameters)
+                        - [**1-2- Request body parameters**](#1-2--request-body-parameters)
+                    - [**1-2- Metadata**](#1-2--metadata)
+                    - [**1-2- Example**](#1-2--example)
+            - [**1- Output**](#1--output)
+                - [**1- Response body parameters**](#1--response-body-parameters)
+                - [**1- Example**](#1-example)
+        - [**2- Requests for tweets metrics**](#2--requests-for-tweets-metrics)
+            - [**2- Input**](#2--input)
+                - [**2-1- Reqest by tweets id**](#2-1--reqest-by-tweets-id)
+                    - [**2-1- Request parameters**](#2-1--request-parameters)
+                        - [**2-1- Route parameters**](#2-1--route-parameters)
+                        - [**2-1- Request body parameters**](#2-1-request-body-parameters)
+                    - [**2-1- Metadata**](#2-1--metadata)
+                    - [**2-1- Example**](#2-1--example)
+                - [**2-2- Reqest by tweets id**](#2-2--reqest-by-tweets-id)
+                    - [**2-2- Request parameters**](#2-2--request-parameters)
+                        - [**2-2- Route parameters**](#2-2--route-parameters)
+                        - [**2-2- Request body parameters**](#2.2--request-body-parameters)
+                    - [**2-2- Metadata**](#2-2--metadata)
+                    - [**2-2- Example**](#2-2--example)
+            - [**2- Output**](#2--output)
+                - [**2- Response body parameters**](#2--response-body-parameters)
+                - [**2- Example**](#2--example)
+        - [**Route parameters**](#route-parameters)
+        - [**Request body parameters**](#request-body-parameters)
+        - [**Response to failed requests**](#response-to-failed-requests)
 * [**Junit tests**](#junit-tests)
 * [**Postman examples**](#postman-examples)
 * [**USEFUL LINKS**](#useful-links)
@@ -207,8 +207,7 @@ In this project only few functionalities of this API are integrated, specificall
     Note: the exception handling has been omitted to simplify the example, but should be considered in a normal use case. be aware that the request execution can generate an IOException.
 ---
 ## **RESTful API docs**
-
-### **API overview**
+Below is explained how to use this api with examples and an extensive documentation of each route, with an entire section dedicated to the tweets filters.
 
 ### **Filters**
 The filters are an important part of the API, they can be passed trough the body of the request, in a json format, to determine which tweets will be used for the engagement evaluation. the tweets could be selected based on the text of the tweet, or maybe based on the date because only a certain temporal interval matter.
@@ -449,15 +448,6 @@ Below there is an example:
         ![Filters package uml](UMLs/Filters%20package%20diagram.png)
 
         Note: with the target of simplify the uml and explain only the relations between the classes of the package Filters, methods and properties not relevant are omitted.
-
-    - Metric filters
-
-    - Message filters
-
-    - Date filters
-
-    - TimeSlot filters
-
 
 ### **Routes**
 This api has two main functionalities, the first is the request of the raw tweets directly taken from the twitter api, with the application of the passed filters. The second functionality is the request of some statistics on the tweets requested after the application of the passed filters.
@@ -1411,6 +1401,7 @@ The tests have the same main structure, following the same pipeline as a normal 
 ## **Postman examples** 
 In the project is present a collection of examples for [Postman](https://www.postman.com/), that present a collection of requests for each routes, with an example of each filters in each sub collection. All the example present a relative documentation.
 The Postman collection of this API is present at this [link](https://github.com/MassimilianoBiancucci/OOP-project/tree/main/postman%20collection).
+Note the Postman examples need the insertion of the Bearer token inside the json request body, in all the examples is actualy filled with a placeholder "\<your bearer token here\>".
 
 ---
 ## **USEFUL LINKS**
