@@ -175,7 +175,7 @@ In this section are explained the framework and components used in the project, 
 
 ### **SpringBoot framework**
 Spring Boot is an open-source framework on top of Spring. It provides Java developers a platform to get started with an auto configurable production-grade Spring application, where Spring is a less user friendly framework for the development of a server application. With Spring Boot a lot of code and configuration is automated and atogenerated saving time and bugs, respect to the base framework Spring.
-In this project only few functionalities of that framework have been used, for example the Gson library that is extensively used in this project.
+In this project only few functionalities of that framework have been used, for example the Gson library that it was extensively used.
 
 ### **Twitter API V2**
 One important component of this project is the Twitter API, which can be used to programmatically retrieve and analyze Twitter data, as well as used for actively interact on Twitter, creating posts, liking tweets and so on.
@@ -185,7 +185,7 @@ In this project only few functionalities of this API are integrated, specificall
     The access to the twitter API is free but is limited, to be used, the API requires a token, associated to a user that has limited API queries. For this reason this API (this project) need the token passed as a field of the json request body.
     For the creation of a Twitter API token you only need to go to the [Twittter developer portal](https://developer.twitter.com/en/portal/dashboard), access with your twitter account credentials and start an Essential plan that enable you to query 500'000 tweets per month. After the start of the plan you need to create a project and than on the project settings you can generate your tokens, for the purpose of make this api work you only need the Bearer token.
 
-    For the direct use of the Twitter API the Bearer token is requested in the Authorization field in the request Header, it should be passed after the keyword `Bearer`. Below a snipet of code that use `OkHttp`, an efficient HTTP and HTTP/2 client for Android and Java applications, to send a request to the twitter API:
+    For the direct use of the Twitter API the Bearer token is required in the Authorization field in the request Header, it should be passed after the keyword `Bearer`. Below a snipet of code that use `OkHttp`, an efficient HTTP and HTTP/2 client for Android and Java applications, to send a request to the twitter API:
 
     ```java
     OkHttpClient client = new OkHttpClient();
@@ -204,7 +204,7 @@ In this project only few functionalities of this API are integrated, specificall
     // Parse the response from string in JsonObject
     JsonObject jsonResponseBody = JsonParser.parseString(responseBody).getAsJsonObject(); 	
     ```
-
+    Note: the exception handling has been omitted to simplify the code in this example, but should be considered in a normal use case. be aware that the call execution can generate an IOException.
 ---
 ## **RESTful API docs**
 
