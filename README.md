@@ -1362,7 +1362,14 @@ Below all the routes are explained in detail, with example of requests and examp
             </details> </br>
 
 - #### **Response to failed requests**
+    When something goes wrong in the request, for a managed exception inside the service, the exception raised is catched and the message will return int ht eresponse. The principal field that should be considered to check if the request terminate correctly or had some error is the field "status" that is present in all the responses for all the routes, this field has values "success" for a correctly executed request and the value "Request failed" if some exception is raised. When something goes wrong another field is present in the response, the "detail" field that return the exception message, this field is a human readable message that should help the developers to understand what goes wrong. Below an example of response when there is an exception:
 
+    ```json
+    {
+        "status": "Request failed",
+        "detail": "Unexpected field $btr inside filter quote_count. The Filter's content must be a non-logic Operator."
+    }
+    ```
 ---
 ## **Junit tests**
 The tests in the project are grouped in tree main categories, the tests for the raw tweets requests, the tests for the tweets metrics requests and in the end the tests for the wrong requests.
