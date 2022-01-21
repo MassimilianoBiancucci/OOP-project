@@ -204,7 +204,7 @@ In this project only few functionalities of this API are integrated, specificall
     // Parse the response from string in JsonObject
     JsonObject jsonResponseBody = JsonParser.parseString(responseBody).getAsJsonObject(); 	
     ```
-    Note: the exception handling has been omitted to simplify the code in this example, but should be considered in a normal use case. be aware that the call execution can generate an IOException.
+    Note: the exception handling has been omitted to simplify the example, but should be considered in a normal use case. be aware that the request execution can generate an IOException.
 ---
 ## **RESTful API docs**
 
@@ -1373,6 +1373,8 @@ Below all the routes are explained in detail, with example of requests and examp
 
 ---
 ## **Junit tests**
+The tests in the project are grouped in tree main categories, the tests for the raw tweets request, the tests for the tweets metrics 
+
 
 ---
 ## **Postman examples**

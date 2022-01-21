@@ -15,7 +15,15 @@ import com.twitterMetrics.engagementAnalyzer.Service.TwitterApiCaller.TwitterApi
 public class EngagementServiceImpl implements EngagementService{
 	
 	
-	// method that process the request of raw tweets
+	/**
+	* method that process the request of tweets engagement metrics.
+	* <p>
+	* This method take 
+	*
+	* @exception Exception can be raised by the RequestParser, the TwitterApiCaller or TwitterResponseParser.
+	* @param requestBody the json request body passed to the request, passed as Gson JsonObject.
+	* @param userId a string that encode the Twitter id of the requested user, if passed the TwitterApiCaller will retrive the tweets of that user, this param can be passed as null if the field "TweetIds" in the request body is passed. If userId is passed as null and the field "TweetIds" in the request body isn't present the function will rise an Exception.
+	*/
 	@Override
 	public JsonObject getRawTweetsData(JsonObject requestBody, String userId) throws Exception {
 		

@@ -1,0 +1,11 @@
+com.twitterMetrics.engagementAnalyzer
+com.twitterMetrics.engagementAnalyzer.Controller
+com.twitterMetrics.engagementAnalyzer.Exceptions
+com.twitterMetrics.engagementAnalyzer.Filters
+com.twitterMetrics.engagementAnalyzer.Filters.Operators
+com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values
+com.twitterMetrics.engagementAnalyzer.Model
+com.twitterMetrics.engagementAnalyzer.Parser
+com.twitterMetrics.engagementAnalyzer.Service
+com.twitterMetrics.engagementAnalyzer.Service.TwitterApiCaller
+com.twitterMetrics.engagementAnalyzer.supportTypes
