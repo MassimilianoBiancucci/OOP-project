@@ -2,9 +2,9 @@
 University project for the object oriented programming course.
 
 ## **Overview**
-This project aims to create a simple java application using the Springboot framework. This application runs a Tomcat server that provides a local RESTful API over HTTP protocol, for the analysis of the people engagement on Twitter, based on the responses on some tweets. 
+This project is simple java application that use the Springboot framework, that runs a Tomcat server, that provides a local RESTful API over HTTP protocol, for the analysis of the people engagement on Twitter, based on the responses on some tweets. 
 
-This application use the Twitter API to retrieve the tweets informations, and applying to them modular filters, enabling the client to request engagement metrics only on specific tweets.
+This application use the Twitter API to retrieve tweets informations, and applying to them modular filters, enabling the client to request engagement metrics on specific tweets.
 
 # **Index**
 
@@ -171,15 +171,40 @@ src
 ---
 ## **Project components**
 
-In this section are explained the principal frameworks and components used in the project, with a little overview of each one, with an insight about how are used. 
+In this section are explained the framework and components used in the project, with a little overview of each one.
 
 ### **SpringBoot framework**
+Spring Boot is an open-source framework on top of Spring. It provides Java developers a platform to get started with an auto configurable production-grade Spring application, where Spring is a less user friendly framework for the development of a server application. With Spring Boot a lot of code and configuration is automated and atogenerated saving time and bugs, respect to the base framework Spring.
+In this project only few functionalities of that framework have been used, for example the Gson library that is extensively used in this project.
 
 ### **Twitter API V2**
+One important component of this project is the Twitter API, which can be used to programmatically retrieve and analyze Twitter data, as well as used for actively interact on Twitter, creating posts, liking tweets and so on.
+In this project only few functionalities of this API are integrated, specifically the tweets retrive from tweets ids and the retrive of the last tweets of a Twitter user specified through its user id.
 
 - #### **Authentication**
+    The access to the twitter API is free but is limited, to be used, the API requires a token, associated to a user that has limited API queries. For this reason this API (this project) need the token passed as a field of the json request body.
+    For the creation of a Twitter API token you only need to go to the [Twittter developer portal](https://developer.twitter.com/en/portal/dashboard), access with your twitter account credentials and start an Essential plan that enable you to query 500'000 tweets per month. After the start of the plan you need to create a project and than on the project settings you can generate your tokens, for the purpose of make this api work you only need the Bearer token.
 
+    For the direct use of the Twitter API the Bearer token is requested in the Authorization field in the request Header, it should be passed after the keyword `Bearer`. Below a snipet of code that use `okHttp` a java library, to send a request to the twitter API:
 
+    ```java
+    OkHttpClient client = new OkHttpClient();
+		
+    // Building of the GET request with the call parameters needed for the request
+    Request request = new Request.Builder()
+            .url("https://api.twitter.com/2/users/44196397/tweets?max_results=100&tweet.fields=created_at,public_metrics")
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer AAAAAAAAAAAAAAAAAAASC5JzzAAMhUXwEAAAOU%3VcayzHCAGeyYBqAARFm871IloLWyHVYofv%2F0BNEfBoWWCds94xyPgxdVfdGHK8HZDijzgHsK")
+            .build();
+
+    // execute the twitter API call
+    Response response = client.newCall(request).execute(); 
+    // parse the response in String format
+    String responseBody = response.body().string(); 
+    // Parse the response from string in JsonObject
+    JsonObject jsonResponseBody = JsonParser.parseString(responseBody).getAsJsonObject(); 	
+    ```
+    
 ---
 ## **RESTful API docs**
 
@@ -399,17 +424,14 @@ Below there is an example:
         ```
         This first example show how to combine multiple filters for the like count, the creation date and the text content with the or logic operator. Note that the conditional operators (es. $gt) and match operators (es. $in) are palced every time inside a field and not outside or inside another operaotr, otherwise the request will fail. 
         
-        Another important error to avoid is to place a logic operator inside a filter, this way will bring to the request fail to. Logic operators must be placed outside a filter, there isn't limit to the number of nested logic operators but the filter elements must be the last elements of the tree, for each branch. Below the error just explained:
+        Another important error to avoid is to place a logic operator inside a filter, this way will bring to the request fail too. Logic operators must be placed outside a filter, there isn't limit to the number of nested logic operators but the filter elements must be the last elements of the tree, for each branch. Below the error just explained:
 
         ```json
         {
             "filters":{
-                "$or":[
-                    {"like_count": 
-                    {
-                        "$and": [{"$gt": 1000}, {"$lt": 2000}]} <-- ERROR
-                    }
-                ]
+                "like_count": {
+                    "$and": [{"$gt": 1000}, {"$lt": 2000}] <-- ERROR
+                } 
             }
         }
         ```
@@ -433,7 +455,7 @@ Below there is an example:
     - Date filters
 
     - TimeSlot filters
-        
+
 
 ### **Routes**
 This api has two main functionalities, the first is the request of the raw tweets directly taken from the twitter api, with the application of the passed filters. The second functionality is the request of some statistics on the tweets requested after the application of the passed filters.
