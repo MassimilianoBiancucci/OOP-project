@@ -448,6 +448,8 @@ Below there is an example:
 
         ![Filters package uml](UMLs/Filters%20package%20diagram.png)
 
+        Note: with the target of simplify the uml and explain only the relations between the classes of the package Filters, methods and properties not relevant are omitted.
+
     - Metric filters
 
     - Message filters
@@ -1373,11 +1375,42 @@ Below all the routes are explained in detail, with example of requests and examp
 
 ---
 ## **Junit tests**
-The tests in the project are grouped in tree main categories, the tests for the raw tweets request, the tests for the tweets metrics 
+The tests in the project are grouped in tree main categories, the tests for the raw tweets requests, the tests for the tweets metrics requests and in the end the tests for the wrong requests.
+For the pourpose of the test the service implementation has been modified, in fact the twitterApiCaller class has been replaced with a static response for repetibility pourposes.
+The tests have the same main structure, following the same pipeline as a normal API request, starting from a request body and generating a response. Below there are more details on the two sub categories:
 
+- ### **Requests tests**
+     This category of tests start from a defined request, and given a fixed Twitter API response the output is predictable so the result of the request is compared with the expected result trough an assertEquals(). There are 5 requests json, these requests are applied to two functions each, one for the calculation of the statistics based on the filtered tweets and one for the directly retrive of the filtered tweets. These two methods do similar things except for the first that retrive the tweets and than calculate the statistics on them. In the end there are 10 tests for 5 requests, and for this ten tests there are other ten expected responses, in json format that are compared with the response of these functions. 
+
+     Below the tests methods prototypes with some explanation:
+
+    **Tests on the raw tweets retrive service**
+     - `rawTweetsNoFiltersRequestTest()`: this test execute a request for raw tweets data without filters
+     - `rawTweetsMetricFiltersRequestTest()`: This test execute a request for raw tweets data applying some filters on the like count, the quote count, the retweet count, the reply count. 
+     - `rawTweetsMessageFiltersRequestTest()`: this test execute a request for raw tweets data applying some filters on the text of the messages.
+     - `rawTweetsDateFiltersRequestTest()`: This test execute a request for raw tweets data applying some filters on the creation dates.
+     - `rawTweetsTimeFiltersRequestTest()`: This test execute a request for raw tweets data without filters applying some filters on the time slot of creation.
+
+    **Tests on the tweet's statistics service**
+     - `tweetsMetricsNoFiltersRequestTest()`: This test execute a request for tweets metrics without filters 
+     - `tweetsMetricsMetricFiltersRequestTest()`: This test execute a request for tweets metrics applying some filters on the like count, the quote count, the retweet count, the reply count.
+     - `tweetsMetricsMessageFiltersRequestTest()`: This test execute a request for tweets metrics applying some filters on the text of the messages.
+     - `tweetsMetricsDateFiltersRequestTest()`: This test execute a request for tweets metrics applying some filters on the creation dates.
+     - `tweetsMetricsTimeFiltersRequestTest()`: This test execute a request for tweets metrics applying some filters on the time slot of creation.
+
+- ### **Wrong requests tests**
+    This type of tests are designed for validate the raise of the correct exception in the request parsing phase. In this case four wrong json requests with a valid json syntax but with some error in the format expected from the ReqeustParser are passed to the service and after the exception is raised, it is handled with a try/catch. After the handling the exception message is evaluated with an assertEquel(), if the no exception is raised the test fail, if the wrong exception is raised the test fail.
+
+     Below the tests methods prototypes with some explanation:
+     - `wrongTweetIdsRequestTest()`: This test execute a request with an error in one operator key present a text string where a number is expected.
+     - `wrongFilters1RequestTest()`: This test execute a request with an error inside the key of a logic operator, so with an unexpected field inside a filter tree.
+     - `wrongFilters2RequestTest()`: This test execute a request with a filter order error, specificaly it pass a logic operator inside a filter.
+     - `wrongFilters3RequestTest()`: This test execute a request with an error inside a conditional operator, passing as operator value a string where only a time, date or int operator values are accepted.
 
 ---
-## **Postman examples**
+## **Postman examples** 
+In the project is present a collection of examples for [Postman](https://www.postman.com/), that present a collection of requests for each routes, with an example of each filters in each sub collection. All the example present a relative documentation.
+The Postman collection of this API is present at this [link](https://github.com/MassimilianoBiancucci/OOP-project/tree/main/postman%20collection).
 
 ---
 ## **USEFUL LINKS**
@@ -1391,9 +1424,11 @@ The tests in the project are grouped in tree main categories, the tests for the 
 - [Twitter API v2 postman collection](https://developer.twitter.com/en/docs/tutorials/postman-getting-started)
 - [Twitter API v2: Tweets lookup](https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/introduction)
 - [Twitter API v2: Timelines](https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/introduction)
+
 ### Docs tools
 - [markdown-toc](http://ecotrust-canada.github.io/markdown-toc/)
 - [tables generator](https://www.tablesgenerator.com/html_tables)
 
 ### Utils
+- [Postman](https://www.postman.com/)
 - [Json formatter](https://jsonformatter.org/json-pretty-print)
