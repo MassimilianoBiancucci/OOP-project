@@ -18,6 +18,13 @@ public class RequestParser {
 	private String[] tweetIds;
 	private LogicOperator filters;
 	
+	
+	/**
+	 * RequestParser Contructor
+	 * 
+	 * @param jsonRequest API request in JsonObject format.
+	 * @throws Exception an Exception will be raised if there is some error in the request format.
+	 */
 	public RequestParser(JsonObject jsonRequest) throws 
 		Exception {
 		
@@ -82,31 +89,49 @@ public class RequestParser {
 		}
 	}
 	
-	// Method for request the Bearer token from the extern of the class
-	// bearerToken is a mandatory field, if not present inside the class when requested throw an exception
+	
+	/**
+	 * Method for the Bearer token request
+	 * 
+	 * @return The Bearer token in String format
+	 * @throws RequestBodyFieldNotPresentException bearerToken is a mandatory field, if not present inside the class when requested throw an RequestBodyFieldNotPresentException exception
+	 */
 	public String getBearerToken() throws RequestBodyFieldNotPresentException{
 		// TODO implement special behavior
 		return bearerToken;
 	}
 	
-	// Method for the set of the bearer
+	
+	/**
+	 * Setter method for the bearerToken for the twitter api
+	 * 
+	 * @param bearerToken The bearer token for the twitter api in String format
+	 */
 	public void setBearerToken(String bearerToken) {
 		this.bearerToken = bearerToken;
 	}
 	
-	// Method for request the parsed list of tweets from the extern of the class
-	// tweetsIds is a mandatory field, if not present inside the class when requested throw an exception
+	
+	/**
+	 * Getter method for the parsed list of tweets ids.
+	 * 
+	 * @return the parsed list of tweets ids in String array format.
+	 * @throws RequestBodyFieldNotPresentException tweetsIds is a mandatory field, if not present inside the class when requested throw an exception.
+	 */
 	public String[] getTweetsIds() throws RequestBodyFieldNotPresentException{
 		// TODO implement special behavior
 		return tweetIds;
 	}
 	
-	// Method for request the parsed filters from the extern of the class
-	// filters aren't a mandatory field, if not present return an empty $nop (no operation operator)
-	// if there are filters in the request return always a $nop operator, but with at least one filter inside.
+	
+	/**
+	 * Getter method for the parsed filters.
+	 * filters aren't a mandatory field, if not present return an empty $nop (no operation operator),
+	 * if there are filters in the request return always a $nop operator, but with at least one filter inside.
+	 * 
+	 * @return a logic operator $nop with if present a subtree of operator and filters.
+	 */
 	public LogicOperator getFilters() {
-		// TODO implement special behavior
 		return filters;
 	}
-
 }

@@ -29,10 +29,21 @@ public class FiltersParser {
 	
 	private LogicOperator op;
 	
+	/**
+	 * FiltersParser Constructor 
+	 * 
+	 * @param jsonFilters JsonObject that encode the filter tree structure
+	 * @throws Exception An exception will be raised of ther is some errore in the filter tree.
+	 */
 	public FiltersParser(JsonObject jsonFilters) throws Exception{
 		op = parse(jsonFilters);
 	}
 	
+	/**
+	 * LogicOperator getter, return the root of the filter tree
+	 * 
+	 * @return root of the parsed filter tree
+	 */
 	public LogicOperator getOp() {
 		return op;
 	}
@@ -351,7 +362,13 @@ public class FiltersParser {
 		throw new Exception("Empty JsonArray in the filter are not allowed.");
 	}
 	
-	// method that return the type of a json element
+
+	/**
+	 * Method that return the type of a json elements
+	 * 
+	 * @param je jsonElement that will be tested.
+	 * @return Result as Class 
+	 */
 	@SuppressWarnings("rawtypes")
 	public static Class getElementClass(JsonElement je) {
 		

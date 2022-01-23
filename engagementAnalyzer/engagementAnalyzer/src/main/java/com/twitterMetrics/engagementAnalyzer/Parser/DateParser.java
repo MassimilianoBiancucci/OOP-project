@@ -19,21 +19,55 @@ public class DateParser {
 	// selected format flag
 	private boolean isTimeFlag = false;
 	
-	// Empty constructor
+	
+	/**
+	 * DateParser constructor withiout arguments.
+	 * Create a DateParser with the field date setted at the current date and time.
+	 */
 	public DateParser() {
 		this.date = LocalDateTime.now();
 	}
-
-	// Constructor for the date argument
+	
+	
+	/**
+	 * DateParser Constructor for the date property
+	 * 
+	 * @param date The date to set in String format
+	 */
 	public DateParser(String date) {
 		this.setDate(date);
 	}
 	
-	// constructor for the date local date argument
+	
+	/**
+	 * DateParser constructor for the date property
+	 * 
+	 * @param date date date to set in LocaDateTime format.
+	 */
 	public DateParser(LocalDateTime date) {
 		this.date = date;
 	}
 	
+	
+	/**
+	 * Setter method for the date property
+	 * This method try to parse the string passed in 3 different ways:
+	 * 	<ol>
+		  <li>With the Twitter String date format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z' es: '2022-01-01T14:07:02.000Z'.</li>
+		  <li>With a simple String date format: yyyy-MM-dd HH:mm:ss es: 2022-01-01 14:07:02.</li>
+		  <li>With the Twitter String date format: HH:mm:ss es: 14:07:02.</li>
+		</ol>
+	 * If all the formats rise a parsing exception catched, than another persing exception will be raised
+	 * without a catch.
+	 * If the the passed stringis a date plus time object this pareser act like a dateTime Object and rise an exception if
+	 * from the extern the getTime() object is called.
+	 * If the the passed stringis a time only object this pareser act like a time Object and rise an exception if
+	 * from the extern the getDate() object is called.
+	 * 
+	 * @param date a String in one of the supperted formats.
+	 * @return A reference to this object.
+	 * @throws DateTimeParseException An exception will be raised if the passed string don't match any of the supported formats.
+	 */
 	public DateParser setDate(String date) throws DateTimeParseException {
 		
 		try {
@@ -64,58 +98,117 @@ public class DateParser {
 				}
 			}
 		}
-		
-		
 		return this;
 	}
 	
+	
+	/**
+	 * Setter method for the date property in LocalDateTime fomrat
+	 * 
+	 * @param date the date in LocalDateTime fomrat
+	 * @return A reference to this object.
+	 */
 	public DateParser setDate(LocalDateTime date) {
 		this.date = date;
 		return this;
 	}
 	
+	
+	/**
+	 * Getter method for the date property in LocalDateTime format
+	 * 
+	 * @return the current stored date property in LocalDateTime format
+	 * @throws Exception An exception will be raised if the current stored property is time and the date property is empty.
+	 */
 	public LocalDateTime getDate() throws Exception {
 		isDate();
 		return date;
 	}
 	
+	
+	/**
+	 * Setter method for the time property
+	 * 
+	 * @param time 
+	 * @return A reference to this object.
+	 */
 	public DateParser setTime(LocalTime time) {
 		this.time = time;
 		return this;
 	}
 	
+	
+	/**
+	 * Setter method for the time property
+	 * 
+	 * @return the time in LocalTime fomrat
+	 * @throws Exception An exception will be raised if the current stored property is date and the time property is empty.
+	 */
 	public LocalTime getTime() throws Exception {
 		isTime();
 		return time;
 	}
 	
+	
+	/**
+	 * Getter method for the date property in the TwitterAPI string format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z' es: '2022-01-01T14:07:02.000Z'.
+	 * 
+	 * @return the date property in the TwitterAPI string format.
+	 */
 	public String getTwitterDate() {
 		return date.format(twitterFormat);
 	}
 	
+	
+	/**
+	 * Getter method for the date property in simple String format: yyyy-MM-dd HH:mm:ss es: '2022-01-01 14:07:02'.
+	 * 
+	 * @return the date property in simple String format.
+	 */
 	public String getSimpleDate() {
 		return date.format(simpleFormat);
 	}
 	
+	
+	/**
+	 * Getter method for the time property in String format: HH:mm:ss es: '14:07:02'.
+	 * 
+	 * @return the time property in String format.
+	 */
 	public String getStrTime() {
 		return time.format(timeFormat);
 	}
 	
-	// method that check if the date-time string passed has only the time, if it doesn't happen throw an exception.
+	
+	/**
+	 * Method that check if the date-time string passed has only the time, if it doesn't happen throw an exception.
+	 * 
+	 * @throws Exception An exception will be raised if the current stored property is date and the time property is empty.
+	 */
 	public void isTime() throws Exception{
 		if(!isTimeFlag) {
 			throw new Exception("The DateParser object expect a time string without date, instead the string contain also the date values.");
 		}
 	}
 	
-	// method that check if the date-time string passed has date and time,  if it doesn't happen throw an exception.
+	
+	/**
+	 * Method that check if the date-time string passed has date and time,  if it doesn't happen throw an exception.
+	 * 
+	 * @throws Exception An exception will be raised if the current stored property is time and the date property is empty.
+	 */
 	public void isDate() throws Exception{
 		if(isTimeFlag) {
 			throw new Exception("The DateParser object expect a date-time string, instead the string contain only the time values.");
 		}
 	}
 	
-	// method that check if the date-time string passed has only the time.
+	
+	/**
+	 * Method that check if the date-time string passed has only the time.
+	 * 
+	 * @return true if the DateParser object contain a time property and the date property is empty.
+	 */
 	public boolean isTimeBool(){
 		if(!isTimeFlag) {
 			return false;
@@ -123,7 +216,12 @@ public class DateParser {
 		return true;
 	}
 	
-	// method that check if the date-time string passed has date and time.
+	
+	/**
+	 * Method that check if the date-time string passed has date and time.
+	 * 
+	 * @return true if the DateParser object contain a date property and the time property is empty.
+	 */
 	public boolean isDateBool(){
 		if(isTimeFlag) {
 			return false;

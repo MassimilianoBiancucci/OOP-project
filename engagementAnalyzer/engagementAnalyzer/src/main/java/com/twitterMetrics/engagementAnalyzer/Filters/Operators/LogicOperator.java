@@ -15,13 +15,25 @@ import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 
 public class LogicOperator extends Operator{
 	
-	public static final Map<String, SymOp> logicSymbolsMap = Map.ofEntries(
-			entry("$nop", SymOp.nop),
-		    entry("$not", SymOp.not),
-		    entry("$or", SymOp.or),
-		    entry("$and", SymOp.and)
-		);
 	
+	/**
+	 * Map that relate enum Operator symbols to the equivalent in string format
+	 */
+	public static final Map<String, SymOp> logicSymbolsMap = Map.ofEntries(
+		entry("$nop", SymOp.nop),
+	    entry("$not", SymOp.not),
+	    entry("$or", SymOp.or),
+	    entry("$and", SymOp.and)
+	);
+	
+	
+	/**
+	 * LogicOperator constructor
+	 * 
+	 * @param sym String that encode the symbol operator that will be applied with this object
+	 * @param values OperatorValues that will be applied with the passed Operator to some filter
+	 * @throws Exception generic exceptions raised if the symbol operator is not accepted or the OperatorValues and the passed symbol operator aren't compatible.
+	 */
 	public LogicOperator(String sym, OperatorValues values) throws Exception {
 		
 		// the super class check the global 
@@ -30,6 +42,14 @@ public class LogicOperator extends Operator{
 		
 	}
 	
+	
+	/**
+	 * LogicOperator constructor
+	 * 
+	 * @param sym enum that encode the symbol operator that will be applied with this object
+	 * @param values OperatorValues that will be applied with the passed Operator to some filter
+	 * @throws Exception generic exceptions raised if the symbol operator is not accepted or the OperatorValues and the passed symbol operator aren't compatible.
+	 */
 	public LogicOperator(SymOp sym, OperatorValues values) throws Exception {
 		this(symbol2String.get(sym), values);
 	}
@@ -46,7 +66,14 @@ public class LogicOperator extends Operator{
 		return true;
 	}
 	
-	// this method should be present inside a 
+	
+	/**
+	 * Apply filter method not implemented in this subclass.
+	 * 
+	 * @param sym not used
+	 * @param values not used
+	 * @throws Exception raised if the method is called.
+	 */
 	@Override
 	public TweetList applayFilters(TweetList tweetList, Field field) throws Exception{
 		throw new Exception("applayFilters() isn't supported by LogicOperators.");
@@ -209,17 +236,27 @@ public class LogicOperator extends Operator{
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "LogicOperator [symbol=" + symbol + ", operatorValues=" + operatorValues + "]";
 	}
-
+	
+	
+	/**
+	 * Method that return this object in JsonObject format
+	 * 
+	 * @return the JsonObject rapresentation of this object
+	 */
 	@Override
 	public JsonObject toJson() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	// method that return true if the symbol match a logical operator 
+	/**
+	 * Static method that return true if the symbol match a suported LogicOperator symbol.
+	 * 
+	 * @param op String tested to match if it is a LogicOperator symbol.
+	 * @return true if is a LogicOperator symbol.
+	 */
 	public static boolean isOperator(String op) {
 		return logicSymbolsMap.containsKey(op);
 	}

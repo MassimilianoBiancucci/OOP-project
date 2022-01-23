@@ -2,6 +2,7 @@ package com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -18,7 +19,13 @@ public class OperatorDateValues implements OperatorValues{
 	private LocalDateTime[] values;
 	private DateParser dateParser;
 	
-	public OperatorDateValues(JsonElement values) throws DateTimeParseException, Exception{
+	/**
+	 * OperatorDateValues constructor
+	 * 
+	 * @param values JsonElement, a JsonArray or a String that will be used as OperatorDateValues values
+	 * @throws Exception will be raised an exception if the element passed does not follow the correct standard.
+	 */
+	public OperatorDateValues(JsonElement values) throws Exception{
 		
 		dateParser = new DateParser();
 		
@@ -29,7 +36,7 @@ public class OperatorDateValues implements OperatorValues{
 	
 	
 	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonElement values) throws DateTimeParseException, Exception {
+	private boolean checkValues(JsonElement values) throws DateTimeParseException, Exception {
 
 		if(values.isJsonArray()) {
 			
@@ -65,22 +72,41 @@ public class OperatorDateValues implements OperatorValues{
 		return true;
 	}
 	
+	
+	/**
+	 * Method not implemented
+	 * 
+	 * @throws Exception if called rise an exception.
+	 */
 	public TweetList[] applayFilters(TweetList tweetList) throws Exception {
 		throw new NotImplementedException("OperatorDateValues dosen't have the method applayFilters() implemented.");
 	}
 	
-	// values getter
+
+	/**
+	 * value getter
+	 * 
+	 * @return Return the first element of the internal LocalDateTime array
+	 * @throws Exception raised if the internal LocalDateTime array has more than one value
+	 */
 	public LocalDateTime getValue() throws Exception {
 		if(getCount() != 1) throw new Exception("OperatorDateValues: Unexpected number of values calling getValue()");
 		return this.values[0];
 	}
 	
-	// values getter
+
+	/**
+	 * values getter
+	 * 
+	 * @return Return the internal LocalDateTime array
+	 * @throws Exception raised if the internal LocalDateTime array is empty
+	 */
 	public LocalDateTime[] getValues() throws Exception {
 		if(getCount() < 1) throw new Exception("OperatorDateValues: Unexpected number of values calling getValues()");
 		return this.values;
 	}
 	
+	@Override
 	public int getCount() {
 		return values.length;
 	}
@@ -88,15 +114,14 @@ public class OperatorDateValues implements OperatorValues{
 	
 	@Override
 	public String toString() {
-		
-		String operatorString = "OperatorDateValues[";
-		for(LocalDateTime date : values)
-			operatorString += " " + dateParser.setDate(date).getTwitterDate() + ",";
-		operatorString += "]";
-		return operatorString;
+		return "OperatorDateValues [values=" + Arrays.toString(values) + ", dateParser=" + dateParser + "]";
 	}
 	
-	
+	/**
+	 * Method that return this object in JsonObject format
+	 * 
+	 * @return the JsonObject rapresentation of this object
+	 */
 	public JsonArray toJson() {
 		JsonArray jsonValues = new JsonArray();
 		for(LocalDateTime i : this.values) 

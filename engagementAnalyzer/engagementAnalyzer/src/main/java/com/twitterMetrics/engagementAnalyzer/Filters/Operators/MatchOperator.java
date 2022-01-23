@@ -15,11 +15,23 @@ import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 
 public class MatchOperator extends Operator{
 	
+	
+	/**
+	 * Map that relate enum Operator symbols to the equivalent in string format
+	 */
 	public static final Map<String, SymOp> matchSymbolsMap = Map.ofEntries(
 	    entry("$in", SymOp.in),
 	    entry("$nin", SymOp.nin)
 	);
 	
+	
+	/**
+	 * MatchOperator constructor
+	 * 
+	 * @param sym String that encode the symbol operator that will be applied with this object
+	 * @param values OperatorValues that will be applied with the passed Operator to some filter
+	 * @throws Exception generic exceptions raised if the symbol operator is not accepted or the OperatorValues and the passed symbol operator aren't compatible.
+	 */
 	public MatchOperator(String sym, OperatorValues values) throws Exception {
 		
 		// the super class check the global 
@@ -28,6 +40,14 @@ public class MatchOperator extends Operator{
 		
 	}
 	
+	
+	/**
+	 * MatchOperator constructor
+	 * 
+	 * @param sym enum that encode the symbol operator that will be applied with this object
+	 * @param values OperatorValues that will be applied with the passed Operator to some filter
+	 * @throws Exception generic exceptions raised if the symbol operator is not accepted or the OperatorValues and the passed symbol operator aren't compatible.
+	 */
 	public MatchOperator(SymOp sym, OperatorValues values) throws Exception {
 		this(symbol2String.get(sym), values);
 	}
@@ -44,7 +64,13 @@ public class MatchOperator extends Operator{
 		return true;
 	}
 	
-	
+	/**
+	 * Method that apply the filter to a tweetList
+	 * 
+	 * @param tweetList List of tweet that will be filtered.	 
+	 * @param field tweet field target of the filter.
+	 * @throws Exception raised if there are some unexpected operator symbols or Filter field.
+	 */
 	public TweetList applayFilters(TweetList tweetList, Field field) throws Exception {
 		// 
 		if(MessageFilter.isField(field)){
@@ -120,17 +146,28 @@ public class MatchOperator extends Operator{
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "MatchOperator [symbol=" + symbol + ", operatorValues=" + operatorValues + "]";
 	}
-
+	
+	
+	/**
+	 * Method that return this object in JsonObject format
+	 * 
+	 * @return the JsonObject rapresentation of this object
+	 */
 	@Override
 	public JsonObject toJson() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	// method that return true if the symbol match a Conditional operator 
+	
+	/**
+	 * Static method that return true if the symbol match a suported MatchOperator symbol.
+	 * 
+	 * @param op String tested to match if it is a MatchOperator symbol.
+	 * @return true if is a MatchOperator symbol.
+	 */
 	public static boolean isOperator(String op) {
 		return matchSymbolsMap.containsKey(op);
 	}

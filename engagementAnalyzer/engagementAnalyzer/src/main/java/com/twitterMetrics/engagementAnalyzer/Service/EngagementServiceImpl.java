@@ -16,13 +16,11 @@ public class EngagementServiceImpl implements EngagementService{
 	
 	
 	/**
-	* method that process the request of tweets engagement metrics.
-	* <p>
-	* This method take 
+	* Method that process the request of tweets engagement metrics.
 	*
-	* @exception Exception can be raised by the RequestParser, the TwitterApiCaller or TwitterResponseParser.
-	* @param requestBody the json request body passed to the request, passed as Gson JsonObject.
-	* @param userId a string that encode the Twitter id of the requested user, if passed the TwitterApiCaller will retrive the tweets of that user, this param can be passed as null if the field "TweetIds" in the request body is passed. If userId is passed as null and the field "TweetIds" in the request body isn't present the function will rise an Exception.
+	* @param requestBody The json request body passed to the request, passed as Gson JsonObject.
+	* @param userId A string that encode the Twitter id of the requested user, if passed the TwitterApiCaller will retrive the tweets of that user, this param can be passed as null if the field "TweetIds" in the request body is passed. If userId is passed as null and the field "TweetIds" in the request body isn't present the function will rise an Exception.
+	* @exception Exception An exception can be raised by the RequestParser, the TwitterApiCaller or TwitterResponseParser.
 	*/
 	@Override
 	public JsonObject getRawTweetsData(JsonObject requestBody, String userId) throws Exception {
@@ -64,7 +62,14 @@ public class EngagementServiceImpl implements EngagementService{
 	}
 
 	
-	// method that process the request of tweets engagement metrics
+	/**
+	 * Method that process the request of tweets engagement metrics.
+	 * 
+	 * @param requestBody The json request body in the API request, in JsonObject format.
+	 * @param userId An id as long number in String format that point to a Twwitter user. 
+	 * @return A jsonObject that encode the response of the service, containing the eventual errores retrived from twitter and the list of tweets retrived.
+	 * @throws Exception An exception can be raised by the RequestParser, the TwitterApiCaller or TwitterResponseParser.
+	 */
 	@Override
 	public JsonObject getTweetsStats(JsonObject requestBody, String userId) throws Exception {
 

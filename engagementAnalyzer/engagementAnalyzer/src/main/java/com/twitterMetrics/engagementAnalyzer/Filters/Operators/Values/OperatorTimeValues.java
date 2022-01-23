@@ -1,6 +1,8 @@
 package com.twitterMetrics.engagementAnalyzer.Filters.Operators.Values;
 
 import java.time.LocalTime;
+import java.util.Arrays;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -12,11 +14,16 @@ import com.twitterMetrics.engagementAnalyzer.Parser.FiltersParser;
 import com.twitterMetrics.engagementAnalyzer.supportTypes.TimeValue;
 
 public class OperatorTimeValues implements OperatorValues{
-	// TODO modify for the managing of localDateTime only for hours minutes and seconds
 	
 	private LocalTime[] values;
 	private DateParser dateParser;
 	
+	/**
+	 * OperatorTimeValues constructor
+	 * 
+	 * @param values JsonElement, a JsonArray or a String that will be used as OperatorTimeValues values
+	 * @throws Exception will be raised a standard exception if the passed JsonElement don't conrepsonde to the expected format
+	 */
 	public OperatorTimeValues(JsonElement values) throws Exception{
 		
 		dateParser = new DateParser();
@@ -28,7 +35,7 @@ public class OperatorTimeValues implements OperatorValues{
 	
 	
 	// method that check if the jsonArray contain data acceptable from OperatorDateValues
-	public boolean checkValues(JsonElement values) throws Exception  {
+	private boolean checkValues(JsonElement values) throws Exception  {
 
 		if(values.isJsonArray()) {
 			
@@ -64,22 +71,43 @@ public class OperatorTimeValues implements OperatorValues{
 		return true;
 	}
 	
+	
+
+	/**
+	 * Method not implemented
+	 * 
+	 * @throws Exception if called rise an exception.
+	 */
 	public TweetList[] applayFilters(TweetList tweetList) throws Exception {
 		throw new NotImplementedException("OperatorTimeValues dosen't have the method applayFilters() implemented.");
 	}
 	
-	// values getter
+
+	/**
+	 * value getter
+	 * 
+	 * @return Return the first element of the internal LocalTime array
+	 * @throws Exception raised if the internal LocalTime array has more than one value
+	 */
 	public LocalTime getValue() throws Exception {
 		if(getCount() != 1) throw new Exception("OperatorTimeValues: Unexpected number of values calling getValue()");
 		return this.values[0];
 	}
 	
-	// values getter
+
+	/**
+	 * values getter
+	 * 
+	 * @return Return the internal LocalTime array
+	 * @throws Exception raised if the internal LocalTime array is empty
+	 */
 	public LocalTime[] getValues() throws Exception {
 		if(getCount() < 1) throw new Exception("OperatorTimeValues: Unexpected number of values calling getValues()");
 		return this.values;
 	}
 	
+	
+	@Override
 	public int getCount() {
 		return values.length;
 	}
@@ -87,15 +115,16 @@ public class OperatorTimeValues implements OperatorValues{
 	
 	@Override
 	public String toString() {
-		
-		String operatorString = "OperatorDateValues[";
-		for(LocalTime date : values)
-			operatorString += " " + dateParser.setTime(date).getStrTime() + ",";
-		operatorString += "]";
-		return operatorString;
+		return "OperatorTimeValues [values=" + Arrays.toString(values) + ", dateParser=" + dateParser + "]";
 	}
 	
 	
+	/**
+	 * Method that return this object in JsonObject format
+	 * 
+	 * @return the JsonObject rapresentation of this object
+	 */
+	@Override
 	public JsonArray toJson() {
 		JsonArray jsonValues = new JsonArray();
 		for(LocalTime time : this.values) 

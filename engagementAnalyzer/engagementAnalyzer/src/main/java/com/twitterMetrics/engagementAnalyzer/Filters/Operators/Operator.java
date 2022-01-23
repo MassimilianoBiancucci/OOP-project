@@ -21,7 +21,9 @@ import com.twitterMetrics.engagementAnalyzer.Exceptions.IncorrectOperatorValuesE
 
 public abstract class Operator {
 	
-	// Enum that encode all the operator symbols
+	/**
+	 * Enum that encode all the operator symbols
+	 */
 	public enum SymOp {
 		nop,
 		not,
@@ -36,6 +38,9 @@ public abstract class Operator {
 		bt
 	}
 	
+	/**
+	 * Map that relate enum Operator symbols to the equivalent in string format
+	 */
 	public static final Map<String, SymOp> symbolsMap = Map.ofEntries(
 		entry("$nop", SymOp.nop),
 	    entry("$not", SymOp.not),
@@ -50,6 +55,9 @@ public abstract class Operator {
 	    entry("$bt", SymOp.bt)
 	);
 	
+	/**
+	 * Map that relate String Operator symbols to the equivalent in enum format
+	 */
 	public static final Map<SymOp, String> symbol2String = Map.ofEntries(
 		entry(SymOp.nop, "$nop"),
 		entry(SymOp.not, "$not"),
@@ -67,6 +75,14 @@ public abstract class Operator {
 	protected SymOp symbol = null;
 	protected OperatorValues operatorValues = null;
 	
+	
+	/**
+	 * Operator abstract class constructor
+	 * 
+	 * @param sym String that encode the symbol operator that will be applied with this object
+	 * @param values OperatorValues that will be applied with the passed Operator to some filter
+	 * @throws Exception generic exceptions raised if the symbol operator is not accepted or the OperatorValues and the passed symbol operator aren't compatible.
+	 */
 	public Operator(String sym, OperatorValues values) throws Exception {
 		
 		// if the symbol is valid check the validity of the operator values
@@ -188,16 +204,20 @@ public abstract class Operator {
 		return true;
 	}
 	
-	// This method is implemented only inside MatchOperators and on conditional Operators 
-	// on logic Operator this method will throw an exception.
-	// this method effectivly launche the filtering of tweets based on field, operator and the operator values.
+	// abstract definiton of the method that should apply the filtering process to a tweetList
 	public abstract TweetList applayFilters(TweetList tweetList, Field field) throws Exception;
 	
 	public abstract String toString();
 	
 	public abstract JsonObject toJson();
 	
-	// method that return true if the symbol match an operator 
+
+	/**
+	 * Static method that return true if the symbol match a suported Operator symbol from this Operator class.
+	 * 
+	 * @param op String tested to match if it is a supported Operator symbol.
+	 * @return true if the Operator symbol is supported.
+	 */
 	public static boolean isOperator(String op) {
 		return symbolsMap.containsKey(op);
 	}

@@ -24,14 +24,25 @@ public class EngagementController {
 	///////////////////////////////////////////////////////////////////////////////////
 	// REQUESTS FOR RAW TWEETS BY TWEETS IDS///////////////////////////////////////////
 	
-	// route that return raw tweets in json format with 
+	
+	/**
+	 * Method  associated to the route /tweets
+	 * 
+	 * @param requestBody a json that encode the parameters of the request, refer to the docs for further details on the requestBody structure.
+	 * @return the requested raw tweets in json format
+	 */
 	@RequestMapping(value = "/tweets", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getRawTweets(@RequestBody JsonObject requestBody){
 		
 		return getTweetsGeneric(requestBody, null);
 	}
 	
-	// method that return the metadata request for the /tweets route
+	
+	/**
+	 * Method associated to the route /tweets/metadata
+	 * 
+	 * @return the metadata request for the /tweets route in json format
+	 */
 	@RequestMapping(value = "/tweets/metadata", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getRawTweetsMetadata(){
 
@@ -43,14 +54,26 @@ public class EngagementController {
 	///////////////////////////////////////////////////////////////////////////////////
 	// REQUESTS FOR RAW TWEETS BY USER ID//////////////////////////////////////////////
 	
-	// route that return raw tweets for certain user
+
+	/**
+	 * Method  associated to the route /user/:userId
+	 * 
+	 * @param userId the id of the target twitter user
+	 * @param requestBody a json that encode the parameters of the request, refer to the docs for further details on the requestBody structure.
+	 * @return raw tweets for the given user in json format
+	 */
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getRawUserTweets(@PathVariable("userId") String userId, @RequestBody JsonObject requestBody){
 
 		return getTweetsGeneric(requestBody, userId);
 	}
 	
-	// method that return the metadata request for the /user/{userId} route
+
+	/**
+	 * Method associated to the route /user/metadata
+	 * 
+	 * @return the metadata request for the /user/{userId} route in json format
+	 */
 	@RequestMapping(value = "/user/metadata", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getRawUserTweetsMetadata(){
 
@@ -62,14 +85,24 @@ public class EngagementController {
 	///////////////////////////////////////////////////////////////////////////////////
 	// REQUESTS FOR TWEETS METRICS BY TWEETS IDS///////////////////////////////////////
 	
-	// route that return engagement statistics based on passed tweets
+	/**
+	 * Method  associated to the route /tweets/metrics
+	 * 
+	 * @param requestBody a json that encode the parameters of the request, refer to the docs for further details on the requestBody structure.
+	 * @return engagement statistics based on passed tweets in json format
+	 */
 	@RequestMapping(value = "/tweets/metrics", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getTweetsMetrics(@RequestBody JsonObject requestBody){
 		
 		return getTweetsMetricsGeneric(requestBody, null);
 	}
 	
-	// method that return the metadata request of the /tweets/metrics route
+
+	/**
+	 * Method associated to the route /tweets/metadata
+	 * 
+	 * @return the metadata request of the /tweets/metrics route in json format
+	 */
 	@RequestMapping(value = "/tweets/metrics/metadata", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getTweetsMetricsMetadata(){
 
@@ -81,14 +114,25 @@ public class EngagementController {
 	///////////////////////////////////////////////////////////////////////////////////
 	// REQUESTS FOR TWEETS METRICS BY USER ID /////////////////////////////////////////
 	
-	// route that return engagement statistics based on tweets of specified user
+	/**
+	 * Method  associated to the route /user/:userId/metrics
+	 * 
+	 * @param userId the id of the target twitter user
+	 * @param requestBody a json that encode the parameters of the request, refer to the docs for further details on the requestBody structure.
+	 * @return engagement statistics based on tweets of specified user in json format
+	 */
 	@RequestMapping(value = "/user/{userId}/metrics", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getUserTweetsMetrics(@PathVariable("userId") String userId, @RequestBody JsonObject requestBody){
 		
 		return getTweetsMetricsGeneric(requestBody, userId);
 	}
 	
-	// method that return the metadata request for the /user/{userId}/metrics route
+
+	/**
+	 * Method associated to the route /tweets/metadata
+	 * 
+	 * @return the metadata request for the /user/{userId}/metrics route in json format
+	 */
 	@RequestMapping(value = "/user/metrics/metadata", method = RequestMethod.GET)
 	public ResponseEntity<JsonObject> getUserTweetsMetricsMetadata(){
 		

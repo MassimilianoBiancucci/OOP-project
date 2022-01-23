@@ -16,21 +16,38 @@ public class TwitterApiCaller {
 	
 	private String token;
 	
-	// Debug constructor
+	
+	/**
+	 * TwitterApiCaller debug constructor, load the bearer token from a local file.
+	 * 
+	 * @throws IOException
+	 */
 	public TwitterApiCaller() throws IOException {
 		// load the default API token from file
 		// USED ONLY FOR DEBUG PURPOSES
 		readDefaultBearerToken();
 	}
 	
-	// principal constructor
+
+	/**
+	 * TwitterApiCaller constructor
+	 * 
+	 * @param BearerToken the Bearer Token for the Twitter API in String format.
+	 */
 	public TwitterApiCaller(String BearerToken) {
 		// load the API token passed
 		this.token = BearerToken;
 	}
 	
-	// method that retrieve the tweets from the Twitter API with the tweets ids
-	public JsonObject getTweetsFromIds(String[] tweetIds) throws IllegalArgumentException{
+
+	/**
+	 * method that retrieve the tweets from the Twitter API with the tweets ids.
+	 * 
+	 * @param tweetIds An array of tweet ids in string format.
+	 * @return A json object with the Twitter API response.
+	 * @throws Exception Throw an exception if the passed list of ids is empty or there is some error in the API request.
+	 */
+	public JsonObject getTweetsFromIds(String[] tweetIds) throws Exception{
 		
 		if(!(tweetIds.length > 0)) throw new IllegalArgumentException("TwitterApiCaller.getTweetsFromIds() must have at least one tweet id as argument!");
 		
@@ -62,18 +79,29 @@ public class TwitterApiCaller {
 		} catch (IOException e) {
 			// catch IO exception
 			e.printStackTrace();
+			throw new Exception("The http requst to the twitter api failed.");
 		} catch (JsonSyntaxException je) {
 			// catch exception raised during the response body parsing from string to Gson object
 			je.printStackTrace();
+			throw new Exception("There was an error in the parsing sequence of the Twitter API response.");
+		} catch (Exception ee) {
+			// unexpected exception 
+			throw new Exception("Unexpected exception in the request for tweets by tweet ids.");
 		}
-		
 		// return the body response as string
 		return jsonResponseBody;
 
 	}
 	
-	// method that retrieve the tweets from the user id
-	public JsonObject getTweetsFromUserId(String userId){
+	
+	/**
+	 * Method that retrieve up to 100 last tweets from the user id.
+	 * 
+	 * @param userId The target Twitter user id in String format. 
+	 * @return A json object with the Twitter API response.
+	 * @throws Exception Throw an exception if there is some error in the API request or in the response parsing sequence.
+	 */
+	public JsonObject getTweetsFromUserId(String userId) throws Exception{
 		
 		OkHttpClient client = new OkHttpClient();
 		
@@ -96,9 +124,14 @@ public class TwitterApiCaller {
 		} catch (IOException e) {
 			// catch IO exception
 			e.printStackTrace();
+			throw new Exception("The http requst to the twitter api failed.");
 		} catch (JsonSyntaxException je) {
 			// catch exception raised during the response body parsing from string to Gson object
 			je.printStackTrace();
+			throw new Exception("There was an error in the parsing sequence of the Twitter API response.");
+		} catch (Exception ee) {
+			// unexpected exception 
+			throw new Exception("Unexpected exception in the request for tweets by user id.");
 		}
 		
 		// return the body response as string

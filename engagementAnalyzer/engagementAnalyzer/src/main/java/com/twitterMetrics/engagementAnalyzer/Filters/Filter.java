@@ -15,8 +15,15 @@ import com.twitterMetrics.engagementAnalyzer.Filters.Operators.Operator;
 import com.twitterMetrics.engagementAnalyzer.Model.TweetList;
 
 
+/**
+ * @author Maxxy
+ *
+ */
 public abstract class Filter {
 	
+	/**
+	 * Enum that encode all the Filter fields symbols
+	 */
 	public enum Field {
 		retweet,
 		reply,
@@ -28,6 +35,10 @@ public abstract class Filter {
 		time,
 	}
 	
+	
+	/**
+	 * Map that relate string Filter fields symbols to the equivalent in enum format
+	 */
 	public static final Map<String, Field> fieldsMap = Map.ofEntries(
 		entry("retweet_count", 		Field.retweet),
 	    entry("reply_count", 		Field.reply),
@@ -39,6 +50,10 @@ public abstract class Filter {
 	    entry("created_in_timeslot", Field.time)
 	);
 	
+	
+	/**
+	 * Map that relate enum Filter fields symbols to the equivalent in string format
+	 */
 	public static final Map<Field, String> field2String = Map.ofEntries(
 		entry(Field.retweet, 	"retweet_count"),
 		entry(Field.reply, 		"reply_count"),
@@ -53,6 +68,13 @@ public abstract class Filter {
 	protected Field field = null;
 	protected Operator op = null;
 	
+	/**
+	 * Filter abstract class constructor
+	 * 
+	 * @param field string that encode the field that will be filtered with this object
+	 * @param op the operator that will be used to filter the given field
+	 * @throws Exception generic exceptions raised if the field is not accepted or the Operator and the passed field aren't compatible.
+	 */
 	public Filter(String field, Operator op) throws Exception {
 		
 		if(validateField(field)) {
@@ -68,6 +90,13 @@ public abstract class Filter {
 		}
 	}
 	
+	/**
+	 * Filter abstract class second constructor
+	 * 
+	 * @param field as Field enum that encode the field that will be filtered with this object
+	 * @param op the operator that will be used to filter the given field
+	 * @throws Exception generic exceptions raised if the field is not correct or the Operator and the passed field aren't compatible.
+	 */
 	public Filter(Field field, Operator op) throws Exception {
 		this(field2String.get(field), op);
 	}
@@ -106,20 +135,46 @@ public abstract class Filter {
 	}
 
 	
-	// method that will apply all the subfilters to the passed tweetList
+	/**
+	 * Method that will apply the filter to the passed TweetList
+	 * 
+	 * @param tweetList the list with the tweets that will be filtered with this filters and the loaded operator
+	 * @return return a tweetList with only the filtered tweets.
+	 * @throws Exception generic exception raised if there is some incompatibility with the Operator or the contained OperatorValues.
+	 */
 	public abstract TweetList applayFilters(TweetList tweetList) throws Exception;
 	
+	
+	/**
+	 * Method that return the specific filter in string format.
+	 */
 	public abstract String toString();
 	
+	
+	/**
+	 * Method that return the specific filter in JsonObject format.
+	 */
 	public abstract JsonObject toJson();
 	
-	// method that return true if the symbol match an operator 
-	public static boolean isField(String op) {
-		return fieldsMap.containsKey(op);
+
+	/**
+	 * Static method that return true if the symbol match a suported field from this filter class.
+	 * 
+	 * @param field string tested to match if it is a supported field.
+	 * @return true if the field is supported.
+	 */
+	public static boolean isField(String field) {
+		return fieldsMap.containsKey(field);
 	}
 	
-	// method that return true if the symbol match an operator 
-	public static boolean isField(Field op) {
-		return fieldsMap.containsValue(op);
+	
+	/**
+	 * Static method that return true if the symbol match a suported field from this filter class.
+	 * 
+	 * @param field Field enum tested to match if it is a supported field.
+	 * @return true if the field is supported.
+	 */
+	public static boolean isField(Field field) {
+		return fieldsMap.containsValue(field);
 	}
 }
